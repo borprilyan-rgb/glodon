@@ -57,4 +57,124 @@ export const tutorialParts = [
 
 import { buildAllSteps } from './tutorialUtils.js'
 
-export const allSteps = buildAllSteps(tutorialParts, 'en')
+const detail = (title, description) => ({ title, description })
+const actionDetails = {
+  'create-project': [
+    detail('Choose the TAS project', 'Create a new project for the job or verify that you are opening the correct existing file.'),
+    detail('Confirm project identity', 'Check the project name and location before continuing. These details make exported quantity files easier to trace.'),
+    detail('Review calculation rules', 'Make sure the selected rules follow the project requirements and applicable measurement standard.'),
+    detail('Verify project units', 'Confirm metric or imperial units before importing drawings so TAS interprets every distance correctly.'),
+  ],
+  'floor-settings': [
+    detail('Open Floor Settings', 'Access Floor Settings from the project setup tools to define the building levels.'),
+    detail('Create the floor list', 'Add every required building floor in the same sequence shown on the design drawings.'),
+    detail('Enter level information', 'Assign a clear floor name, floor height, and floor elevation to each level.'),
+    detail('Cross-check the levels', 'Compare the completed floor table with both architectural and structural documentation.'),
+  ],
+  'import-drawing': [
+    detail('Select the destination floor', 'Activate the level represented by the source drawing before starting the import.'),
+    detail('Import the source drawing', 'Choose the relevant architectural or structural file for the active floor.'),
+    detail('Check drawing placement', 'Verify the drawing name, visibility, orientation, and position on the selected level.'),
+    detail('Confirm before modelling', 'Recheck the destination floor before identifying or drawing any model elements.'),
+  ],
+  'set-scale': [
+    detail('Choose calibration points', 'Use two precise points connected by a clearly stated dimension on the drawing.'),
+    detail('Mark both reference points', 'Select the first and second points carefully to avoid introducing a calibration offset.'),
+    detail('Enter the actual distance', 'Type the known dimension using the project units, not the apparent on-screen length.'),
+    detail('Apply the scale correction', 'Let TAS rescale the imported drawing before taking any model measurements.'),
+  ],
+  'verify-scale': [
+    detail('Select an independent check', 'Choose a known grid, room, or structural dimension that was not used for calibration.'),
+    detail('Compare measured values', 'Check the TAS measurement against the written dimension on the source drawing.'),
+    detail('Resolve any discrepancy', 'If the values differ, review the reference points, project units, and original drawing scale.'),
+    detail('Approve the drawing scale', 'Begin modelling only after the independent TAS and drawing dimensions agree.'),
+  ],
+  'identify-columns': [
+    detail('Open Identify Column', 'Start the column-recognition workflow from the appropriate TAS identification tool.'),
+    detail('Select column graphics', 'Use a precise selection or block selection that includes only the relevant column drawing.'),
+    detail('Map labels and dimensions', 'Connect the detected column marks with their corresponding sizes and identifiers.'),
+    detail('Validate column properties', 'Check type, size, height, elevation, and floor before generating model elements.'),
+    detail('Generate and inspect columns', 'Create the columns and use the 3D view to find incorrect positions, levels, or rotations.'),
+  ],
+  'identify-beams': [
+    detail('Open Identify Beam', 'Start beam recognition after the supporting columns have been generated.'),
+    detail('Select lines and labels', 'Include each beam line with the label that defines its identity and dimensions.'),
+    detail('Validate beam properties', 'Confirm width, depth, level, and elevation before generating the beams.'),
+    detail('Generate the beams', 'Create the beam elements from the reviewed recognition result.'),
+    detail('Inspect beam connections', 'Use the 3D view to confirm that beams meet their intended columns without gaps or offsets.'),
+  ],
+  'identify-slabs': [
+    detail('Prepare supporting elements', 'Generate the relevant columns, walls, and beams so TAS can detect dependable slab boundaries.'),
+    detail('Open Identify Slab', 'Select the intended slab region using the slab-identification tool.'),
+    detail('Check the slab boundary', 'Confirm that the perimeter is closed and follows the correct supporting elements.'),
+    detail('Review identification options', 'Choose the settings that match the drawing condition and intended slab geometry.'),
+    detail('Generate and inspect slabs', 'Confirm thickness and elevation, create the slab, and review the result in context.'),
+  ],
+  'identify-openings': [
+    detail('Open the schedule tool', 'Use Identify Door and Window Schedule to build opening types from the drawing schedule.'),
+    detail('Select the complete schedule', 'Block-select the relevant table while excluding unrelated notes or drawing graphics.'),
+    detail('Map schedule columns', 'Assign the type, width, height, and sill-height fields to the correct table columns.'),
+    detail('Generate opening types', 'Create reusable door and window definitions from the reviewed schedule data.'),
+    detail('Place openings on walls', 'Identify or insert each opening on its correct host wall and building floor.'),
+    detail('Inspect openings in 3D', 'Verify opening position, dimensions, sill height, and wall association in the model view.'),
+  ],
+  'apply-finishes': [
+    detail('Prepare room boundaries', 'Create or identify enclosed rooms before assigning any finish quantities.'),
+    detail('Define finish types', 'Set up the required floor, wall, skirting, and ceiling finish specifications.'),
+    detail('Assign finishes to rooms', 'Apply each finish type only to the rooms included in its scope.'),
+    detail('Review finish geometry', 'Check finish height, position, and boundaries against the room requirements.'),
+    detail('Verify boundary effects', 'Confirm that doors, windows, and room edges alter finish quantities as intended.'),
+  ],
+  'view-expression': [
+    detail('Select the measured entity', 'Choose the model element whose calculated quantity needs investigation.'),
+    detail('Open View Expression', 'Display the detailed calculation behind the selected entity and quantity.'),
+    detail('Trace the quantity formula', 'Review calculated components and deductions instead of relying only on the final total.'),
+    detail('Identify the deduction source', 'Determine which intersecting element is responsible for the quantity adjustment.'),
+  ],
+  'measurement-rules': [
+    detail('Open the Quantity tab', 'Go to the quantity tools for the element type currently under review.'),
+    detail('Open Measurement Rules', 'Display the rule set that controls intersections and deductions.'),
+    detail('Choose the element type', 'Select the category that matches the entity whose quantity you inspected.'),
+    detail('Read the rule description', 'Understand the rule scope and current option before making any change.'),
+  ],
+  'filter-deduction': [
+    detail('Open Filter Relevant Element', 'Narrow the rule list to the intersection identified in View Expression.'),
+    detail('Select the deduction element', 'Keep only the element type that is responsible for the observed deduction.'),
+    detail('Confirm the junction rule', 'Verify that the filtered result describes the intended physical intersection.'),
+    detail('Protect unrelated rules', 'Leave other junction settings unchanged to avoid unintended quantity changes.'),
+  ],
+  'change-rule': [
+    detail('Choose the required option', 'Select the measurement treatment required by the project standard for this intersection.'),
+    detail('Understand No Effect', 'Use No Effect when the intersecting element must not change the measured quantity.'),
+    detail('Understand occupied volume', 'Use Calculate Occupied Volume when the occupied portion must be included in the deduction logic.'),
+    detail('Record the rule change', 'Document the new setting so its effect can be checked after recalculation.'),
+  ],
+  recalculate: [
+    detail('Choose the calculation command', 'Use Calculate for a wider scope or Calculate Selected Entity for a focused check.'),
+    detail('Define the calculation scope', 'Select only the affected floors or entities when testing a targeted change.'),
+    detail('Run the calculation', 'Start the quantity calculation after confirming the intended scope.'),
+    detail('Wait for refreshed results', 'Do not verify the quantity until TAS has completed and updated the result.'),
+  ],
+  'verify-deduction': [
+    detail('Reopen View Expression', 'Return to the refreshed expression after recalculating the affected quantity.'),
+    detail('Select the quantity to inspect', 'Choose the correct entity and quantity type for the visual deduction check.'),
+    detail('Open 3D Deduction', 'Display the model portion that TAS includes in the deduction.'),
+    detail('Inspect the highlighted volume', 'Review the deducted geometry in context rather than judging the total alone.'),
+    detail('Compare before and after', 'Confirm that the revised quantity and deducted volume now follow the intended measurement rule.'),
+  ],
+  'quantity-category': [
+    detail('Calculate current quantities', 'Refresh all required quantities before opening the category report.'),
+    detail('Open View Quantity by Category', 'Display the calculated results in their configured category hierarchy.'),
+    detail('Review report structure', 'Check categories, values, units, and hierarchy for completeness and consistency.'),
+    detail('Spot-check report totals', 'Compare representative category totals with the corresponding model entities.'),
+  ],
+  'configure-report': [
+    detail('Open report classification', 'Use Set Classification and Quantity to control the report fields and grouping.'),
+    detail('Select report attributes', 'Include only the attributes required by the report recipient and project standard.'),
+    detail('Arrange the hierarchy', 'Move fields up or down to establish the desired grouping order.'),
+    detail('Regenerate the report', 'Refresh the report so the revised classification structure is applied.'),
+    detail('Complete the final check', 'Verify totals, units, and classification before issuing the quantity report.'),
+  ],
+}
+
+export const allSteps = buildAllSteps(tutorialParts, 'en', actionDetails)

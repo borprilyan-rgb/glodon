@@ -1,4 +1,4 @@
-import { BookOpen, Check, RotateCcw, Search, X } from 'lucide-react'
+import { Check, RotateCcw, Search, X } from 'lucide-react'
 import { getStepHash } from '../data/tutorialUtils'
 import ProgressBar from './ProgressBar'
 import LanguageSwitcher from './LanguageSwitcher'
@@ -7,7 +7,7 @@ export default function Sidebar({ parts, steps, activeStep, completed, query, se
   const visibleIds = new Set(steps.map((step) => step.id))
   return <aside className={`sidebar ${mobileOpen ? 'sidebar--open' : ''}`}>
     <div className="sidebar__top">
-      <a className="brand" href="#/" onClick={closeMobile}><span className="brand__mark"><BookOpen size={22} /></span><span><strong>Cubicost TAS</strong><small>{t.tutorialSubtitle}</small></span></a>
+      <a className="brand" href="#/" onClick={closeMobile}><span className="brand__mark"><img src="/branding/company-logo.png" alt="Cubicost TAS company logo" /></span><span><strong>Glodon Tutorial</strong><small>{t.tutorialSubtitle}</small></span></a>
       <button className="icon-button sidebar__close" onClick={closeMobile} aria-label={t.closeMenu}><X /></button>
     </div>
     <LanguageSwitcher language={language} onChange={onLanguageChange} t={t} />

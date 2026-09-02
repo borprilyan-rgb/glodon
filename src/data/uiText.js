@@ -1,6 +1,6 @@
 export const uiText = {
   id: {
-    language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Tutorial Teknis',
+    language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Pembelajaran TAS & TRB',
     progress: 'Progres tutorial', stepsProgress: (done, total) => `${done} dari ${total} langkah`, search: 'Cari materi', searchAria: 'Cari materi tutorial',
     noResults: (query) => `Materi tidak ditemukan untuk “${query}”.`, reset: 'Reset progres', resetConfirm: 'Reset seluruh progres tutorial? Tindakan ini tidak dapat dibatalkan.',
     lessons: 'Materi', closeMenu: 'Tutup menu tutorial', courseProgress: 'PROGRES TUTORIAL', complete: 'SELESAI', part: 'BAGIAN', step: 'LANGKAH', of: 'DARI',
@@ -17,7 +17,7 @@ export const uiText = {
     action: 'Langkah tindakan', selectAction: (number) => `Pilih langkah tindakan ${number}`, previousImage: 'Gambar sebelumnya', nextImage: 'Gambar berikutnya', enlargeImage: 'Perbesar gambar', closeImage: 'Tutup gambar', imageCount: (current, total) => `Gambar ${current} dari ${total}`, screenshotUnavailable: 'Tangkapan layar belum tersedia', requiredFile: 'File yang diperlukan', screenshotNavigation: 'Navigasi gambar tindakan', lightboxLabel: 'Pratinjau tangkapan layar diperbesar',
   },
   en: {
-    language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Technical Tutorial',
+    language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'TAS & TRB Learning Resource',
     progress: 'Tutorial progress', stepsProgress: (done, total) => `${done} of ${total} steps`, search: 'Search tutorial', searchAria: 'Search tutorial steps',
     noResults: (query) => `No results for “${query}”.`, reset: 'Reset progress', resetConfirm: 'Reset all tutorial progress? This cannot be undone.',
     lessons: 'Lessons', closeMenu: 'Close tutorial menu', courseProgress: 'COURSE PROGRESS', complete: 'COMPLETE', part: 'PART', step: 'STEP', of: 'OF',

@@ -1,22 +1,25 @@
 const withoutExtension = (filename) => filename?.replace(/\.[^.]+$/, '')
 
-const buildActions = (step, partId, locale) => {
+const buildActions = (step, partId, locale, actionDetails) => {
   const baseName = withoutExtension(step.screenshot?.file) || step.id
-  return step.instructions.map((description, index) => {
+  return step.instructions.map((instruction, index) => {
     const number = index + 1
     const padded = String(number).padStart(2, '0')
     const isComparison = step.comparisonAt === number
     const fallbackDescription = locale === 'id'
       ? `Tampilkan tindakan ${number} untuk materi ${step.title}.`
       : `Show action ${number} for the ${step.title} lesson.`
+    const detail = actionDetails?.[step.id]?.[index]
+    const title = detail?.title || instruction.replace(/[.!?]$/, '')
+    const description = detail?.description || ''
     const action = {
       id: `${step.id}-action-${number}`,
       number,
-      title: description.replace(/[.!?]$/, ''),
+      title,
       description,
       image: `/tutorial/tas/${partId}/${index === 0 && step.screenshot?.file ? step.screenshot.file : `${baseName}-${padded}.webp`}`,
       caption: index === 0 && step.screenshot?.description ? step.screenshot.description : fallbackDescription,
-      alt: locale === 'id' ? `Tindakan ${number}: ${description}` : `Action ${number}: ${description}`,
+      alt: locale === 'id' ? `Tindakan ${number}: ${title}` : `Action ${number}: ${title}`,
       requiredDescription: index === 0 && step.screenshot?.description ? step.screenshot.description : fallbackDescription,
     }
     if (isComparison) {
@@ -30,7 +33,7 @@ const buildActions = (step, partId, locale) => {
   })
 }
 
-export const buildAllSteps = (parts, locale) => parts.flatMap((part) => part.steps.map((step, index) => ({ ...step, actions: buildActions(step, part.id, locale), partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
+export const buildAllSteps = (parts, locale, actionDetails) => parts.flatMap((part) => part.steps.map((step, index) => ({ ...step, actions: buildActions(step, part.id, locale, actionDetails), partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
 export const getStepHash = (step) => `#/${step.partId}/${step.id}`
 
 export const officialCommands = [

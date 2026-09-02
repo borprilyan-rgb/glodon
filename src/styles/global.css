@@ -12,7 +12,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; display: flex; flex-direction: column; width: 288px; padding: 26px 20px 20px; background: #102b4e; color: #dce8f3; overflow: hidden; }
 .sidebar__top { display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 11px; }
-.brand__mark { display: grid; place-items: center; width: 40px; height: 40px; color: white; background: var(--blue); border-radius: 8px; }
+.brand__mark { display: grid; flex: 0 0 40px; place-items: center; width: 40px; height: 40px; padding: 3px; }
+.brand__mark img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .brand strong, .brand small { display: block; color: white; }.brand strong { font-size: 15px; }.brand small { margin-top: 2px; color: #9db3c9; font-size: 11px; letter-spacing: .04em; }
 .progress { width: 100%; }.progress__meta { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--muted); }.progress__meta strong { color: var(--navy); }.progress__track { height: 7px; overflow: hidden; background: #dce5ec; border-radius: 999px; }.progress__track span { display: block; height: 100%; background: var(--turquoise); border-radius: inherit; transition: width .3s ease; }
 .sidebar > .progress { margin: 28px 0 20px; }.sidebar .progress__meta { color: #9db3c9; }.sidebar .progress__meta strong { color: white; }.sidebar .progress__track { background: #294563; }
