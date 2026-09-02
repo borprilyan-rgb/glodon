@@ -1,6 +1,6 @@
 export const uiText = {
   id: {
-    language: 'Bahasa', indonesian: 'Bahasa Indonesia', english: 'English', tutorialSubtitle: 'Tutorial Teknis',
+    language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Tutorial Teknis',
     progress: 'Progres tutorial', stepsProgress: (done, total) => `${done} dari ${total} langkah`, search: 'Cari materi', searchAria: 'Cari materi tutorial',
     noResults: (query) => `Materi tidak ditemukan untuk “${query}”.`, reset: 'Reset progres', resetConfirm: 'Reset seluruh progres tutorial? Tindakan ini tidak dapat dibatalkan.',
     lessons: 'Materi', closeMenu: 'Tutup menu tutorial', courseProgress: 'PROGRES TUTORIAL', complete: 'SELESAI', part: 'BAGIAN', step: 'LANGKAH', of: 'DARI',
@@ -16,7 +16,7 @@ export const uiText = {
     footer: 'Materi pembelajaran independen · Konfirmasikan prosedur dengan versi Cubicost TAS dan standar proyek Anda.', reference: 'Layar referensi',
   },
   en: {
-    language: 'Language', indonesian: 'Bahasa Indonesia', english: 'English', tutorialSubtitle: 'Technical Tutorial',
+    language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Technical Tutorial',
     progress: 'Tutorial progress', stepsProgress: (done, total) => `${done} of ${total} steps`, search: 'Search tutorial', searchAria: 'Search tutorial steps',
     noResults: (query) => `No results for “${query}”.`, reset: 'Reset progress', resetConfirm: 'Reset all tutorial progress? This cannot be undone.',
     lessons: 'Lessons', closeMenu: 'Close tutorial menu', courseProgress: 'COURSE PROGRESS', complete: 'COMPLETE', part: 'PART', step: 'STEP', of: 'OF',
