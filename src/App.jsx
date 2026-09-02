@@ -16,7 +16,7 @@ function routeFromHash() {
 
 export default function App() {
   const [route, setRoute] = useState(routeFromHash)
-  const [language, setLanguage] = useState(() => localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'id')
+  const [language, setLanguage] = useState(() => localStorage.getItem(LANGUAGE_KEY) === 'id' ? 'id' : 'en')
   const [completed, setCompleted] = useState(() => { try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')) } catch { return new Set() } })
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
