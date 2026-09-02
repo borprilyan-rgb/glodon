@@ -55,5 +55,6 @@ export const tutorialParts = [
   },
 ]
 
-export const allSteps = tutorialParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
-export const getStepHash = (step) => `#/${step.partId}/${step.id}`
+import { buildAllSteps } from './tutorialUtils.js'
+
+export const allSteps = buildAllSteps(tutorialParts)

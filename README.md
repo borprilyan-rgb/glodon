@@ -12,6 +12,16 @@ A responsive, self-paced technical tutorial that teaches beginners how to prepar
 
 No backend is required.
 
+## Languages
+
+Bahasa Indonesia is the default language and English remains available from the language switch in the desktop sidebar or mobile header. The selected language is saved separately from tutorial progress in browser `localStorage`.
+
+- Indonesian tutorial content: `src/data/tutorialData.id.js`
+- English tutorial content: `src/data/tutorialData.en.js`
+- Shared interface translations: `src/data/uiText.js`
+
+To change the default, update the initial `language` state fallback in `src/App.jsx` and the `lang` attribute in `index.html`. Keep stable part and step IDs identical in both tutorial data files so routes and completion progress remain shared.
+
 ## Install and run
 
 ```bash
