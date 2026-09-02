@@ -66,12 +66,37 @@
       "detail": ""
     },
     {
+      "name": "Project-units warning follows its action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Project-units warning uses combined copy",
+      "passed": true,
+      "detail": ""
+    },
+    {
       "name": "Comparison mode has two media panels",
       "passed": true,
       "detail": ""
     },
     {
+      "name": "Completion disabled before checklist confirmation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Completion enabled after checklist confirmation",
+      "passed": true,
+      "detail": ""
+    },
+    {
       "name": "Tutorial progress persists after reload",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Checklist state persists after reload",
       "passed": true,
       "detail": ""
     },

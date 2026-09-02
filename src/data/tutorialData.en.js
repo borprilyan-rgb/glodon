@@ -7,7 +7,6 @@ export const tutorialParts = [
       { id: 'create-project', title: 'Create or open a TAS project', duration: '4 min', screenshot: null,
         intro: 'Start with project information that matches the contract documents and measurement standard.',
         instructions: ['Create a new TAS project or open the correct existing project.', 'Confirm the project name and location so exported files are easy to identify.', 'Review the selected calculation rules and make sure they match the project requirements.', 'Confirm whether dimensions and quantities use metric or imperial units before importing drawings.'],
-        note: 'Project units control how imported drawing distances are interpreted.', warning: 'Changing units after modelling begins can invalidate dimensions and quantities.',
         checks: ['Project identity is correct', 'Calculation rules are confirmed', 'Units match the source drawings'] },
       { id: 'floor-settings', title: 'Configure Floor Settings', duration: '6 min', screenshot: { file: 'floor-settings.jpg', title: 'Floor Settings dialog', description: 'Show the floor list with name, floor height, and elevation fields.' },
         intro: 'Define the building vertically so every entity is created at its intended level.',
@@ -57,13 +56,13 @@ export const tutorialParts = [
 
 import { buildAllSteps } from './tutorialUtils.js'
 
-const detail = (title, description) => ({ title, description })
+const detail = (title, description, callout) => ({ title, description, callout })
 const actionDetails = {
   'create-project': [
     detail('Choose the TAS project', 'Create a new project for the job or verify that you are opening the correct existing file.'),
     detail('Confirm project identity', 'Check the project name and location before continuing. These details make exported quantity files easier to trace.'),
     detail('Review calculation rules', 'Make sure the selected rules follow the project requirements and applicable measurement standard.'),
-    detail('Verify project units', 'Confirm metric or imperial units before importing drawings so TAS interprets every distance correctly.'),
+    detail('Verify project units', 'Confirm metric or imperial units before importing drawings so TAS interprets every distance correctly.', { title: 'Confirm project units before modelling', text: 'Project units control how imported drawing distances are interpreted. Changing them after modelling begins can invalidate dimensions and quantities.' }),
   ],
   'floor-settings': [
     detail('Open Floor Settings', 'Access Floor Settings from the project setup tools to define the building levels.'),

@@ -17,6 +17,7 @@ const buildActions = (step, partId, locale, actionDetails) => {
       number,
       title,
       description,
+      callout: detail?.callout,
       image: `/tutorial/tas/${partId}/${index === 0 && step.screenshot?.file ? step.screenshot.file : `${baseName}-${padded}.webp`}`,
       caption: index === 0 && step.screenshot?.description ? step.screenshot.description : fallbackDescription,
       alt: locale === 'id' ? `Tindakan ${number}: ${title}` : `Action ${number}: ${title}`,
