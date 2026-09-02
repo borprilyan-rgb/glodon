@@ -14,6 +14,7 @@ export const uiText = {
     principle1: 'Persiapkan secara akurat', principle1Text: 'Atur lantai, gambar, dan skala terlebih dahulu.', principle2: 'Modelkan secara berurutan', principle2Text: 'Ikuti ketergantungan antar elemen.', principle3: 'Verifikasi kuantitas', principle3Text: 'Telusuri setiap hasil sebelum membuat laporan.',
     courseMap: 'PETA MATERI', mapTitle: 'Tiga bagian. Satu alur kerja yang andal.', mapText: 'Selesaikan materi secara berurutan atau buka langsung prosedur yang Anda perlukan.',
     footer: 'Materi pembelajaran independen · Konfirmasikan prosedur dengan versi Cubicost TAS dan standar proyek Anda.', reference: 'Layar referensi',
+    action: 'Langkah tindakan', selectAction: (number) => `Pilih langkah tindakan ${number}`, previousImage: 'Gambar sebelumnya', nextImage: 'Gambar berikutnya', enlargeImage: 'Perbesar gambar', closeImage: 'Tutup gambar', imageCount: (current, total) => `Gambar ${current} dari ${total}`, screenshotUnavailable: 'Tangkapan layar belum tersedia', requiredFile: 'File yang diperlukan', screenshotNavigation: 'Navigasi gambar tindakan', lightboxLabel: 'Pratinjau tangkapan layar diperbesar',
   },
   en: {
     language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Technical Tutorial',
@@ -30,5 +31,6 @@ export const uiText = {
     principle1: 'Prepare accurately', principle1Text: 'Floors, drawings, and scale first.', principle2: 'Model in sequence', principle2Text: 'Respect element dependencies.', principle3: 'Verify quantities', principle3Text: 'Trace every result before reporting.',
     courseMap: 'COURSE MAP', mapTitle: 'Three parts. One reliable workflow.', mapText: 'Complete the lessons in order, or jump directly to the procedure you need.',
     footer: 'Independent learning resource · Confirm procedures against your Cubicost TAS version and project standard.', reference: 'Reference screen',
+    action: 'Action', selectAction: (number) => `Select action ${number}`, previousImage: 'Previous image', nextImage: 'Next image', enlargeImage: 'Enlarge image', closeImage: 'Close image', imageCount: (current, total) => `Image ${current} of ${total}`, screenshotUnavailable: 'Screenshot unavailable', requiredFile: 'Required file', screenshotNavigation: 'Action image navigation', lightboxLabel: 'Enlarged screenshot preview',
   },
 }
