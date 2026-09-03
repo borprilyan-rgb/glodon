@@ -101,10 +101,11 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .mobile-header-row { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; }
   .mobile-header-row > a, .mobile-header-row > button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: white; background: transparent; border: 0; border-radius: 5px; }
   .mobile-header-row > a:focus-visible, .mobile-header-row > button:focus-visible { outline: 2px solid white; outline-offset: -3px; }
+  .mobile-header-row > .mobile-header-language { flex: 0 0 40px; width: 40px; height: 40px; color: #b9d9ff; border: 1px solid #48647f; font-size: 11px; font-weight: 900; }
   .mobile-header-row > .mobile-header__logo { width: 40px; height: 40px; padding: 3px; }
   .mobile-header__logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  .mobile-header-row > strong { display: -webkit-box; min-width: 0; overflow: hidden; color: white; font-size: 14px; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-  .mobile-header-row > button { flex: 0 0 44px; margin-left: auto; }
+  .mobile-header-row > strong { display: -webkit-box; flex: 1 1 auto; min-width: 0; overflow: hidden; color: white; font-size: 14px; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .mobile-header-row > button { flex: 0 0 44px; }
   .mobile-menu-layer { position: fixed; inset: 0; z-index: 80; display: block; }
   .mobile-menu-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; background: rgba(5, 21, 38, .58); border: 0; }
   .mobile-menu-drawer { position: absolute; top: 0; right: 0; width: min(88vw, 340px); height: 100dvh; padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; color: var(--navy); background: white; box-shadow: -18px 0 44px rgba(3, 20, 38, .22); }
@@ -113,9 +114,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .mobile-menu-drawer nav { display: grid; gap: 4px; padding: 14px 0; }
   .mobile-menu-drawer nav a { display: flex; align-items: center; gap: 11px; min-height: 48px; padding: 10px 12px; color: var(--navy); border-radius: 5px; font-weight: 700; }
   .mobile-menu-drawer nav a:hover, .mobile-menu-drawer nav a:focus-visible { background: #edf5ff; }
-  .mobile-menu-language { padding: 14px 0; border-block: 1px solid var(--line); }
-  .mobile-menu-language > span { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; }
-  .mobile-menu-language .language-switcher { margin: 0; background: var(--navy); }
   .mobile-menu-drawer > .progress { margin-top: 20px; }
 
   .main-content--focused { width: 100%; padding-inline: 16px; }
@@ -231,7 +229,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .contact-card h2 { margin: 20px 0 9px; font-size: 22px; }
 .contact-value { min-height: 48px; margin: 0; overflow-wrap: anywhere; color: #536a80; font-size: 16px; font-weight: 700; line-height: 1.5; }
 .contact-card__actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 23px; }
-.contact-card__actions .primary-button, .contact-copy { min-height: 44px; }
+.contact-card__actions .primary-button, .contact-copy { justify-content: center; min-height: 44px; text-align: center; }
 .contact-copy { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 14px; color: var(--navy); background: white; border: 1px solid #b8c9d8; border-radius: 6px; font-weight: 700; cursor: pointer; }
 .contact-card button:disabled { cursor: not-allowed; opacity: .48; }
 .contact-privacy { display: flex; align-items: flex-start; gap: 10px; margin-top: 22px; padding: 14px 16px; color: #617488; background: #f7fafc; border: 1px solid var(--line); border-radius: 6px; }
@@ -247,7 +245,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .contact-grid { grid-template-columns: 1fr; gap: 14px; }
   .contact-card { padding: 21px 16px; }
   .contact-card__actions { display: grid; }
-  .contact-card__actions .primary-button, .contact-copy { width: 100%; min-height: 48px; }
+  .contact-card__actions .primary-button, .contact-copy { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: center; text-align: center; }
+  .contact-card__actions .primary-button svg, .contact-copy svg { flex: 0 0 auto; }
   .hub-contact-link { margin-top: 22px; }
   .lesson-help-link { margin-bottom: 72px; }
 }
