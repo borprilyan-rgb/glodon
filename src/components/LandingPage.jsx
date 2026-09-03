@@ -29,6 +29,7 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
           <a className="primary-button" href={getStepPath(progressLesson, product)}>{t.landingPrimary[state]}<ArrowRight size={17} /></a>
           <a className="secondary-button" href={config.courseRoute}>{t.viewCourseMap}</a>
         </div>
+        <a className="landing-contact-link" href="/contact">{t.stillNeedHelp} {t.contactUs}</a>
         <p className="landing-course-info">{t.landingCourseInfo}</p>
         <aside className="landing-progress" aria-label={t.overallProgress}>
           <ProgressBar completed={completed.size} total={allSteps.length} t={t} />

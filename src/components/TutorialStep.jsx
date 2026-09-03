@@ -14,5 +14,6 @@ export default function TutorialStep({ step, index, total, isComplete, selectedC
     {(step.note || step.warning) && <WarningCallout t={t}><OfficialText>{[step.note, step.warning].filter(Boolean).join(' ')}</OfficialText></WarningCallout>}
     <CompletionChecklist checks={step.checks} selectedChecks={selectedChecks} isComplete={isComplete} onCheck={onCheck} onToggle={onToggle} step={step} destination={destination} t={t} />
     <StepNavigation previous={previous} next={next} product={product} t={t} />
+    <p className="lesson-help-link">{t.stillNeedHelp} <a href="/contact">{t.contactUs}</a></p>
   </article>
 }
