@@ -105,6 +105,27 @@ const partDefinitions = {
 
 const partRanges = [[0, 4], [4, 14], [14, 18]]
 
+const manualPageByAction = {
+  'export-tas-model': [103, 104, 104, 105],
+  'import-tas-model': [106, 106, 106, 106],
+  'match-import-settings': [107, 107, 108, 108],
+  'prepare-trb-drawings': [109, 109, 110, 110],
+  'pile-cap-reinforcement': [112, 113, 113, 113],
+  'pile-cap-data-check': [114, 114, 115, 115],
+  'column-reinforcement': [117, 118, 119, 119],
+  'column-schedule': [123, 124, 125, 126, 127],
+  'beam-side-label': [129, 130, 130, 131],
+  'beam-schedule': [134, 135, 136, 137, 137],
+  'beam-support-layout': [138, 133, 133, 138],
+  'slab-main-bars': [140, 141, 142, 144, 145],
+  'slab-support-bars': [146, 146, 147, 147],
+  'wall-reinforcement': [149, 150, 150, 151, 152],
+  'calculate-quantity': [155, 155, 155, 155],
+  'verify-rebar': [156, 156, 157, 157],
+  'review-quantity': [158, 158, 158, 158],
+  'quantity-reports': [159, 159, 160, 160, 160],
+}
+
 export function getTrbData(language) {
   const isId = language === 'id'
   const tutorialParts = partDefinitions[language].map(([number, title, summary], partIndex) => ({
@@ -112,7 +133,10 @@ export function getTrbData(language) {
     steps: lessons.slice(...partRanges[partIndex]).map(([id, titleId, titleEn, introId, introEn, pages, actions]) => ({
       id, title: isId ? titleId : titleEn, intro: isId ? introId : introEn, duration: `${actions.length * 2} min`, manualPages: pages,
       instructions: actions.map((item) => isId ? item.titleId : item.titleEn),
-      actions: actions.map((item, index) => ({ id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/trb/part-${partIndex + 1}/${item.file}`, alt: isId ? `Tampilan TRB untuk ${item.titleId}` : `TRB screen for ${item.titleEn}`, caption: isId ? `Referensi visual untuk tindakan ${index + 1}. Sumber manual halaman ${pages}.` : `Visual reference for action ${index + 1}. Manual pages ${pages}.`, requiredDescription: isId ? `Crop antarmuka TRB yang mengonfirmasi tindakan ini dari halaman manual ${pages}.` : `Focused TRB interface crop confirming this action from manual pages ${pages}.`, pending: true })),
+      actions: actions.map((item, index) => {
+        const manualPage = manualPageByAction[id][index]
+        return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/trb/manual/page-${manualPage}.webp`, alt: isId ? `Halaman ${manualPage} manual TRB untuk ${item.titleId}` : `TRB manual page ${manualPage} for ${item.titleEn}`, caption: isId ? `Screenshot manual TRB halaman ${manualPage}.` : `TRB manual screenshot, page ${manualPage}.`, requiredDescription: '', pending: false }
+      }),
       checks: isId ? ['Tindakan telah dicocokkan dengan dokumen sumber', 'Data dan cakupan elemen telah diperiksa', 'Hasil siap digunakan pada langkah berikutnya'] : ['Actions were checked against the source document', 'Element data and scope were reviewed', 'The result is ready for the next step'],
     })),
   }))
