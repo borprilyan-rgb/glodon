@@ -3,6 +3,7 @@ import ActionStepList from './ActionStepList'
 import ScreenshotViewer from './ScreenshotViewer'
 import ScreenshotNavigation from './ScreenshotNavigation'
 import ImageLightbox from './ImageLightbox'
+import { ArrowLeft, ArrowRight, CheckSquare } from 'lucide-react'
 
 export default function ActionStepViewer({ actions, t }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -30,10 +31,13 @@ export default function ActionStepViewer({ actions, t }) {
   }
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
   const navigateLightbox = useCallback((index) => { setLightboxIndex(index); setActiveIndex(mediaItems[index].actionIndex) }, [mediaItems])
+  const moveTo = (index) => { setActiveIndex(index); document.querySelector('.action-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+  const nextAction = () => { if (activeIndex < actions.length - 1) moveTo(activeIndex + 1); else document.getElementById('lesson-completion')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }
 
   return <section className="action-viewer" onKeyDown={(event) => { if (lightboxIndex === null && event.key === 'ArrowLeft' && activeIndex > 0) setActiveIndex(activeIndex - 1); if (lightboxIndex === null && event.key === 'ArrowRight' && activeIndex < actions.length - 1) setActiveIndex(activeIndex + 1) }}>
     <div className="action-viewer__list"><span className="eyebrow">{t.action.toUpperCase()}</span><ActionStepList actions={actions} activeIndex={activeIndex} onSelect={setActiveIndex} t={t} /></div>
     <div className="action-viewer__media"><ScreenshotViewer action={actions[activeIndex]} onEnlarge={openLightbox} t={t} /><ScreenshotNavigation current={activeIndex} total={actions.length} onPrevious={() => setActiveIndex(activeIndex - 1)} onNext={() => setActiveIndex(activeIndex + 1)} t={t} /></div>
+    <nav className="mobile-action-navigation" aria-label={t.screenshotNavigation}><button type="button" onClick={() => moveTo(activeIndex - 1)} disabled={activeIndex === 0}><ArrowLeft size={18} /><span>{t.previous}</span></button><strong>{activeIndex + 1} {t.of.toLowerCase()} {actions.length}</strong><button type="button" onClick={nextAction}><span>{activeIndex === actions.length - 1 ? t.ready : t.next}</span>{activeIndex === actions.length - 1 ? <CheckSquare size={18} /> : <ArrowRight size={18} />}</button></nav>
     {lightboxIndex !== null && <ImageLightbox items={mediaItems} index={lightboxIndex} onIndexChange={navigateLightbox} onClose={closeLightbox} t={t} opener={opener} />}
   </section>
 }
