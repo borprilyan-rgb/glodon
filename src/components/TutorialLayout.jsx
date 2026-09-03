@@ -1,7 +1,5 @@
-import Sidebar from './Sidebar'
-import MobileNavigation from './MobileNavigation'
+import LessonHeader from './LessonHeader'
 
-export default function TutorialLayout({ children, ...sidebarProps }) {
-  const total = sidebarProps.parts.reduce((n, part) => n + part.steps.length, 0)
-  return <div className="app-shell"><Sidebar {...sidebarProps} /><MobileNavigation onOpen={sidebarProps.openMobile} completed={sidebarProps.completed.size} total={total} t={sidebarProps.t} language={sidebarProps.language} onLanguageChange={sidebarProps.onLanguageChange} /><button className={`sidebar-backdrop ${sidebarProps.mobileOpen ? 'is-visible' : ''}`} onClick={sidebarProps.closeMobile} aria-label={sidebarProps.t.closeMenu} /><main className="main-content">{children}<footer>{sidebarProps.t.footer}</footer></main></div>
+export default function TutorialLayout({ children, activeStep, completed, total, showProgress, language, onLanguageChange, t }) {
+  return <div className="app-shell app-shell--focused"><LessonHeader activeStep={activeStep} completed={completed} total={total} showProgress={showProgress} language={language} onLanguageChange={onLanguageChange} t={t} /><main className="main-content main-content--focused">{children}<footer>{t.footer}</footer></main></div>
 }

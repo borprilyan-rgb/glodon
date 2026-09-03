@@ -1,0 +1,215 @@
+{
+  "results": [
+    {
+      "name": "Course route renders",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Course map contains three parts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Course map contains eighteen lessons",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "No lesson completed when course opens",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Continue Learning targets first lesson initially",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop course map has no horizontal overflow",
+      "passed": true,
+      "detail": "{\"client\":1440,\"scroll\":1440}"
+    },
+    {
+      "name": "Direct route #/part-1/create-project",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-1/floor-settings",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-1/import-drawing",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-1/set-scale",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-1/verify-scale",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-2/identify-columns",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-2/identify-beams",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-2/identify-slabs",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-2/identify-openings",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-2/apply-finishes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/view-expression",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/measurement-rules",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/filter-deduction",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/change-rule",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/recalculate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/verify-deduction",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/quantity-category",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Direct route #/part-3/configure-report",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Full course list absent from lesson",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Course Map button visible on lesson",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Course Map button returns to course route",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Completed lesson shown on map",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Most recent lesson identified",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Most recent incomplete lesson is in progress",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Continue Learning targets recent incomplete lesson",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Next Lesson navigates directly",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Browser Back restores prior lesson",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Browser Forward restores next lesson",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Previous Lesson navigates directly",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Desktop lesson has no horizontal overflow",
+      "passed": true,
+      "detail": "{\"client\":1440,\"scroll\":1440}"
+    },
+    {
+      "name": "Progress survives refresh",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Indonesian lesson localization works",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Indonesian course localization works",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Mobile course map has no horizontal overflow",
+      "passed": true,
+      "detail": "{\"client\":390,\"scroll\":390}"
+    },
+    {
+      "name": "Mobile lesson has no horizontal overflow",
+      "passed": true,
+      "detail": "{\"client\":390,\"scroll\":390}"
+    },
+    {
+      "name": "Mobile lesson retains Course Map control",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "failures": 0
+}
