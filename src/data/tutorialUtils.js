@@ -36,6 +36,7 @@ const buildActions = (step, partId, locale, actionDetails) => {
 
 export const buildAllSteps = (parts, locale, actionDetails) => parts.flatMap((part) => part.steps.map((step, index) => ({ ...step, actions: buildActions(step, part.id, locale, actionDetails), partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
 export const getStepHash = (step) => `#/${step.partId}/${step.id}`
+export const getStepPath = (step, product = 'tas') => `/${product}/lesson/${step.id}`
 
 export const officialCommands = [
   'Identify Door and Window Schedule', 'Set Classification and Quantity', 'Calculate Selected Entity',

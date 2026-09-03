@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
-import { getStepHash } from '../data/tutorialUtils'
+import { ArrowRight, BookOpen, CheckCircle2, Clock3, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
+import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
 import ProgressBar from './ProgressBar'
 
 const PREVIEW_IMAGE = '/tutorial/tas/welcome-preview.webp'
 
-export default function LandingPage({ allSteps, completed, started, continueStep, t }) {
+export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', scaffold, t }) {
   const [imageAvailable, setImageAvailable] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxOpener, setLightboxOpener] = useState(null)
+  if (product === 'trb') return <div className="landing-page trb-welcome"><section className="landing-hero landing-hero--trb" aria-labelledby="trb-title"><div className="landing-hero__copy"><span className="eyebrow">TRB · {t.technicalTutorial}</span><h1 id="trb-title">{scaffold.title}</h1><p>{scaffold.intro}</p><span className="status-badge status-badge--preparation"><Clock3 size={13} />{t.contentInPreparation}</span><div className="landing-actions"><a className="primary-button" href="/trb/course">{t.viewCourseMap}<ArrowRight size={17} /></a><a className="secondary-button" href="/">{t.backToAllCourses}</a></div></div><aside className="trb-welcome__note"><BookOpen size={28} /><h2>{t.curriculumPreview}</h2><p>{t.trbPreparationNote}</p><strong>{scaffold.parts.length} {t.preliminaryParts}</strong></aside></section></div>
+
   const isComplete = allSteps.length > 0 && completed.size === allSteps.length
   const isReturning = !isComplete && (started.size > 0 || completed.size > 0)
   const state = isComplete ? 'complete' : isReturning ? 'returning' : 'new'
@@ -30,8 +32,8 @@ export default function LandingPage({ allSteps, completed, started, continueStep
         <h1 id="landing-title">{heading}</h1>
         <p>{t.landingIntro}</p>
         <div className="landing-actions">
-          <a className="primary-button" href={getStepHash(progressLesson)}>{primaryLabel}<ArrowRight size={17} /></a>
-          <a className="secondary-button" href="#/course">{t.viewCourseMap}</a>
+          <a className="primary-button" href={getStepPath(progressLesson, product)}>{primaryLabel}<ArrowRight size={17} /></a>
+          <a className="secondary-button" href={`/${product}/course`}>{t.viewCourseMap}</a>
         </div>
         <p className="landing-course-info">{t.landingCourseInfo}</p>
         {state === 'returning' && <aside className="landing-progress" aria-label={t.overallProgress}>
