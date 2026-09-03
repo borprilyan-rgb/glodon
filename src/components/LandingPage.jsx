@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, BookOpen, CheckCircle2, Clock3, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
+import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
 import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
 import ProgressBar from './ProgressBar'
@@ -10,7 +10,12 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
   const [imageAvailable, setImageAvailable] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxOpener, setLightboxOpener] = useState(null)
-  if (product === 'trb') return <div className="landing-page trb-welcome"><section className="landing-hero landing-hero--trb" aria-labelledby="trb-title"><div className="landing-hero__copy"><span className="eyebrow">TRB · {t.technicalTutorial}</span><h1 id="trb-title">{scaffold.title}</h1><p>{scaffold.intro}</p><span className="status-badge status-badge--preparation"><Clock3 size={13} />{t.contentInPreparation}</span><div className="landing-actions"><a className="primary-button" href="/trb/course">{t.viewCourseMap}<ArrowRight size={17} /></a><a className="secondary-button" href="/">{t.backToAllCourses}</a></div></div><aside className="trb-welcome__note"><BookOpen size={28} /><h2>{t.curriculumPreview}</h2><p>{t.trbPreparationNote}</p><strong>{scaffold.parts.length} {t.preliminaryParts}</strong></aside></section></div>
+  if (product === 'trb') {
+    const trbComplete = allSteps.length > 0 && completed.size === allSteps.length
+    const trbStarted = started.size > 0 || completed.size > 0
+    const trbPrimary = trbComplete ? t.reviewCourse : trbStarted ? t.continueCourse : t.startCourse
+    return <div className="landing-page trb-welcome"><section className="landing-hero landing-hero--trb" aria-labelledby="trb-title"><div className="landing-hero__copy"><span className="eyebrow">TRB · {t.technicalTutorial}</span><h1 id="trb-title">{scaffold.title}</h1><p>{scaffold.intro}</p><div className="landing-actions"><a className="primary-button" href={getStepPath(trbComplete ? allSteps[0] : continueStep, 'trb')}>{trbPrimary}<ArrowRight size={17} /></a><a className="secondary-button" href="/trb/course">{t.viewCourseMap}</a></div><p className="landing-course-info">3 {t.partsLabel} · 18 {t.lessons.toLowerCase()} · Indonesia & English</p></div><aside className="trb-welcome__note"><BookOpen size={28} /><h2>{t.trbLearningOutcomes}</h2><ul><li>{t.trbOutcome1}</li><li>{t.trbOutcome2}</li><li>{t.trbOutcome3}</li></ul><ProgressBar completed={completed.size} total={allSteps.length} t={t} /></aside></section></div>
+  }
 
   const isComplete = allSteps.length > 0 && completed.size === allSteps.length
   const isReturning = !isComplete && (started.size > 0 || completed.size > 0)
