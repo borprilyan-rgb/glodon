@@ -16,6 +16,7 @@ export default function ActionStepViewer({ actions, t }) {
   useEffect(() => {
     const neighbors = [actions[activeIndex - 1], actions[activeIndex + 1]].filter(Boolean)
     neighbors.forEach((action) => {
+      if (action.pending) return
       const sources = action.mediaLayout === 'comparison' ? action.comparison.map((item) => item.image) : [action.image]
       sources.forEach((src) => { const image = new window.Image(); image.src = src })
     })

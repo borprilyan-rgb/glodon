@@ -5,7 +5,7 @@ function ScreenshotMedia({ media, onEnlarge, t, eager = false }) {
   const [failed, setFailed] = useState(false)
   const filename = media.image.split('/').pop()
   return <div className="screenshot-media">
-    {!failed ? <button type="button" className="screenshot-media__image" onClick={onEnlarge} aria-label={`${t.enlargeImage}: ${media.alt}`}><img src={media.image} alt={media.alt} loading={eager ? 'eager' : 'lazy'} onError={() => setFailed(true)} /><span><Maximize2 size={16} /> {t.enlargeImage}</span></button> : <div className="screenshot-media__placeholder" role="status"><span className="screenshot-placeholder__icon"><Image size={27} /></span><div><small>{media.pending ? t.screenshotPending : t.screenshotUnavailable}</small><h3>{media.label || media.alt}</h3><code>{filename}</code><p><strong>{t.requiredFile}:</strong> {media.requiredDescription || media.caption}</p></div></div>}
+    {!failed && !media.pending ? <button type="button" className="screenshot-media__image" onClick={onEnlarge} aria-label={`${t.enlargeImage}: ${media.alt}`}><img src={media.image} alt={media.alt} loading={eager ? 'eager' : 'lazy'} onError={() => setFailed(true)} /><span><Maximize2 size={16} /> {t.enlargeImage}</span></button> : <div className="screenshot-media__placeholder" role="status"><span className="screenshot-placeholder__icon"><Image size={27} /></span><div><small>{media.pending ? t.screenshotPending : t.screenshotUnavailable}</small><h3>{media.label || media.alt}</h3><code>{filename}</code><p><strong>{t.requiredFile}:</strong> {media.requiredDescription || media.caption}</p></div></div>}
     <div className="screenshot-media__caption">{media.label && <strong>{media.label}</strong>}<p>{media.caption}</p></div>
   </div>
 }

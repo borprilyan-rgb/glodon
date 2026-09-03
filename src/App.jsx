@@ -14,24 +14,30 @@ const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
 const TAS_PROGRESS_KEY = 'cubicost:tutorial:tas:progress'
 const TAS_LAST_LESSON_KEY = 'cubicost:tutorial:tas:lastLesson'
 const TAS_MIGRATION_KEY = 'cubicost:tutorial:tas:migrated-v1'
+const TAS_CURRICULUM_MIGRATION_KEY = 'cubicost:tutorial:tas:curriculum-v2-migrated'
+const TAS_CURRICULUM_BACKUP_KEY = 'cubicost:tutorial:tas:progress:curriculum-v1-backup'
 const TRB_PROGRESS_KEY = 'cubicost:tutorial:trb:progress'
 const TRB_LAST_LESSON_KEY = 'cubicost:tutorial:trb:lastLesson'
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
+const TAS_LESSON_IDS = new Set(getTasData('en').allSteps.map((step) => step.id))
 const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
+const TAS_LAST_LESSON_MAP = { 'floor-settings': 'floor-grade-settings', 'import-drawing': 'import-split-drawing', 'set-scale': 'scale-relocate-drawing', 'verify-scale': 'scale-relocate-drawing', 'view-expression': 'measurement-rules', 'filter-deduction': 'measurement-rules', 'change-rule': 'measurement-rules', recalculate: 'calculate-verify-quantity', 'verify-deduction': 'calculate-verify-quantity', 'quantity-category': 'quantity-reports', 'configure-report': 'quantity-reports' }
+
+function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESSON_MAP[id] || null }
 
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   if (path === '/') {
     const [first, second] = window.location.hash.replace(/^#\/?/, '').split('/')
     if (first === 'course') return { product: 'tas', page: 'course' }
-    if (first && first !== 'tas' && first !== 'trb') return { product: 'tas', page: 'lesson', partId: first, stepId: second }
+    if (first && first !== 'tas' && first !== 'trb') return { product: 'tas', page: 'lesson', stepId: mapTasLessonId(second) || second }
     return { page: 'hub' }
   }
   const [product, view, stepId] = path.split('/').filter(Boolean)
   if (!['tas', 'trb'].includes(product)) return { page: 'hub' }
   if (view === 'course') return { product, page: 'course' }
   if (product === 'trb' && view === 'reference') return { product, page: 'reference' }
-  if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId }
+  if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId: product === 'tas' ? mapTasLessonId(stepId) || stepId : stepId }
   return { product, page: 'welcome' }
 }
 
@@ -53,6 +59,24 @@ function loadTasProgress(initialStepId) {
         if (migrated.lastLesson) localStorage.setItem(TAS_LAST_LESSON_KEY, migrated.lastLesson)
       }
       localStorage.setItem(TAS_MIGRATION_KEY, '1')
+    }
+    if (!localStorage.getItem(TAS_CURRICULUM_MIGRATION_KEY)) {
+      const currentRaw = localStorage.getItem(TAS_PROGRESS_KEY)
+      if (currentRaw && !localStorage.getItem(TAS_CURRICULUM_BACKUP_KEY)) localStorage.setItem(TAS_CURRICULUM_BACKUP_KEY, currentRaw)
+      const current = JSON.parse(currentRaw || '[]')
+      const oldCompleted = new Set(Array.isArray(current) ? current : current.completed || [])
+      const oldStarted = new Set(Array.isArray(current) ? current : current.started || [...oldCompleted])
+      const completed = new Set(['identify-columns', 'identify-beams', 'identify-slabs', 'identify-openings', 'apply-finishes'].filter((id) => oldCompleted.has(id)))
+      if (['view-expression', 'measurement-rules', 'filter-deduction', 'change-rule'].every((id) => oldCompleted.has(id))) completed.add('measurement-rules')
+      if (['recalculate', 'verify-deduction'].every((id) => oldCompleted.has(id))) completed.add('calculate-verify-quantity')
+      if (['quantity-category', 'configure-report'].every((id) => oldCompleted.has(id))) completed.add('quantity-reports')
+      const started = new Set([...oldStarted].map(mapTasLessonId).filter(Boolean))
+      const checklists = Object.fromEntries(Object.entries(Array.isArray(current) ? {} : current.checklists || {}).filter(([id]) => TAS_LESSON_IDS.has(id)))
+      localStorage.setItem(TAS_PROGRESS_KEY, JSON.stringify({ completed: [...completed], checklists, started: [...started] }))
+      const previousLast = localStorage.getItem(TAS_LAST_LESSON_KEY) || (!Array.isArray(current) && current.lastLesson) || null
+      const mappedLast = mapTasLessonId(previousLast)
+      mappedLast ? localStorage.setItem(TAS_LAST_LESSON_KEY, mappedLast) : localStorage.removeItem(TAS_LAST_LESSON_KEY)
+      localStorage.setItem(TAS_CURRICULUM_MIGRATION_KEY, '1')
     }
     return normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY))
   } catch { return normaliseProgress([], initialStepId, null) }
