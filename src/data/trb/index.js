@@ -1,3 +1,5 @@
+import { getScreenshotCopy } from '../screenshotCopy.js'
+
 const a = (titleId, descriptionId, titleEn, descriptionEn, file) => ({ titleId, descriptionId, titleEn, descriptionEn, file })
 
 const lessons = [
@@ -135,7 +137,8 @@ export function getTrbData(language) {
       instructions: actions.map((item) => isId ? item.titleId : item.titleEn),
       actions: actions.map((item, index) => {
         const manualPage = manualPageByAction[id][index]
-        return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/trb/manual/page-${manualPage}.webp`, alt: isId ? `Halaman ${manualPage} manual TRB untuk ${item.titleId}` : `TRB manual page ${manualPage} for ${item.titleEn}`, caption: isId ? `Screenshot manual TRB halaman ${manualPage}.` : `TRB manual screenshot, page ${manualPage}.`, requiredDescription: '', pending: false }
+        const screenshotCopy = getScreenshotCopy('trb', manualPage, language)
+        return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/trb/manual/page-${manualPage}.webp`, imageAlt: screenshotCopy.alt, alt: screenshotCopy.alt, caption: screenshotCopy.caption, requiredDescription: '', pending: false }
       }),
       checks: isId ? ['Tindakan telah dicocokkan dengan dokumen sumber', 'Data dan cakupan elemen telah diperiksa', 'Hasil siap digunakan pada langkah berikutnya'] : ['Actions were checked against the source document', 'Element data and scope were reviewed', 'The result is ready for the next step'],
     })),
