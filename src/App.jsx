@@ -6,8 +6,6 @@ import TutorialLayout from './components/TutorialLayout'
 import CourseHub from './components/CourseHub'
 import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
-import TrbCourseMap from './components/TrbCourseMap'
-import TrbReferencePage from './components/TrbReferencePage'
 import TutorialStep from './components/TutorialStep'
 
 const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
@@ -27,8 +25,13 @@ function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESS
 
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
+  const hashParts = window.location.hash.replace(/^#\/?/, '').split('/')
+  if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
+    window.history.replaceState({}, '', '/trb/course')
+    return { product: 'trb', page: 'course' }
+  }
   if (path === '/') {
-    const [first, second] = window.location.hash.replace(/^#\/?/, '').split('/')
+    const [first, second] = hashParts
     if (first === 'course') return { product: 'tas', page: 'course' }
     if (first && first !== 'tas' && first !== 'trb') return { product: 'tas', page: 'lesson', stepId: mapTasLessonId(second) || second }
     return { page: 'hub' }
@@ -36,7 +39,6 @@ function routeFromLocation() {
   const [product, view, stepId] = path.split('/').filter(Boolean)
   if (!['tas', 'trb'].includes(product)) return { page: 'hub' }
   if (view === 'course') return { product, page: 'course' }
-  if (product === 'trb' && view === 'reference') return { product, page: 'reference' }
   if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId: product === 'tas' ? mapTasLessonId(stepId) || stepId : stepId }
   return { product, page: 'welcome' }
 }
@@ -140,6 +142,7 @@ export default function App() {
   const activeStep = activeIndex >= 0 ? { ...activeData.allSteps[activeIndex], partStepCount: activeData.tutorialParts.find((part) => part.id === activeData.allSteps[activeIndex].partId).steps.length } : null
   const term = query.trim().toLocaleLowerCase(language)
   const filteredParts = tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
+  const filteredTrbParts = trb.tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
   const lastIncomplete = tasProgress.lastLesson && !completed.has(tasProgress.lastLesson) ? allSteps.find((step) => step.id === tasProgress.lastLesson) : null
   const continueStep = lastIncomplete || allSteps.find((step) => !completed.has(step.id)) || allSteps[0]
   const trbLastIncomplete = trbProgress.lastLesson && !trbProgress.completed.has(trbProgress.lastLesson) ? trb.allSteps.find((step) => step.id === trbProgress.lastLesson) : null
@@ -158,6 +161,7 @@ export default function App() {
     return { ...current, completed: nextCompleted }
   })
   const reset = () => { if (window.confirm(t.resetConfirm)) setTasProgress({ completed: new Set(), checklists: {}, started: new Set(), lastLesson: null }) }
+  const resetTrb = () => { if (window.confirm(t.resetConfirm)) setTrbProgress({ completed: new Set(), checklists: {}, started: new Set(), lastLesson: null }) }
   const updateTrbCheck = (checkIndex) => setTrbProgress((current) => {
     const selected = new Set(current.completed.has(activeStep.id) ? activeStep.checks.map((_, index) => index) : current.checklists[activeStep.id] || [])
     selected.has(checkIndex) ? selected.delete(checkIndex) : selected.add(checkIndex)
@@ -179,9 +183,8 @@ export default function App() {
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" t={t} />}
     {product === 'tas' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={allSteps[activeIndex + 1]} product="tas" t={t} />}
-    {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" scaffold={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
-    {product === 'trb' && route.page === 'course' && <TrbCourseMap course={trb} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} t={t} />}
+    {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
+    {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} t={t} />}
     {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" t={t} />}
-    {product === 'trb' && route.page === 'reference' && <TrbReferencePage t={t} />}
   </TutorialLayout>
 }

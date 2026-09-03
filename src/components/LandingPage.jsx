@@ -1,65 +1,57 @@
 import { useState } from 'react'
 import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
+import { getProductConfig } from '../data/productConfig'
 import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
 import ProgressBar from './ProgressBar'
 
-const PREVIEW_IMAGE = '/tutorial/tas/welcome-preview.webp'
+const outcomeIcons = [BookOpen, Layers3, FileCheck2]
 
-export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', scaffold, t }) {
+export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', course, t }) {
   const [imageAvailable, setImageAvailable] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxOpener, setLightboxOpener] = useState(null)
-  if (product === 'trb') {
-    const trbComplete = allSteps.length > 0 && completed.size === allSteps.length
-    const trbStarted = started.size > 0 || completed.size > 0
-    const trbPrimary = trbComplete ? t.reviewCourse : trbStarted ? t.continueCourse : t.startCourse
-    return <div className="landing-page trb-welcome"><section className="landing-hero landing-hero--trb" aria-labelledby="trb-title"><div className="landing-hero__copy"><span className="eyebrow">TRB · {t.technicalTutorial}</span><h1 id="trb-title">{scaffold.title}</h1><p>{scaffold.intro}</p><div className="landing-actions"><a className="primary-button" href={getStepPath(trbComplete ? allSteps[0] : continueStep, 'trb')}>{trbPrimary}<ArrowRight size={17} /></a><a className="secondary-button" href="/trb/course">{t.viewCourseMap}</a></div><p className="landing-course-info">3 {t.partsLabel} · 18 {t.lessons.toLowerCase()} · Indonesia & English</p></div><aside className="trb-welcome__note"><BookOpen size={28} /><h2>{t.trbLearningOutcomes}</h2><ul><li>{t.trbOutcome1}</li><li>{t.trbOutcome2}</li><li>{t.trbOutcome3}</li></ul><ProgressBar completed={completed.size} total={allSteps.length} t={t} /></aside></section></div>
-  }
-
+  const config = getProductConfig(product, t, course)
   const isComplete = allSteps.length > 0 && completed.size === allSteps.length
   const isReturning = !isComplete && (started.size > 0 || completed.size > 0)
   const state = isComplete ? 'complete' : isReturning ? 'returning' : 'new'
-  const heading = t.landingHeading[state]
-  const primaryLabel = t.landingPrimary[state]
+  const heading = config.welcomeTitle || t.landingHeading[state]
   const progressLesson = isComplete ? allSteps[0] : continueStep
-  const previewItem = { image: PREVIEW_IMAGE, alt: t.previewAlt, label: t.previewLabel, caption: t.previewCaption }
-  const outcomes = [
-    { icon: BookOpen, title: t.outcome1Title, description: t.outcome1Text },
-    { icon: Layers3, title: t.outcome2Title, description: t.outcome2Text },
-    { icon: FileCheck2, title: t.outcome3Title, description: t.outcome3Text },
-  ]
+  const previewItem = { image: config.preview, alt: t.productPreviewAlt(config.name), label: t.previewLabel, caption: t.productPreviewCaption(config.name) }
 
-  return <div className="landing-page">
+  return <div className="landing-page" data-product={product}>
     <section className="landing-hero" aria-labelledby="landing-title">
       <div className="landing-hero__copy">
-        <span className="eyebrow">{t.landingEyebrow}</span>
+        <div className="landing-product-label"><span><img src={config.logo} alt={config.name} /></span><span className="eyebrow">{config.welcomeEyebrow}</span></div>
         <h1 id="landing-title">{heading}</h1>
-        <p>{t.landingIntro}</p>
+        <p>{config.welcomeText}</p>
         <div className="landing-actions">
-          <a className="primary-button" href={getStepPath(progressLesson, product)}>{primaryLabel}<ArrowRight size={17} /></a>
-          <a className="secondary-button" href={`/${product}/course`}>{t.viewCourseMap}</a>
+          <a className="primary-button" href={getStepPath(progressLesson, product)}>{t.landingPrimary[state]}<ArrowRight size={17} /></a>
+          <a className="secondary-button" href={config.courseRoute}>{t.viewCourseMap}</a>
         </div>
         <p className="landing-course-info">{t.landingCourseInfo}</p>
-        {state === 'returning' && <aside className="landing-progress" aria-label={t.overallProgress}>
+        <aside className="landing-progress" aria-label={t.overallProgress}>
           <ProgressBar completed={completed.size} total={allSteps.length} t={t} />
-          <p><span>{t.currentOrNextLesson}</span><strong>{continueStep.title}</strong></p>
-        </aside>}
+          <p><span>{t.currentOrNextLesson}</span><strong>{progressLesson?.title}</strong></p>
+        </aside>
       </div>
       <div className="landing-preview">
-        {imageAvailable ? <button className="landing-preview__image" type="button" onClick={(event) => { setLightboxOpener(event.currentTarget); setLightboxOpen(true) }} aria-label={t.enlargePreview}>
-          <img src={PREVIEW_IMAGE} alt={t.previewAlt} onError={() => setImageAvailable(false)} />
+        {imageAvailable ? <button className="landing-preview__image" type="button" onClick={(event) => { setLightboxOpener(event.currentTarget); setLightboxOpen(true) }} aria-label={t.enlargeProductPreview(config.name)}>
+          <img src={config.preview} alt={t.productPreviewAlt(config.name)} onError={() => setImageAvailable(false)} />
           <span><Maximize2 size={16} />{t.enlargeImage}</span>
-        </button> : <div className="landing-preview__placeholder" role="img" aria-label={t.previewPlaceholderAlt}>
+        </button> : <div className="landing-preview__placeholder" role="img" aria-label={t.productPreviewAlt(config.name)}>
           <span className="landing-preview__placeholder-icon"><Image size={28} /></span>
-          <div><strong>Cubicost TAS</strong><p>{t.previewUnavailable}</p><code>welcome-preview.webp</code></div>
+          <div><strong>{config.name}</strong><p>{t.previewUnavailable}</p><code>welcome-preview.webp</code></div>
         </div>}
-        <p className="landing-preview__caption">{t.previewCaption}</p>
+        <p className="landing-preview__caption">{t.productPreviewCaption(config.name)}</p>
       </div>
     </section>
     <section className="learning-outcomes" aria-labelledby="outcomes-title">
-      <div className="section-heading"><span className="eyebrow">Cubicost TAS</span><h2 id="outcomes-title">{t.whatYouWillLearn}</h2></div>
-      <div className="outcome-grid">{outcomes.map(({ icon: Icon, title, description }) => <article className="outcome-card" key={title}><span><Icon size={20} /></span><div><h3>{title}</h3><p>{description}</p></div><CheckCircle2 className="outcome-card__check" size={17} aria-hidden="true" /></article>)}</div>
+      <div className="section-heading"><span className="eyebrow">{config.name}</span><h2 id="outcomes-title">{t.whatYouWillLearn}</h2></div>
+      <div className="outcome-grid">{config.outcomes.map(({ title, description }, index) => {
+        const Icon = outcomeIcons[index]
+        return <article className="outcome-card" key={title}><span><Icon size={20} /></span><div><h3>{title}</h3><p>{description}</p></div><CheckCircle2 className="outcome-card__check" size={17} aria-hidden="true" /></article>
+      })}</div>
     </section>
     {lightboxOpen && <ImageLightbox items={[previewItem]} index={0} onIndexChange={() => {}} onClose={() => setLightboxOpen(false)} t={t} opener={lightboxOpener} />}
   </div>
