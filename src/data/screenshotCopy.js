@@ -83,9 +83,12 @@ const fallback = {
 export function getScreenshotCopy(product, page, language) {
   const isId = language === 'id'
   const visible = (scenes[product]?.[page] || fallback[product])[isId ? 0 : 1]
-  const directCaption = `${visible.charAt(0).toUpperCase()}${visible.slice(1)}.`
+  const subject = `${visible.charAt(0).toUpperCase()}${visible.slice(1)}`
+  const directCaption = `${subject}.`
   return {
     caption: directCaption,
-    alt: `${product.toUpperCase()}: ${visible}`,
+    alt: isId
+      ? `${product.toUpperCase()}: potongan antarmuka yang menampilkan ${visible}`
+      : `${product.toUpperCase()}: cropped interface showing ${subject.charAt(0).toLowerCase()}${subject.slice(1)}`,
   }
 }
