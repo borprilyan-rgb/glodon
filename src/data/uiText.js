@@ -1,11 +1,11 @@
-export const uiText = {
+﻿export const uiText = {
   id: {
     language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Pembelajaran TAS, TRB & TME',
     progress: 'Progres tutorial', stepsProgress: (done, total) => `${done} dari ${total} langkah`, search: 'Cari materi', searchAria: 'Cari materi tutorial',
     noResults: (query) => `Materi tidak ditemukan untuk “${query}”.`, reset: 'Reset progres', resetConfirm: 'Reset seluruh progres tutorial? Tindakan ini tidak dapat dibatalkan.',
     lessons: 'Materi', closeMenu: 'Tutup menu tutorial', courseProgress: 'PROGRES BELAJAR', complete: 'SELESAI', part: 'BAGIAN', step: 'LANGKAH', of: 'DARI',
     procedure: 'PROSEDUR', followSteps: 'Ikuti langkah berikut', technicalNote: 'Catatan teknis', warning: 'Perhatian penting',
-    stepCheck: 'PEMERIKSAAN LANGKAH', ready: 'Siap melanjutkan?', completionPrompt: 'Pastikan semua pemeriksaan berikut telah diselesaikan.', markComplete: 'Tandai selesai', completed: 'Selesai', lessonCompleted: 'Pelajaran selesai ✓', partCompleted: (number) => `Bagian ${number} selesai ✓`, courseCompleted: 'Selesai belajar ✓', completedLesson: (title) => `Anda telah menyelesaikan “${title}”.`, completedPart: (title) => `${title} telah diselesaikan.`, completedCourse: (product) => `Anda telah menyelesaikan seluruh tutorial Cubicost ${product}.`, nextDestination: 'Berikutnya:', continueNextLesson: 'Lanjut ke Pelajaran Berikutnya', nextLessonShort: 'Pelajaran Berikutnya', startNextPart: 'Mulai Bagian Berikutnya', reviewCourseProgress: 'Lihat Progres', reviewCompletion: 'Periksa Penyelesaian', nextPart: (number, title) => `Bagian ${number} — ${title}`,
+    stepCheck: 'PEMERIKSAAN LANGKAH', ready: 'Siap melanjutkan?', completionPrompt: 'Pastikan semua pemeriksaan berikut telah diselesaikan.', markComplete: 'Tandai selesai', completed: 'Selesai', lessonCompleted: 'Pelajaran selesai ✓', partCompleted: (number) => `Bagian ${number} selesai ✓`, courseCompleted: 'Selesai belajar ✓', completedLesson: (title) => `Anda telah menyelesaikan “${title}”.`, completedPart: (title) => `${title} telah diselesaikan.`, completedCourse: (product) => `Anda telah menyelesaikan seluruh tutorial Cubicost ${product}.`, nextDestination: 'Berikutnya:', continueNextLesson: 'Lanjut ke Pelajaran Berikutnya', nextLessonShort: 'Pelajaran Berikutnya', startNextPart: 'Mulai Bagian Berikutnya', reviewCourseProgress: 'Lihat Progres', reviewCompletion: 'Periksa Penyelesaian', nextPart: (number, title) => `Bagian ${number}, ${title}`,
     previous: 'Sebelumnya', next: 'Berikutnya', backTo: 'Kembali ke', returnTo: 'Kembali ke', overview: 'Ikhtisar', previousNextAria: 'Langkah tutorial sebelumnya dan berikutnya',
     screenshotRequired: 'TANGKAPAN LAYAR YANG DIPERLUKAN', referenceScreen: 'Layar referensi', openImage: 'Buka gambar',
     heroEyebrow: 'TAS BEGINNER TUTORIAL', heroTitle: 'Tutorial Teknis', heroProduct: 'Cubicost TAS',
@@ -38,11 +38,11 @@ export const uiText = {
     noResults: (query) => `No results for “${query}”.`, reset: 'Reset progress', resetConfirm: 'Reset all tutorial progress? This cannot be undone.',
     lessons: 'Lessons', closeMenu: 'Close tutorial menu', courseProgress: 'LEARNING PROGRESS', complete: 'COMPLETE', part: 'PART', step: 'STEP', of: 'OF',
     procedure: 'PROCEDURE', followSteps: 'Follow these steps', technicalNote: 'Technical note', warning: 'Important warning',
-    stepCheck: 'STEP CHECK', ready: 'Ready to move on?', completionPrompt: 'Confirm that all of the following checks have been completed.', markComplete: 'Mark as complete', completed: 'Completed', lessonCompleted: 'Lesson completed ✓', partCompleted: (number) => `Part ${number} completed ✓`, courseCompleted: 'Learning complete ✓', completedLesson: (title) => `You have completed “${title}”.`, completedPart: (title) => `${title} is complete.`, completedCourse: (product) => `You have completed the Cubicost ${product} tutorial.`, nextDestination: 'Next:', continueNextLesson: 'Continue to Next Lesson', nextLessonShort: 'Next Lesson', startNextPart: 'Start Next Part', reviewCourseProgress: 'Review Learning Progress', reviewCompletion: 'Review Completion', nextPart: (number, title) => `Part ${number} — ${title}`,
+    stepCheck: 'STEP CHECK', ready: 'Ready to move on?', completionPrompt: 'Confirm that all of the following checks have been completed.', markComplete: 'Mark as complete', completed: 'Completed', lessonCompleted: 'Lesson completed ✓', partCompleted: (number) => `Part ${number} completed ✓`, courseCompleted: 'Learning complete ✓', completedLesson: (title) => `You have completed “${title}”.`, completedPart: (title) => `${title} is complete.`, completedCourse: (product) => `You have completed the Cubicost ${product} tutorial.`, nextDestination: 'Next:', continueNextLesson: 'Continue to Next Lesson', nextLessonShort: 'Next Lesson', startNextPart: 'Start Next Part', reviewCourseProgress: 'Review Learning Progress', reviewCompletion: 'Review Completion', nextPart: (number, title) => `Part ${number}, ${title}`,
     previous: 'Previous', next: 'Next', backTo: 'Back to', returnTo: 'Return to', overview: 'Overview', previousNextAria: 'Previous and next tutorial steps',
     screenshotRequired: 'REQUIRED SCREENSHOT', referenceScreen: 'Reference screen', openImage: 'Open image',
     heroEyebrow: 'TAS BEGINNER TUTORIAL', heroTitle: 'Technical Tutorial', heroProduct: 'Cubicost TAS',
-    heroIntro: 'From drawing setup to defensible quantities—a structured field guide for building reliable TAS models and reports.',
+    heroIntro: 'From drawing setup to defensible quantities, a structured field guide for building reliable TAS models and reports.',
     start: 'Start the tutorial', practicalParts: 'practical parts', guidedSteps: 'guided steps',
     principle1: 'Prepare accurately', principle1Text: 'Floors, drawings, and scale first.', principle2: 'Model in sequence', principle2Text: 'Respect element dependencies.', principle3: 'Verify quantities', principle3Text: 'Trace every result before reporting.',
     courseMap: 'LEARNING MAP', mapTitle: 'Three parts. One reliable workflow.', mapText: 'Complete the lessons in order, or jump directly to the procedure you need.',
@@ -66,3 +66,4 @@ export const uiText = {
     productPreviewAlt: (product) => `Preview of the ${product} interface used throughout the tutorial`, productPreviewCaption: (product) => `Welcome to ${product} tutorial.`, enlargeProductPreview: (product) => `Enlarge the ${product} preview`,
   },
 }
+
