@@ -1,8 +1,8 @@
-const emailSubject = '[Cubicost Support] Pertanyaan TAS/TRB'
+const emailSubject = '[Cubicost Support] Pertanyaan TAS/TRB/TME'
 const emailBody = `Nama / Name:
 Departemen / Department:
 Proyek / Project:
-Produk / Product: TAS / TRB
+Produk / Product: TAS / TRB / TME
 Versi Aplikasi / Application Version:
 Pelajaran Terkait / Related Lesson:
 
@@ -13,7 +13,7 @@ const whatsappMessage = `Halo, saya memerlukan bantuan terkait tutorial Cubicost
 
 Nama:
 Departemen:
-Produk: TAS / TRB
+Produk: TAS / TRB / TME
 Pelajaran terkait:
 Pertanyaan:`
 

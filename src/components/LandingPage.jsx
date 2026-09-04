@@ -22,7 +22,7 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
   return <div className="landing-page" data-product={product}>
     <section className="landing-hero" aria-labelledby="landing-title">
       <div className="landing-hero__copy">
-        <div className="landing-product-label"><span><img src={config.logo} alt={config.name} /></span><span className="eyebrow">{config.welcomeEyebrow}</span></div>
+        <div className="landing-product-label"><span><img src={config.logo} alt={config.name} onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling.hidden = false }} /><span className="product-logo-fallback" hidden>{config.shortName}</span></span><span className="eyebrow">{config.welcomeEyebrow}</span></div>
         <h1 id="landing-title">{heading}</h1>
         <p>{config.welcomeText}</p>
         <div className="landing-actions">
@@ -30,7 +30,7 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
           <a className="secondary-button" href={config.courseRoute}>{t.viewCourseMap}</a>
         </div>
         <a className="landing-contact-link" href="/contact">{t.stillNeedHelp} {t.contactUs}</a>
-        <p className="landing-course-info">{t.landingCourseInfo}</p>
+        <p className="landing-course-info">{t.learningSummary(config.partCount, allSteps.length)}</p>
         <aside className="landing-progress" aria-label={t.overallProgress}>
           <ProgressBar completed={completed.size} total={allSteps.length} t={t} />
           <p><span>{t.currentOrNextLesson}</span><strong>{progressLesson?.title}</strong></p>

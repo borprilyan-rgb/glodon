@@ -209,6 +209,14 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .main-content--focused footer { padding-bottom: calc(76px + env(safe-area-inset-bottom)); font-size: 14px; }
 }
 
+/* Three-product learning hub and text fallback for products without a logo asset. */
+@media (min-width: 1181px) {
+  .hub-course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.product-mark__fallback,
+.product-logo-fallback { display: grid; place-items: center; width: 100%; height: 100%; color: white; background: var(--navy); border-radius: 8px; font-size: 14px; font-weight: 900; letter-spacing: .08em; }
+.product-mark__fallback[hidden], .product-logo-fallback[hidden] { display: none; }
+
 .contact-nav-button { display: flex; align-items: center; gap: 6px; padding: 8px 10px; color: white; border: 1px solid #48647f; border-radius: 5px; font-size: 11px; font-weight: 700; }
 .contact-nav-button:hover { background: #1b3b5d; }
 .hub-contact-link, .landing-contact-link, .lesson-help-link { color: var(--muted); font-size: 13px; }
