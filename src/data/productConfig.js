@@ -8,7 +8,7 @@ export function getProductConfig(product, t, course = {}) {
     logo: `/branding/cubicost-${product}-logo.png`,
     welcomeTitle: hasCourseData ? course.title : null,
     welcomeText: hasCourseData ? course.intro : t.landingIntro,
-    welcomeEyebrow: hasCourseData ? `${product.toUpperCase()} · ${t.technicalTutorial}` : t.landingEyebrow,
+    welcomeEyebrow: hasCourseData ? `${product === 'tme' ? 'TME-C' : product.toUpperCase()} · ${t.technicalTutorial}` : t.landingEyebrow,
     courseTitle: hasCourseData ? course.title : `${t.heroProduct} ${t.heroTitle}`,
     courseIntro: hasCourseData ? course.intro : t.heroIntro,
     partCount: course.tutorialParts?.length || 3,
