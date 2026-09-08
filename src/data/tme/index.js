@@ -11,7 +11,7 @@ const definitions = [
       action('Atur nama dan tinggi lantai', 'Set floor names and heights', 'Ubah Floor Name dan Floor Height sesuai data proyek.', 'Update Floor Name and Floor Height from the project data.', 'floor-settings-name-height.png', 6),
       action('Tinjau hasil pengaturan', 'Review the completed settings', 'Periksa kembali nama lantai, elevasi, dan urutannya.', 'Check the completed floor names, elevations and sequence.', 'floor-settings-review.png', 6),
     ], 'Penetapan lantai yang benar memungkinkan riser dan kuantitas dikelompokkan sesuai lantainya.', 'Correct floor assignment allows risers and quantities to be grouped by floor.'),
-    lesson('prepare-drawings', 'Menyiapkan Gambar TME', 'Prepare TME Drawings', 'Unggah, skalakan, pisahkan, beri nama, tetapkan lantai, dan selaraskan gambar sistem.', 'Upload, scale, split, name, assign and align system drawings.', '8–13', [
+    lesson('prepare-drawings', 'Menyiapkan Gambar TME-C', 'Prepare TME-C Drawings', 'Unggah, skalakan, pisahkan, beri nama, tetapkan lantai, dan selaraskan gambar sistem.', 'Upload, scale, split, name, assign and align system drawings.', '8–13', [
       action('Tambahkan gambar', 'Add drawings', 'Gunakan Add Drawing dan pilih file gambar yang diperlukan.', 'Use Add Drawing and select the required drawing files.', 'prepare-drawings-add.png', 8),
       action('Periksa dan koreksi skala', 'Check and correct scale', 'Gunakan Scale Drawing atau rasio jarak terukur terhadap jarak aktual, lalu lakukan pemeriksaan independen.', 'Use Scale Drawing or the measured-to-actual distance ratio, then perform an independent check.', 'prepare-drawings-scale.png', 10),
       action('Pisahkan dan beri nama denah', 'Split and name plans', 'Pisahkan beberapa denah dalam satu gambar dan beri nama yang jelas.', 'Split multiple plans in one drawing and give each a clear name.', 'prepare-drawings-split-name.png', 9),
@@ -163,7 +163,7 @@ export function getTmeData(language) {
   return {
     id: 'tme',
     title: isId ? 'Tutorial Teknis Cubicost TME-C' : 'Cubicost TME-C Technical Tutorial',
-    intro: isId ? 'Pelajari alur kerja Cubicost TME mulai dari persiapan gambar, identifikasi sistem MVAC, pemadam kebakaran, elektrikal, dan plumbing hingga perhitungan kuantitas.' : 'Learn the Cubicost TME workflow from drawing preparation and MVAC, fire-protection, electrical and plumbing identification through quantity calculation.',
+    intro: isId ? 'Pelajari alur kerja Cubicost TME-C mulai dari persiapan gambar, identifikasi sistem MVAC, pemadam kebakaran, elektrikal, dan plumbing hingga perhitungan kuantitas.' : 'Learn the Cubicost TME-C workflow from drawing preparation and MVAC, fire-protection, electrical and plumbing identification through quantity calculation.',
     tutorialParts, allSteps, lessonCount: allSteps.length, status: 'available',
   }
 }

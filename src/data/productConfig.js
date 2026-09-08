@@ -1,14 +1,16 @@
+export const getProductLabel = (product) => product === 'tme' ? 'TME-C' : product.toUpperCase()
+
 export function getProductConfig(product, t, course = {}) {
   const hasCourseData = product !== 'tas'
   const isTme = product === 'tme'
   return {
     id: product,
-    name: `Cubicost ${product === 'tme' ? 'TME-C' : product.toUpperCase()}`,
-    shortName: product === 'tme' ? 'TME-C' : product.toUpperCase(),
+    name: `Cubicost ${getProductLabel(product)}`,
+    shortName: getProductLabel(product),
     logo: `/branding/cubicost-${product}-logo.png`,
     welcomeTitle: hasCourseData ? course.title : null,
     welcomeText: hasCourseData ? course.intro : t.landingIntro,
-    welcomeEyebrow: hasCourseData ? `${product === 'tme' ? 'TME-C' : product.toUpperCase()} · ${t.technicalTutorial}` : t.landingEyebrow,
+    welcomeEyebrow: hasCourseData ? `${getProductLabel(product)} · ${t.technicalTutorial}` : t.landingEyebrow,
     courseTitle: hasCourseData ? course.title : `${t.heroProduct} ${t.heroTitle}`,
     courseIntro: hasCourseData ? course.intro : t.heroIntro,
     partCount: course.tutorialParts?.length || 3,
