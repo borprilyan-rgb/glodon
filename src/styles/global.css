@@ -259,6 +259,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .lesson-help-link { margin-bottom: 72px; }
 }
 
+.screenshot-media__caption .screenshot-media__instruction { margin-top: 9px; padding-top: 9px; color: #38526c; border-top: 1px solid #d9e4ed; font-size: 13px; line-height: 1.6; }.screenshot-media__instructions { display: grid; gap: 8px; margin: 9px 0 0; padding: 9px 0 0 24px; color: #38526c; border-top: 1px solid #d9e4ed; font-size: 13px; line-height: 1.6; }.screenshot-media__instructions li { padding-left: 3px; }
+.lightbox__image-wrap { overflow: auto; place-items: start; cursor: grab; touch-action: pan-x pan-y pinch-zoom; scrollbar-color: #57708a #0d2035; }.lightbox__image-wrap.is-panning { cursor: grabbing; user-select: none; }.lightbox__image-wrap img { max-width: none; min-width: 0; max-height: none; object-fit: contain; user-select: none; }.lightbox__zoom { position: absolute; top: 12px; left: 12px; z-index: 2; display: flex; align-items: center; gap: 2px; padding: 3px; color: white; background: #1d3c5d; border: 1px solid #57708a; border-radius: 4px; }.lightbox__zoom button { display: grid; place-items: center; width: 31px; height: 31px; color: white; background: transparent; border: 0; border-radius: 3px; cursor: pointer; }.lightbox__zoom button:hover:not(:disabled) { background: #31577e; }.lightbox__zoom button:disabled { opacity: .45; cursor: default; }.lightbox__zoom span { min-width: 43px; text-align: center; font-size: 11px; font-weight: 800; }
+
 @media (prefers-reduced-motion: reduce) {
   .action-list__item, .course-part__toggle { scroll-behavior: auto; transition: none; }
 }

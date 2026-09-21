@@ -22,7 +22,7 @@
     },
     {
       "name": "Continue Learning targets first lesson initially",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
@@ -31,92 +31,92 @@
       "detail": "{\"client\":1440,\"scroll\":1440}"
     },
     {
-      "name": "Direct route #/part-1/create-project",
+      "name": "Direct route /tas/lesson/create-project",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-1/floor-settings",
+      "name": "Direct route /tas/lesson/tas-interface-attributes",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-1/import-drawing",
+      "name": "Direct route /tas/lesson/floor-grade-settings",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-1/set-scale",
+      "name": "Direct route /tas/lesson/import-split-drawing",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-1/verify-scale",
+      "name": "Direct route /tas/lesson/scale-relocate-drawing",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-2/identify-columns",
+      "name": "Direct route /tas/lesson/axis-grid",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-2/identify-beams",
+      "name": "Direct route /tas/lesson/identify-pile-caps",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-2/identify-slabs",
+      "name": "Direct route /tas/lesson/identify-columns",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-2/identify-openings",
+      "name": "Direct route /tas/lesson/identify-beams",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-2/apply-finishes",
+      "name": "Direct route /tas/lesson/identify-slabs",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/view-expression",
+      "name": "Direct route /tas/lesson/identify-structural-walls",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/measurement-rules",
+      "name": "Direct route /tas/lesson/identify-architectural-walls",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/filter-deduction",
+      "name": "Direct route /tas/lesson/identify-openings",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/change-rule",
+      "name": "Direct route /tas/lesson/apply-finishes",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/recalculate",
+      "name": "Direct route /tas/lesson/measurement-rules",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/verify-deduction",
+      "name": "Direct route /tas/lesson/measurement-settings",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/quantity-category",
+      "name": "Direct route /tas/lesson/calculate-verify-quantity",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "Direct route #/part-3/configure-report",
+      "name": "Direct route /tas/lesson/quantity-reports",
       "passed": true,
       "detail": ""
     },
@@ -132,7 +132,7 @@
     },
     {
       "name": "Course Map button returns to course route",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
@@ -142,7 +142,7 @@
     },
     {
       "name": "Most recent lesson identified",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
@@ -152,12 +152,12 @@
     },
     {
       "name": "Continue Learning targets recent incomplete lesson",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
       "name": "Next Lesson navigates directly",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
@@ -167,12 +167,12 @@
     },
     {
       "name": "Browser Forward restores next lesson",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
       "name": "Previous Lesson navigates directly",
-      "passed": true,
+      "passed": false,
       "detail": ""
     },
     {
@@ -207,9 +207,9 @@
     },
     {
       "name": "Mobile lesson retains Course Map control",
-      "passed": true,
+      "passed": false,
       "detail": ""
     }
   ],
-  "failures": 0
+  "failures": 8
 }

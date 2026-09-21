@@ -5,7 +5,7 @@ import ScreenshotNavigation from './ScreenshotNavigation'
 import ImageLightbox from './ImageLightbox'
 import { ArrowLeft, ArrowRight, CheckSquare } from 'lucide-react'
 
-export default function ActionStepViewer({ actions, isComplete, destination, t }) {
+export default function ActionStepViewer({ actions, isComplete, destination, showInstructionsBelowImage = false, t }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState(null)
   const [opener, setOpener] = useState(null)
@@ -37,8 +37,8 @@ export default function ActionStepViewer({ actions, isComplete, destination, t }
   const completionAction = destination.type === 'course' ? t.reviewCourseProgress : destination.type === 'part' ? t.startNextPart : t.nextLessonShort
 
   return <section className="action-viewer" onKeyDown={(event) => { if (lightboxIndex === null && event.key === 'ArrowLeft' && activeIndex > 0) setActiveIndex(activeIndex - 1); if (lightboxIndex === null && event.key === 'ArrowRight' && activeIndex < actions.length - 1) setActiveIndex(activeIndex + 1) }}>
-    <div className="action-viewer__list"><span className="eyebrow">{t.action.toUpperCase()}</span><ActionStepList actions={actions} activeIndex={activeIndex} onSelect={setActiveIndex} t={t} /></div>
-    <div className="action-viewer__media"><ScreenshotViewer action={actions[activeIndex]} onEnlarge={openLightbox} t={t} /><ScreenshotNavigation current={activeIndex} total={actions.length} onPrevious={() => setActiveIndex(activeIndex - 1)} onNext={() => setActiveIndex(activeIndex + 1)} t={t} /></div>
+    <div className="action-viewer__list"><span className="eyebrow">{t.action.toUpperCase()}</span><ActionStepList actions={actions} activeIndex={activeIndex} onSelect={setActiveIndex} showInstructionsBelowImage={showInstructionsBelowImage} t={t} /></div>
+    <div className="action-viewer__media"><ScreenshotViewer action={actions[activeIndex]} onEnlarge={openLightbox} showInstruction={showInstructionsBelowImage} t={t} /><ScreenshotNavigation current={activeIndex} total={actions.length} onPrevious={() => setActiveIndex(activeIndex - 1)} onNext={() => setActiveIndex(activeIndex + 1)} t={t} /></div>
     <nav className="mobile-action-navigation" aria-label={t.screenshotNavigation}><button type="button" onClick={() => moveTo(activeIndex - 1)} disabled={activeIndex === 0 || isComplete}><ArrowLeft size={18} /><span>{t.previous}</span></button><strong>{activeIndex + 1} {t.of.toLowerCase()} {actions.length}</strong>{isComplete ? <a href={destination.href}><span>{completionAction}</span><ArrowRight size={18} /></a> : <button type="button" onClick={nextAction}><span>{activeIndex === actions.length - 1 ? t.reviewCompletion : t.next}</span>{activeIndex === actions.length - 1 ? <CheckSquare size={18} /> : <ArrowRight size={18} />}</button>}</nav>
     {lightboxIndex !== null && <ImageLightbox items={mediaItems} index={lightboxIndex} onIndexChange={navigateLightbox} onClose={closeLightbox} t={t} opener={opener} />}
   </section>
