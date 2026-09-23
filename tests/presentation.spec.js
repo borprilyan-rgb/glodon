@@ -2,6 +2,32 @@ import { test, expect } from '@playwright/test'
 
 const origin = 'http://127.0.0.1:5173'
 
+test('enlarged screenshot stays inside fullscreen and preserves the slide', async ({ page }) => {
+  await openEnglish(page, '/present?product=tme&lesson=setting-gambar&slide=1')
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
+  const slideUrl = page.url()
+  await page.getByRole('button', { name: 'Enlarge image', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Enlarged screenshot preview' })
+  await expect(dialog).toBeVisible()
+  expect(await dialog.evaluate((element) => document.fullscreenElement.contains(element))).toBe(true)
+  const image = dialog.locator('img')
+  await expect(image).toBeVisible()
+  await page.getByRole('button', { name: 'Zoom in', exact: true }).click()
+  await expect(dialog.getByText('150%', { exact: true })).toBeVisible()
+  await page.keyboard.press('ArrowRight')
+  await expect(page).toHaveURL(slideUrl)
+  await page.screenshot({ path: 'test-results/presentation-expanded.png', fullPage: true })
+  await page.getByRole('button', { name: 'Close image', exact: true }).click()
+  await expect(dialog).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Enlarge image', exact: true })).toBeFocused()
+  await expect(page).toHaveURL(slideUrl)
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
+  await page.getByRole('button', { name: 'Enlarge image', exact: true }).click()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+})
+
 test('walkthrough continues across lessons and sections in both directions', async ({ page }) => {
   await openEnglish(page, '/present?product=tme&lesson=setting-gambar&slide=2')
   await page.getByRole('button', { name: 'Next lesson', exact: true }).click()

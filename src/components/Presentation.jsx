@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight, Maximize, Minimize, Play, X } from 'lucide-react
 import { presentationCopy } from '../data/presentation'
 import { getProductLabel } from '../data/productConfig'
 import '../styles/presentation.css'
+import ImageLightbox from './ImageLightbox'
+import { uiText } from '../data/uiText'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -30,7 +32,9 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const [fullscreen, setFullscreen] = useState(Boolean(document.fullscreenElement))
   const [notice, setNotice] = useState('')
   const [failedImage, setFailedImage] = useState(null)
+  const [expandedImage, setExpandedImage] = useState(null)
   const root = useRef(null)
+  const t = uiText[language]
   const lesson = courses[product].allSteps.find((step) => step.id === lessonId) || courses[product].allSteps[0]
   const lessons = courses[product].allSteps
   const lessonIndex = lessons.findIndex((step) => step.id === lesson.id)
@@ -71,6 +75,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   }, [])
   useEffect(() => {
     const keydown = (event) => {
+      if (expandedImage) return
       if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, select, textarea, [contenteditable]') || (event.key === ' ' && event.target.closest('button, a, summary'))) return
       if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
         event.preventDefault()
@@ -87,20 +92,21 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     }
     window.addEventListener('keydown', keydown)
     return () => window.removeEventListener('keydown', keydown)
-  }, [count, c.fullscreenError, navigate])
+  }, [count, c.fullscreenError, navigate, expandedImage])
 
   const exitPath = walkthrough ? `/${product}/lesson/${lesson.id}` : '/'
   return <div className="presentation" ref={root}>
+    <div className="presentation-content" inert={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
       <a href={exitPath} className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
       <div><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button><button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button><a href={exitPath} aria-label={c.exit}><X size={20} /></a></div>
     </header>
     <main className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : ''}`} aria-label={walkthrough ? c.actions : c.overview}>
       <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${lesson.title}` : slide.label}</span><h1>{walkthrough ? action.title : slide.title}</h1>{!walkthrough && <p>{slide.text}</p>}</div>
-      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} />}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <>
+      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image: action.image, alt: action.imageAlt || action.alt || action.title, caption: action.title, opener: event.currentTarget })}><img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} /></button>}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <>
         {slide.kind === 'intro' && <div className="presentation-products">{Object.keys(courses).map((id) => <div key={id}><img src={`/branding/cubicost-${id}-logo.png`} alt={`Cubicost ${getProductLabel(id)}`} /><strong>{getProductLabel(id)}</strong></div>)}</div>}
         {slide.kind === 'coverage' && <div className="presentation-cards">{Object.entries(courses).map(([id, course], i) => <article key={id}><span className="presentation-card-number">0{i + 1}</span><h2>{getProductLabel(id)}</h2><p>{c.coverage[i]}</p><small>{course.allSteps.length} {c.lessons} · {course.tutorialParts.length} {c.sections}</small></article>)}</div>}
-        {slide.kind === 'experience' && <div className="presentation-experience"><img src={demoLesson.actions[0].image} alt={demoLesson.actions[0].imageAlt || demoLesson.title} /><div><span className="presentation-eyebrow">TAS</span><h2>{demoLesson.title}</h2><p>{demoLesson.intro}</p></div></div>}
+        {slide.kind === 'experience' && <div className="presentation-experience"><button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image: demoLesson.actions[0].image, alt: demoLesson.actions[0].imageAlt || demoLesson.title, caption: demoLesson.title, opener: event.currentTarget })}><img src={demoLesson.actions[0].image} alt={demoLesson.actions[0].imageAlt || demoLesson.title} /></button><div><span className="presentation-eyebrow">TAS</span><h2>{demoLesson.title}</h2><p>{demoLesson.intro}</p></div></div>}
         {['benefits', 'next'].includes(slide.kind) && <div className="presentation-cards">{(slide.kind === 'benefits' ? c.benefits : c.nextSteps).map(([title, text], i) => <article key={title}><span className="presentation-card-number">0{i + 1}</span><h2>{title}</h2><p>{text}</p></article>)}</div>}
       </>}
     </main>
@@ -111,5 +117,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     </footer>
     <nav className="presentation-course-nav" aria-label={c.course}>{Object.keys(courses).map((id) => <button key={id} type="button" aria-label={getProductLabel(id)} title={getProductLabel(id)} aria-pressed={walkthrough && product === id} onClick={() => { setProduct(id); setLessonId(courses[id].allSteps[0].id); setIndex(0); setWalkthrough(true) }}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /></button>)}</nav>
     {notice && <p role="status" className="presentation-notice">{notice}</p>}
+    </div>
+    {expandedImage && <ImageLightbox items={[expandedImage]} index={0} onIndexChange={() => {}} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} />}
   </div>
 }

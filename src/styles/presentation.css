@@ -24,7 +24,7 @@
 .presentation-cards p, .presentation-experience p { font-size: clamp(18px, 1.6vw, 25px); line-height: 1.5; color: #536a80; }
 .presentation-cards small { display: block; margin-top: 24px; font-size: 17px; color: #2673ab; }
 .presentation-experience { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
-.presentation-experience > img { width: 100%; max-height: 36vh; object-fit: contain; background: white; border: 1px solid #d6e1eb; border-radius: 8px; }
+.presentation-experience .presentation-image-button img { width: 100%; max-height: 36vh; object-fit: contain; background: white; border: 1px solid #d6e1eb; border-radius: 8px; }
 .presentation-stage--lesson { padding-top: 25px; padding-bottom: 25px; }
 .presentation-stage--lesson h1 { font-size: clamp(28px, 2.8vw, 44px); }
 .presentation-action { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 28px; align-items: start; }
@@ -64,3 +64,11 @@
 .presentation-course-nav button img { width: 36px; height: 32px; object-fit: contain; }
 .presentation-course-nav button:hover { background: #e4f2ff; border-color: #7fa7cc; }
 .presentation-course-nav button[aria-pressed="true"] { background: #e4f2ff; border-color: #147ed0; box-shadow: inset 0 0 0 1px #147ed0; }
+
+.presentation-content { display: flex; flex-direction: column; flex: 1; }
+.presentation .presentation-image-button { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; border: 0; background: white; cursor: zoom-in; }
+.presentation .lightbox { padding: 0; }
+.presentation .lightbox__panel { width: 100vw; height: 100dvh; max-width: none; border: 0; }
+.presentation .lightbox__image-wrap { padding: 64px 12px 12px; }
+.presentation .lightbox__close { color: white; background: #1d3c5d; }
+.presentation .lightbox__zoom button { padding: 0; color: white; background: transparent; border: 0; }
