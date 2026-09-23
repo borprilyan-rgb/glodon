@@ -1,0 +1,66 @@
+.presentation { min-height: 100dvh; background: #f2f6fa; color: #163453; font-family: inherit; display: flex; flex-direction: column; }
+.presentation:fullscreen { overflow-y: auto; }
+.presentation:fullscreen .presentation-options { display: none; }
+.presentation button, .presentation select { font: inherit; }
+.presentation button, .presentation-toolbar a, .presentation-options a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border: 1px solid #cad7e3; border-radius: 7px; background: white; color: #163453; cursor: pointer; text-decoration: none; }
+.presentation button:disabled { opacity: .35; cursor: default; }
+.presentation :focus-visible, .presentation-entry :focus-visible { outline: 3px solid #147ed0; outline-offset: 3px; }
+.presentation-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 3vw; border-bottom: 1px solid #d6e1eb; }
+.presentation-toolbar .presentation-brand { border: 0; background: transparent; padding: 0; font-weight: 700; }
+.presentation-brand img { width: 95px; height: 35px; object-fit: contain; }
+.presentation-toolbar > div { display: flex; gap: 8px; }
+.presentation-stage { flex: 1; width: 100%; max-width: 1680px; margin: auto; padding: clamp(24px, 4vw, 65px) 5vw; box-sizing: border-box; }
+.presentation-eyebrow { color: #2673ab; font-size: 15px; font-weight: 750; letter-spacing: .06em; }
+.presentation-heading h1 { max-width: 1200px; font-size: clamp(32px, 4.1vw, 64px); line-height: 1.12; letter-spacing: -.035em; margin: 15px 0 20px; }
+.presentation-heading > p { font-size: clamp(19px, 1.8vw, 28px); line-height: 1.5; max-width: 1100px; color: #536a80; margin: 0 0 30px; }
+.presentation-products { display: flex; gap: 30px; margin: 50px 0 20px; }
+.presentation-products > div { flex: 1; display: flex; align-items: center; gap: 20px; padding: 30px; background: white; border-bottom: 4px solid #168bc1; border-radius: 10px; }
+.presentation-products img { width: 90px; height: 70px; object-fit: contain; }
+.presentation-products strong { font-size: 30px; }
+.presentation-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 35px; }
+.presentation-cards article { padding: clamp(22px, 2.4vw, 38px); background: white; border: 1px solid #d6e1eb; border-radius: 12px; }
+.presentation-card-number { font-size: 22px; color: #2588b5; }
+.presentation h2 { font-size: clamp(24px, 2.3vw, 36px); line-height: 1.2; margin: 20px 0 14px; }
+.presentation-cards p, .presentation-experience p { font-size: clamp(18px, 1.6vw, 25px); line-height: 1.5; color: #536a80; }
+.presentation-cards small { display: block; margin-top: 24px; font-size: 17px; color: #2673ab; }
+.presentation-experience { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
+.presentation-experience > img { width: 100%; max-height: 36vh; object-fit: contain; background: white; border: 1px solid #d6e1eb; border-radius: 8px; }
+.presentation-stage--lesson { padding-top: 25px; padding-bottom: 25px; }
+.presentation-stage--lesson h1 { font-size: clamp(28px, 2.8vw, 44px); }
+.presentation-action { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 28px; align-items: start; }
+.presentation-image { display: grid; place-items: center; min-height: 240px; background: white; border: 1px solid #d6e1eb; border-radius: 8px; overflow: hidden; }
+.presentation-image img { display: block; width: 100%; height: min(52vh, 650px); object-fit: contain; }
+.presentation-instructions p { font-size: clamp(18px, 1.5vw, 24px); line-height: 1.65; margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+.presentation-controls { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 0 !important; padding: 16px 3vw !important; border-top: 1px solid #d6e1eb; }
+.presentation-navigation, .presentation-options { display: flex; align-items: center; gap: 12px; }
+.presentation-navigation > span { min-width: 96px; text-align: center; }
+.presentation-controls > small { color: #61768a; }
+.presentation-notice { padding: 0 3vw; }
+.presentation-entry { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; margin: 0 0 18px; }
+.presentation-entry a { gap: 8px; }
+.presentation-return { display: flex; align-items: center; gap: 14px; background: #e4f2ff; padding: 8px 16px; border-radius: 6px; }
+.presentation-return a { color: #145e96; font-weight: 700; }
+.presentation-return button { display: grid; place-items: center; border: 0; background: transparent; padding: 8px; cursor: pointer; }
+@media (max-width: 900px) {
+  .presentation-products > div { flex-direction: column; gap: 8px; padding: 18px; }
+  .presentation-controls { flex-wrap: wrap; }
+  .presentation-controls > small { display: none; }
+  .presentation-action { grid-template-columns: 1fr; }
+  .presentation-image img { height: auto; max-height: 55vh; }
+}
+@media (max-width: 600px) {
+  .presentation-toolbar { padding: 12px 16px; }
+  .presentation-brand span, .presentation-toolbar button span { display: none; }
+  .presentation-cards, .presentation-experience { grid-template-columns: 1fr; gap: 16px; }
+  .presentation-products { gap: 10px; margin-top: 30px; }
+  .presentation-products img { width: 60px; height: 50px; }
+  .presentation-products strong { font-size: 20px; }
+  .presentation-products > div { padding: 14px 6px; }
+  .presentation-options { flex-wrap: wrap; }
+  .presentation-stage { padding: 28px 20px; }
+}
+.presentation-course-nav { display: flex; justify-content: center; gap: 10px; padding: 8px 3vw; border-top: 1px solid #d6e1eb; }
+.presentation-course-nav button { width: 52px; height: 48px; padding: 6px; }
+.presentation-course-nav button img { width: 36px; height: 32px; object-fit: contain; }
+.presentation-course-nav button:hover { background: #e4f2ff; border-color: #7fa7cc; }
+.presentation-course-nav button[aria-pressed="true"] { background: #e4f2ff; border-color: #147ed0; box-shadow: inset 0 0 0 1px #147ed0; }

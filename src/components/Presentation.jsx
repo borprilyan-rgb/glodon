@@ -1,0 +1,115 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ArrowLeft, ArrowRight, Maximize, Minimize, Play, X } from 'lucide-react'
+import { presentationCopy } from '../data/presentation'
+import { getProductLabel } from '../data/productConfig'
+import '../styles/presentation.css'
+
+const DEMO_KEY = 'cubicost:presentation:return'
+
+export function PresentationEntry({ language, product, step }) {
+  const c = presentationCopy[language]
+  const [returnPath, setReturnPath] = useState(() => {
+    try { const path = sessionStorage.getItem(DEMO_KEY); return path?.startsWith('/present?') ? path : null } catch { return null }
+  })
+  const href = step ? `/present?product=${product}&lesson=${encodeURIComponent(step.id)}` : '/present'
+  return <div className="presentation-entry">
+    <a className="secondary-button" href={href}><Play size={16} />{step ? c.lesson : c.present}</a>
+    {returnPath && <div className="presentation-return"><a href={returnPath}>{c.back}</a><button type="button" aria-label={c.dismiss} onClick={() => { try { sessionStorage.removeItem(DEMO_KEY) } catch { /* Storage may be unavailable. */ } setReturnPath(null) }}><X size={16} /></button></div>}
+  </div>
+}
+
+export default function Presentation({ courses, language, onLanguageChange }) {
+  const c = presentationCopy[language]
+  const params = new URLSearchParams(window.location.search)
+  const initialProduct = Object.hasOwn(courses, params.get('product')) ? params.get('product') : 'tas'
+  const selectedLesson = courses[initialProduct].allSteps.find((step) => step.id === params.get('lesson'))
+  const [product, setProduct] = useState(initialProduct)
+  const [lessonId, setLessonId] = useState(selectedLesson?.id || courses[initialProduct].allSteps[0].id)
+  const [walkthrough, setWalkthrough] = useState(Boolean(selectedLesson))
+  const [index, setIndex] = useState(() => Math.max(0, Math.min(Number.parseInt(params.get('slide'), 10) || 0, (selectedLesson?.actions.length || c.slides.length) - 1)))
+  const [fullscreen, setFullscreen] = useState(Boolean(document.fullscreenElement))
+  const [notice, setNotice] = useState('')
+  const [failedImage, setFailedImage] = useState(null)
+  const root = useRef(null)
+  const lesson = courses[product].allSteps.find((step) => step.id === lessonId) || courses[product].allSteps[0]
+  const lessons = courses[product].allSteps
+  const lessonIndex = lessons.findIndex((step) => step.id === lesson.id)
+  const previousLesson = walkthrough ? lessons[lessonIndex - 1] : null
+  const nextLesson = walkthrough ? lessons[lessonIndex + 1] : null
+  const count = walkthrough ? lesson.actions.length : c.slides.length
+  const slide = c.slides[index]
+  const action = walkthrough ? lesson.actions[index] : null
+  const currentPath = `/present?${new URLSearchParams({ ...(walkthrough ? { product, lesson: lesson.id } : {}), slide: String(index) })}`
+  const demoLesson = walkthrough ? lesson : courses.tas.allSteps[0]
+  const demoProduct = walkthrough ? product : 'tas'
+
+  const navigate = useCallback((direction) => {
+    if (direction > 0 && index === count - 1 && nextLesson) {
+      setLessonId(nextLesson.id)
+      setIndex(0)
+    } else if (direction < 0 && index === 0 && previousLesson) {
+      setLessonId(previousLesson.id)
+      setIndex(previousLesson.actions.length - 1)
+    } else {
+      setIndex((current) => Math.max(0, Math.min(count - 1, current + direction)))
+    }
+  }, [index, count, nextLesson, previousLesson])
+
+  async function toggleFullscreen() {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen()
+      else await root.current.requestFullscreen()
+      setNotice('')
+    } catch { setNotice(c.fullscreenError) }
+  }
+
+  useEffect(() => { window.history.replaceState({}, '', currentPath) }, [currentPath])
+  useEffect(() => {
+    const changed = () => setFullscreen(Boolean(document.fullscreenElement))
+    document.addEventListener('fullscreenchange', changed)
+    return () => document.removeEventListener('fullscreenchange', changed)
+  }, [])
+  useEffect(() => {
+    const keydown = (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, select, textarea, [contenteditable]') || (event.key === ' ' && event.target.closest('button, a, summary'))) return
+      if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
+        event.preventDefault()
+        if (event.key === 'Home') setIndex(0)
+        else if (event.key === 'End') setIndex(count - 1)
+        else navigate(['ArrowRight', 'PageDown', ' '].includes(event.key) ? 1 : -1)
+      }
+      if (event.key.toLowerCase() === 'f') {
+        event.preventDefault()
+        const operation = document.fullscreenElement ? document.exitFullscreen() : root.current.requestFullscreen?.()
+        if (operation) operation.catch(() => setNotice(c.fullscreenError))
+        else setNotice(c.fullscreenError)
+      }
+    }
+    window.addEventListener('keydown', keydown)
+    return () => window.removeEventListener('keydown', keydown)
+  }, [count, c.fullscreenError, navigate])
+
+  const exitPath = walkthrough ? `/${product}/lesson/${lesson.id}` : '/'
+  return <div className="presentation" ref={root}>
+    <header className="presentation-toolbar">
+      <a href={exitPath} className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
+      <div><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button><button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button><a href={exitPath} aria-label={c.exit}><X size={20} /></a></div>
+    </header>
+    <main className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : ''}`} aria-label={walkthrough ? c.actions : c.overview}>
+      <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${lesson.title}` : slide.label}</span><h1>{walkthrough ? action.title : slide.title}</h1>{!walkthrough && <p>{slide.text}</p>}</div>
+      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} />}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <>
+        {slide.kind === 'intro' && <div className="presentation-products">{Object.keys(courses).map((id) => <div key={id}><img src={`/branding/cubicost-${id}-logo.png`} alt={`Cubicost ${getProductLabel(id)}`} /><strong>{getProductLabel(id)}</strong></div>)}</div>}
+        {slide.kind === 'coverage' && <div className="presentation-cards">{Object.entries(courses).map(([id, course], i) => <article key={id}><span className="presentation-card-number">0{i + 1}</span><h2>{getProductLabel(id)}</h2><p>{c.coverage[i]}</p><small>{course.allSteps.length} {c.lessons} · {course.tutorialParts.length} {c.sections}</small></article>)}</div>}
+        {slide.kind === 'experience' && <div className="presentation-experience"><img src={demoLesson.actions[0].image} alt={demoLesson.actions[0].imageAlt || demoLesson.title} /><div><span className="presentation-eyebrow">TAS</span><h2>{demoLesson.title}</h2><p>{demoLesson.intro}</p></div></div>}
+        {['benefits', 'next'].includes(slide.kind) && <div className="presentation-cards">{(slide.kind === 'benefits' ? c.benefits : c.nextSteps).map(([title, text], i) => <article key={title}><span className="presentation-card-number">0{i + 1}</span><h2>{title}</h2><p>{text}</p></article>)}</div>}
+      </>}
+    </main>
+    <footer className="presentation-controls">
+      <div className="presentation-navigation"><button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button><span aria-live="polite">{walkthrough && <>{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; </>}{c.slide} {index + 1} / {count}</span><button type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button></div>
+      <small>{c.keyboard}</small>
+      <div className="presentation-options"><a href={`/${demoProduct}/lesson/${demoLesson.id}`} onClick={() => { try { sessionStorage.setItem(DEMO_KEY, currentPath) } catch { /* Demo still opens if storage is unavailable. */ } }}>{c.demo}<ArrowRight size={16} /></a><button type="button" onClick={() => { setWalkthrough(false); setIndex(0) }}>{c.overview}</button></div>
+    </footer>
+    <nav className="presentation-course-nav" aria-label={c.course}>{Object.keys(courses).map((id) => <button key={id} type="button" aria-label={getProductLabel(id)} title={getProductLabel(id)} aria-pressed={walkthrough && product === id} onClick={() => { setProduct(id); setLessonId(courses[id].allSteps[0].id); setIndex(0); setWalkthrough(true) }}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /></button>)}</nav>
+    {notice && <p role="status" className="presentation-notice">{notice}</p>}
+  </div>
+}

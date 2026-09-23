@@ -1,0 +1,94 @@
+import { test, expect } from '@playwright/test'
+
+const origin = 'http://127.0.0.1:5173'
+
+test('walkthrough continues across lessons and sections in both directions', async ({ page }) => {
+  await openEnglish(page, '/present?product=tme&lesson=setting-gambar&slide=2')
+  await page.getByRole('button', { name: 'Next lesson', exact: true }).click()
+  await expect(page).toHaveURL(/lesson=mvac-equipment-plenum-grille&slide=0/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Equipment, plenums, grilles, ducts, flexible ducts, dampers, and grouping')
+  await page.getByRole('button', { name: 'Previous lesson', exact: true }).click()
+  await expect(page).toHaveURL(/lesson=setting-gambar&slide=2/)
+  await page.keyboard.press('ArrowRight')
+  await expect(page).toHaveURL(/lesson=mvac-equipment-plenum-grille&slide=0/)
+  await page.reload()
+  await expect(page).toHaveURL(/lesson=mvac-equipment-plenum-grille&slide=0/)
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.keyboard.press('ArrowLeft')
+  await expect(page).toHaveURL(/lesson=setting-gambar&slide=2/)
+  await page.goto(`${origin}/present?product=tme&lesson=setting-lantai`)
+  await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
+  await page.goto(`${origin}/present?product=tme&lesson=penyesuaian-atribut&slide=999`)
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
+})
+
+async function openEnglish(page, path = '/present') {
+  await page.goto(`${origin}${path}`)
+  await page.getByRole('button', { name: 'Ganti ke bahasa Inggris' }).click()
+}
+
+test('executive slides support keyboard navigation, boundaries, language, and demo return', async ({ page }) => {
+  await openEnglish(page)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('One place to build Cubicost skills')
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
+  await page.getByRole('heading', { level: 1 }).click()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Three products. A shared learning experience.')
+  await page.keyboard.press('End')
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
+  await page.keyboard.press('ArrowLeft')
+  const returnUrl = page.url()
+  await page.getByRole('link', { name: 'Open lesson' }).click()
+  await page.getByRole('link', { name: 'Return to presentation' }).click()
+  await expect(page).toHaveURL(returnUrl)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Make everyday learning easier')
+  await page.getByRole('button', { name: 'Switch to Indonesian' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mempermudah pembelajaran sehari-hari')
+})
+
+test('walkthrough uses lesson actions, survives refresh, and opens from the lesson', async ({ page }) => {
+  await openEnglish(page, '/present?product=tme&lesson=setting-gambar')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Upload drawings and check scale')
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Assign floors and set the reference point')
+  await page.screenshot({ path: 'test-results/presentation-lesson.png', fullPage: true })
+  await page.reload()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Assign floors and set the reference point')
+  await page.getByRole('link', { name: 'Exit presentation', exact: true }).click()
+  await page.getByRole('link', { name: 'Present this lesson' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Upload drawings and check scale')
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
+  await expect(page.getByRole('link', { name: 'Open lesson', exact: true })).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Overview', exact: true })).toBeHidden()
+  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'setting-lantai']]) {
+    await page.getByRole('button', { name: label, exact: true }).click()
+    await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
+    await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
+  }
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
+  await page.getByRole('button', { name: 'TME-C', exact: true }).click()
+  await expect(page).toHaveURL(/lesson=setting-lantai&slide=0/)
+
+})
+
+test('slides fit desktop and mobile widths and recover from invalid parameters', async ({ page }) => {
+  await openEnglish(page, '/present?product=invalid&lesson=missing&slide=999')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pilot, learn, and expand')
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 })
+    for (let slide = 0; slide < 5; slide++) {
+      await page.goto(`${origin}/present?slide=${slide}`)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    }
+  }
+  await page.screenshot({ path: 'test-results/presentation-mobile.png', fullPage: true })
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto(`${origin}/present?slide=1`)
+  await page.screenshot({ path: 'test-results/presentation-desktop.png', fullPage: true })
+})

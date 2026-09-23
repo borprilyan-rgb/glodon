@@ -9,6 +9,7 @@ import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
+import Presentation, { PresentationEntry } from './components/Presentation'
 
 const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
 const TAS_PROGRESS_KEY = 'cubicost:tutorial:tas:progress'
@@ -31,6 +32,7 @@ function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESS
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const hashParts = window.location.hash.replace(/^#\/?/, '').split('/')
+  if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
     window.history.replaceState({}, '', '/trb/course')
@@ -222,7 +224,9 @@ export default function App() {
   const product = route.product || null
   const visibleProgress = product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
+  if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && route.page !== 'welcome'} language={language} onLanguageChange={setLanguage} t={t}>
+    <PresentationEntry language={language} product={product} step={activeStep} />
     {route.page === 'hub' && <CourseHub tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" t={t} />}
