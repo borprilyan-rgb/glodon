@@ -8,14 +8,14 @@ import { uiText } from '../data/uiText'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
-export function PresentationEntry({ language, product, step }) {
+export function PresentationEntry({ language, step }) {
   const c = presentationCopy[language]
   const [returnPath, setReturnPath] = useState(() => {
     try { const path = sessionStorage.getItem(DEMO_KEY); return path?.startsWith('/present?') ? path : null } catch { return null }
   })
-  const href = step ? `/present?product=${product}&lesson=${encodeURIComponent(step.id)}` : '/present'
+  if (step && !returnPath) return null
   return <div className="presentation-entry">
-    <a className="secondary-button" href={href}><Play size={16} />{step ? c.lesson : c.present}</a>
+    <>{!step && <a className="secondary-button" href="/present"><Play size={16} />{c.present}</a>}</>
     {returnPath && <div className="presentation-return"><a href={returnPath}>{c.back}</a><button type="button" aria-label={c.dismiss} onClick={() => { try { sessionStorage.removeItem(DEMO_KEY) } catch { /* Storage may be unavailable. */ } setReturnPath(null) }}><X size={16} /></button></div>}
   </div>
 }

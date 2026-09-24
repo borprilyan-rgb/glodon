@@ -42,7 +42,7 @@ test('walkthrough continues across lessons and sections in both directions', asy
   await page.getByRole('heading', { level: 1 }).click()
   await page.keyboard.press('ArrowLeft')
   await expect(page).toHaveURL(/lesson=setting-gambar&slide=2/)
-  await page.goto(`${origin}/present?product=tme&lesson=setting-lantai`)
+  await page.goto(`${origin}/present?product=tme&lesson=plumbing-measurement-settings`)
   await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
   await page.goto(`${origin}/present?product=tme&lesson=penyesuaian-atribut&slide=999`)
   await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
@@ -75,7 +75,7 @@ test('executive slides support keyboard navigation, boundaries, language, and de
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mempermudah pembelajaran sehari-hari')
 })
 
-test('walkthrough uses lesson actions, survives refresh, and opens from the lesson', async ({ page }) => {
+test('walkthrough survives refresh and lesson pages hide the presentation entry', async ({ page }) => {
   await openEnglish(page, '/present?product=tme&lesson=setting-gambar')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Upload drawings and check scale')
   await page.getByRole('button', { name: 'Next', exact: true }).click()
@@ -84,12 +84,13 @@ test('walkthrough uses lesson actions, survives refresh, and opens from the less
   await page.reload()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Assign floors and set the reference point')
   await page.getByRole('link', { name: 'Exit presentation', exact: true }).click()
-  await page.getByRole('link', { name: 'Present this lesson' }).click()
+  await expect(page.getByRole('link', { name: 'Present this lesson', exact: true })).toHaveCount(0)
+  await page.goto(`${origin}/present?product=tme&lesson=setting-gambar`)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Upload drawings and check scale')
   await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
   await expect(page.getByRole('link', { name: 'Open lesson', exact: true })).toBeHidden()
   await expect(page.getByRole('button', { name: 'Overview', exact: true })).toBeHidden()
-  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'setting-lantai']]) {
+  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'plumbing-measurement-settings']]) {
     await page.getByRole('button', { name: label, exact: true }).click()
     await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
     await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true')
@@ -98,7 +99,7 @@ test('walkthrough uses lesson actions, survives refresh, and opens from the less
   }
   await page.getByRole('button', { name: 'Next', exact: true }).click()
   await page.getByRole('button', { name: 'TME-C', exact: true }).click()
-  await expect(page).toHaveURL(/lesson=setting-lantai&slide=0/)
+  await expect(page).toHaveURL(/lesson=plumbing-measurement-settings&slide=0/)
 
 })
 

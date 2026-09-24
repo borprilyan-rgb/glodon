@@ -1,3 +1,5 @@
+import { measurementSetupLessons, measurementLessonsEn } from './measurementSettings.js'
+
 const action = (title, description, image) => ({ title, description, image })
 const lesson = (id, title, purpose, goal, actions) => ({ id, title, purpose, goal, actions })
 const sourceModuleByLesson = {
@@ -9,9 +11,9 @@ const sourceModuleByLesson = {
   'penyesuaian-lantai': 18, 'penyesuaian-atribut': 19,
 }
 
-// The TME-C curriculum follows the supplied modules exactly, in their original numbered order.
+// Preserve the original module order; measurement settings introduce the setup section.
 const definitions = [
-  { number: '01', title: 'Setting', summary: 'Setting lantai dan gambar sebagai acuan identifikasi.', lessons: [
+  { number: '01', title: 'Setting', summary: 'Pengaturan pengukuran, lantai, dan gambar sebagai acuan identifikasi.', lessons: [
     lesson('setting-lantai', 'Setting Lantai', 'Menyesuaikan jumlah, nama dan elevasi lantai.', 'Agar quantity riser dapat teridentifikasi dan dapat dikelompokkan sesuai dengan nama lantainya.', [
       action('Setting lantai, import gambar, skala & tentukan as acuan', '', 'module-01.svg'),
       action('Setting lantai', 'Project Setting → Floor Setting → Batch Insert Floor → isi jumlah penambahan lantai → OK. Atau: Project Setting → Floor Setting → Insert Floor beberapa kali sesuai jumlah lantai yang diinginkan. Nama lantai: klik salah satu lantai pada kolom Floor Name → ketik nama lantai yang diinginkan. Elevasi lantai: klik salah satu lantai pada kolom Floor Height → ketik angka ketinggian lantai sesuai desain.', 'floor-settings-open.png'),
@@ -96,7 +98,7 @@ const definitions = [
 ]
 
 const englishParts = {
-  '01': ['Setup', 'Set up floors and drawings as the identification reference.'],
+  '01': ['Setup', 'Configure measurement settings, floors, and drawings as the identification reference.'],
   '02': ['MVAC Work', 'Identify equipment, plenums, grilles, ducts, flexible ducts, dampers, and AC pipes.'],
   '03': ['Fire-Fighting Work', 'Identify fire-fighting equipment, pipes, risers, and valves.'],
   '04': ['Electrical Work', 'Identify panel diagrams, panels, cable trays, cables, lamps, switches, and sockets.'],
@@ -105,6 +107,7 @@ const englishParts = {
 }
 
 const englishLessons = {
+  ...measurementLessonsEn,
   'setting-lantai': ['Floor Setup', 'Adjust the number, names, and elevations of floors.', 'So riser quantities can be identified and grouped by floor name.', [
     ['Floor setup, drawing import, scale, and axis reference', ''],
     ['Floor setup', 'Project Setting → Floor Setting → Batch Insert Floor → enter the number of floors to add → OK. Alternatively: Project Setting → Floor Setting → Insert Floor repeatedly for the required number of floors. Floor name: click a floor in the Floor Name column → enter the required floor name. Floor elevation: click a floor in the Floor Height column → enter the design floor height.'],
@@ -185,7 +188,7 @@ export function getTmeData(language) {
     title: isEnglish ? englishParts[part.number]?.[0] || part.title : part.title,
     summary: isEnglish ? englishParts[part.number]?.[1] || part.summary : part.summary,
     workflow: [],
-    steps: part.lessons.map((item) => {
+    steps: [...(part.number === '01' ? measurementSetupLessons : []), ...part.lessons].map((item) => {
       const translation = englishLessons[item.id]
       const useEnglish = isEnglish && translation
       const [title, purpose, goal, actions] = useEnglish ? translation : [item.title, item.purpose, item.goal, item.actions.map((entry) => [entry.title, entry.description])]
@@ -201,7 +204,9 @@ export function getTmeData(language) {
           number: index + 1,
           title: actionTitle,
           description,
-          image: item.actions[index].image.endsWith('.svg')
+          image: item.actions[index].image.startsWith('/tutorial/')
+            ? item.actions[index].image
+            : item.actions[index].image.endsWith('.svg')
             ? `/tutorial/tme/source-slides/covers/${item.actions[index].image}`
             : `/tutorial/tme/source-slides/module-${String(sourceModuleByLesson[item.id]).padStart(2, '0')}/page-${String(index - (item.actions[0].image.endsWith('.svg') ? 0 : -1)).padStart(2, '0')}.png`,
           imageAlt: `${title}: ${actionTitle}`,
