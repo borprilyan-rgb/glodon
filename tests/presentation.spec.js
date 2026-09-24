@@ -53,26 +53,35 @@ async function openEnglish(page, path = '/present') {
   await page.getByRole('button', { name: 'Ganti ke bahasa Inggris' }).click()
 }
 
-test('executive slides support keyboard navigation, boundaries, language, and demo return', async ({ page }) => {
+test('presentation home cards open courses in fullscreen and support lesson return', async ({ page }) => {
   await openEnglish(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('One place to build Cubicost skills')
-  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
-  await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
-  await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
+  await expect(page.locator('.presentation-products button')).toHaveCount(3)
+  await expect(page.locator('.presentation-course-nav')).toHaveCount(0)
+  await expect(page.locator('.presentation-controls')).toHaveCount(0)
   await page.getByRole('heading', { level: 1 }).click()
   await page.keyboard.press('ArrowRight')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Three products. A shared learning experience.')
-  await page.keyboard.press('End')
-  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
-  await page.keyboard.press('ArrowLeft')
+  await expect(page).toHaveURL(`${origin}/present`)
+  await page.getByRole('button', { name: 'Switch to Indonesian' }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Satu tempat untuk mengembangkan keterampilan Cubicost')
+  await page.getByRole('button', { name: 'Ganti ke bahasa Inggris' }).click()
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
+  await page.getByRole('button', { name: 'TME-C', exact: true }).click()
+  await expect(page).toHaveURL(/product=tme&lesson=measurement-settings&slide=0/)
+  await expect(page.getByRole('button', { name: 'Exit fullscreen', exact: true })).toBeVisible()
+  await expect(page.locator('.presentation-course-nav button')).toHaveCount(3)
+  await expect(page.getByRole('button', { name: 'Overview', exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
   const returnUrl = page.url()
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click()
   await page.getByRole('link', { name: 'Open lesson' }).click()
   await page.getByRole('link', { name: 'Return to presentation' }).click()
   await expect(page).toHaveURL(returnUrl)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Make everyday learning easier')
-  await page.getByRole('button', { name: 'Switch to Indonesian' }).click()
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Mempermudah pembelajaran sehari-hari')
+  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model']]) {
+    await page.goto(`${origin}/present`)
+    await page.getByRole('button', { name: label, exact: true }).click()
+    await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
+  }
 })
 
 test('walkthrough survives refresh and lesson pages hide the presentation entry', async ({ page }) => {
@@ -105,7 +114,7 @@ test('walkthrough survives refresh and lesson pages hide the presentation entry'
 
 test('slides fit desktop and mobile widths and recover from invalid parameters', async ({ page }) => {
   await openEnglish(page, '/present?product=invalid&lesson=missing&slide=999')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pilot, learn, and expand')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('One place to build Cubicost skills')
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 })
     for (let slide = 0; slide < 5; slide++) {

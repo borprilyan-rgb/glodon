@@ -14,7 +14,7 @@
 .presentation-heading h1 { max-width: 1200px; font-size: clamp(32px, 4.1vw, 64px); line-height: 1.12; letter-spacing: -.035em; margin: 15px 0 20px; }
 .presentation-heading > p { font-size: clamp(19px, 1.8vw, 28px); line-height: 1.5; max-width: 1100px; color: #536a80; margin: 0 0 30px; }
 .presentation-products { display: flex; gap: 30px; margin: 50px 0 20px; }
-.presentation-products > div { flex: 1; display: flex; align-items: center; gap: 20px; padding: 30px; background: white; border-bottom: 4px solid #168bc1; border-radius: 10px; }
+.presentation-products > button { flex: 1; display: flex; align-items: center; gap: 20px; padding: 30px; background: white; border-bottom: 4px solid #168bc1; border-radius: 10px; }
 .presentation-products img { width: 90px; height: 70px; object-fit: contain; }
 .presentation-products strong { font-size: 30px; }
 .presentation-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 35px; }
@@ -42,7 +42,7 @@
 .presentation-return a { color: #145e96; font-weight: 700; }
 .presentation-return button { display: grid; place-items: center; border: 0; background: transparent; padding: 8px; cursor: pointer; }
 @media (max-width: 900px) {
-  .presentation-products > div { flex-direction: column; gap: 8px; padding: 18px; }
+  .presentation-products > button { flex-direction: column; gap: 8px; padding: 18px; }
   .presentation-controls { flex-wrap: wrap; }
   .presentation-controls > small { display: none; }
   .presentation-action { grid-template-columns: 1fr; }
@@ -55,7 +55,7 @@
   .presentation-products { gap: 10px; margin-top: 30px; }
   .presentation-products img { width: 60px; height: 50px; }
   .presentation-products strong { font-size: 20px; }
-  .presentation-products > div { padding: 14px 6px; }
+  .presentation-products > button { padding: 14px 6px; }
   .presentation-options { flex-wrap: wrap; }
   .presentation-stage { padding: 28px 20px; }
 }
@@ -72,3 +72,7 @@
 .presentation .lightbox__image-wrap { padding: 64px 12px 12px; }
 .presentation .lightbox__close { color: white; background: #1d3c5d; }
 .presentation .lightbox__zoom button { padding: 0; color: white; background: transparent; border: 0; }
+
+.presentation-stage--home { display: flex; flex-direction: column; justify-content: center; }
+.presentation-products > button { justify-content: flex-start; text-align: left; border: 0; border-bottom: 4px solid #168bc1; transition: background .15s, box-shadow .15s; }
+.presentation-products > button:hover { background: #e4f2ff; box-shadow: 0 8px 24px rgba(22,52,83,.12); }
