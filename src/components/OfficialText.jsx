@@ -1,6 +1,6 @@
 import { officialCommands } from '../data/tutorialUtils'
 
-const commandPattern = new RegExp(`(${officialCommands.map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g')
+const commandPattern = new RegExp(`\\b(${officialCommands.map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g')
 
 export default function OfficialText({ children }) {
   if (typeof children !== 'string') return children

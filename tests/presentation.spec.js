@@ -42,7 +42,7 @@ test('walkthrough continues across lessons and sections in both directions', asy
   await page.getByRole('heading', { level: 1 }).click()
   await page.keyboard.press('ArrowLeft')
   await expect(page).toHaveURL(/lesson=setting-gambar&slide=2/)
-  await page.goto(`${origin}/present?product=tme&lesson=plumbing-measurement-settings`)
+  await page.goto(`${origin}/present?product=tme&lesson=measurement-settings`)
   await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled()
   await page.goto(`${origin}/present?product=tme&lesson=penyesuaian-atribut&slide=999`)
   await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled()
@@ -90,7 +90,7 @@ test('walkthrough survives refresh and lesson pages hide the presentation entry'
   await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
   await expect(page.getByRole('link', { name: 'Open lesson', exact: true })).toBeHidden()
   await expect(page.getByRole('button', { name: 'Overview', exact: true })).toBeHidden()
-  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'plumbing-measurement-settings']]) {
+  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'measurement-settings']]) {
     await page.getByRole('button', { name: label, exact: true }).click()
     await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
     await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true')
@@ -99,7 +99,7 @@ test('walkthrough survives refresh and lesson pages hide the presentation entry'
   }
   await page.getByRole('button', { name: 'Next', exact: true }).click()
   await page.getByRole('button', { name: 'TME-C', exact: true }).click()
-  await expect(page).toHaveURL(/lesson=plumbing-measurement-settings&slide=0/)
+  await expect(page).toHaveURL(/lesson=measurement-settings&slide=0/)
 
 })
 

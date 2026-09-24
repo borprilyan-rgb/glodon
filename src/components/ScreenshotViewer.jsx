@@ -3,7 +3,7 @@ import { useState } from 'react'
 import OfficialText from './OfficialText'
 
 function InstructionCaption({ description }) {
-  const segments = description?.split(/(?<=\.)\s+(?=[A-ZÀ-Ý])/u).filter(Boolean) || []
+  const segments = (description?.includes('\n') ? description.split(/\n+/) : description?.split(/(?<=\.)\s+(?=[A-ZÀ-Ý])/u))?.filter(Boolean) || []
   if (segments.length < 2) return description ? <p className="screenshot-media__instruction"><OfficialText>{description}</OfficialText></p> : null
   return <ol className="screenshot-media__instructions">{segments.map((segment) => <li key={segment}><OfficialText>{segment}</OfficialText></li>)}</ol>
 }
