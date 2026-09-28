@@ -5,6 +5,9 @@ import { getProductLabel } from '../data/productConfig'
 import '../styles/presentation.css'
 import ImageLightbox from './ImageLightbox'
 import { uiText } from '../data/uiText'
+import usePresentationDrawing from './usePresentationDrawing'
+import DrawingCanvas from './DrawingCanvas'
+import DrawingToolbar from './DrawingToolbar'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -42,6 +45,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const nextLesson = walkthrough ? lessons[lessonIndex + 1] : null
   const count = walkthrough ? lesson.actions.length : 1
   const action = walkthrough ? lesson.actions[index] : null
+  const drawing = usePresentationDrawing(walkthrough ? `${product}:${lesson.id}:${action.id}` : 'home')
   const currentPath = walkthrough ? `/present?${new URLSearchParams({ product, lesson: lesson.id, slide: String(index) })}` : '/present'
   function startCourse(id) {
     setProduct(id)
@@ -99,14 +103,15 @@ export default function Presentation({ courses, language, onLanguageChange }) {
 
   const exitPath = walkthrough ? `/${product}/lesson/${lesson.id}` : '/'
   return <div className="presentation" ref={root}>
-    <div className="presentation-content" inert={expandedImage ? true : undefined}>
+    <div className="presentation-content" inert={expandedImage ? true : undefined} aria-hidden={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
       <a href={exitPath} className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
-      <div><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button><button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button><a href={exitPath} aria-label={c.exit}><X size={20} /></a></div>
+      <div><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button><a href={exitPath} aria-label={c.exit}><X size={20} /></a></div>
     </header>
+    {walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="tools" />}
     <main className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
       <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${lesson.title}` : c.home.label}</span><h1>{walkthrough ? action.title : c.home.title}</h1>{!walkthrough && <p>{c.home.text}</p>}</div>
-      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image: action.image, alt: action.imageAlt || action.alt || action.title, caption: action.title, opener: event.currentTarget })}><img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} /></button>}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <div className="presentation-products">{Object.keys(courses).map((id) => <button type="button" key={id} aria-label={getProductLabel(id)} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /><strong>{getProductLabel(id)}</strong></button>)}</div>}
+      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image: action.image, alt: action.imageAlt || action.alt || action.title, caption: action.title, opener: event.currentTarget })}><img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} /></button>}{!expandedImage && failedImage !== action.image && <DrawingCanvas drawing={drawing} image={action.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <div className="presentation-products">{Object.keys(courses).map((id) => <button type="button" key={id} aria-label={getProductLabel(id)} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /><strong>{getProductLabel(id)}</strong></button>)}</div>}
     </main>
     {walkthrough && <><footer className="presentation-controls">
       <div className="presentation-navigation"><button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button><span aria-live="polite">{walkthrough && <>{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; </>}{c.slide} {index + 1} / {count}</span><button type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button></div>
@@ -116,6 +121,6 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     <nav className="presentation-course-nav" aria-label={c.course}>{Object.keys(courses).map((id) => <button key={id} type="button" aria-label={getProductLabel(id)} title={getProductLabel(id)} aria-pressed={walkthrough && product === id} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /></button>)}</nav></>}
     {notice && <p role="status" className="presentation-notice">{notice}</p>}
     </div>
-    {expandedImage && <ImageLightbox items={[expandedImage]} index={0} onIndexChange={() => {}} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} />}
+    {expandedImage && <ImageLightbox items={[expandedImage]} index={0} onIndexChange={() => {}} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} drawing={drawing} language={language} />}
   </div>
 }

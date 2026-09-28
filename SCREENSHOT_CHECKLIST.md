@@ -2,6 +2,10 @@
 
 Completed: all 89 TAS actions now use genuine full-page screenshots rendered from the cited TAS C v10.300 manual. Shared manual pages are reused when one slide documents several actions. The 69 extracted WebP assets are stored in `public/tutorial/tas/manual/`; every TAS action has `pending: false`, and no TRB screenshot is reused.
 
+sounds good alright first for the exercise i need to make sure that the question is not as hard as what needed. the close is around 80%
+
+this is needed to make sure
+
 ## Part 1 - Project and Drawing Preparation
 
 - Pages 13-14: `create-project-01.webp` through `create-project-04.webp`

@@ -77,7 +77,7 @@ test('presentation home cards open courses in fullscreen and support lesson retu
   await page.getByRole('link', { name: 'Open lesson' }).click()
   await page.getByRole('link', { name: 'Return to presentation' }).click()
   await expect(page).toHaveURL(returnUrl)
-  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model']]) {
+  for (const [label, product, lesson] of [['TAS', 'tas', 'measurement-settings'], ['TRB', 'trb', 'export-tas-model']]) {
     await page.goto(`${origin}/present`)
     await page.getByRole('button', { name: label, exact: true }).click()
     await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
@@ -99,7 +99,7 @@ test('walkthrough survives refresh and lesson pages hide the presentation entry'
   await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
   await expect(page.getByRole('link', { name: 'Open lesson', exact: true })).toBeHidden()
   await expect(page.getByRole('button', { name: 'Overview', exact: true })).toBeHidden()
-  for (const [label, product, lesson] of [['TAS', 'tas', 'create-project'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'measurement-settings']]) {
+  for (const [label, product, lesson] of [['TAS', 'tas', 'measurement-settings'], ['TRB', 'trb', 'export-tas-model'], ['TME-C', 'tme', 'measurement-settings']]) {
     await page.getByRole('button', { name: label, exact: true }).click()
     await expect(page).toHaveURL(`${origin}/present?product=${product}&lesson=${lesson}&slide=0`)
     await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true')

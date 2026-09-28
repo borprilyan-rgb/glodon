@@ -1,0 +1,22 @@
+.presentation-image, .lightbox__annotated-image { position: relative; }
+.drawing-canvas { position: absolute; pointer-events: none; z-index: 1; }
+.drawing-canvas.is-drawing { pointer-events: auto; touch-action: none; cursor: crosshair; }
+.drawing-toolbar { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; padding: 8px 12px; }
+.presentation .drawing-toolbar button { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; padding: 8px; background: white; color: #163453; border: 1px solid #cad7e3; border-radius: 7px; }
+.presentation .drawing-toolbar button[aria-pressed="true"] { background: #d8ebff; border-color: #147ed0; box-shadow: inset 0 0 0 1px #147ed0; }
+.drawing-colors { display: inline-flex; gap: 4px; }
+.drawing-colors button span { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ffffff80; }
+.drawing-toolbar select { min-height: 44px; padding: 8px; font: inherit; color: #163453; background: white; border: 1px solid #cad7e3; border-radius: 7px; }
+.drawing-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.drawing-toolbar > [role="status"] { flex-basis: 100%; text-align: center; font-size: 13px; }
+.lightbox__drawing-tools { flex: 0 0 auto; color: white; background: #102b4e; z-index: 2; }
+.lightbox__annotated-image { min-width: 0; }
+.lightbox__annotated-image img { width: 100%; height: 100%; }
+@media (max-width: 600px) {
+  .drawing-toolbar { gap: 4px; padding: 6px; }
+  .presentation .drawing-toolbar button { min-width: 40px; height: 40px; padding: 6px; }
+  .drawing-toolbar select { min-height: 40px; }
+}
+
+.drawing-toolbar--toggle { padding: 0; flex-wrap: nowrap; }
+.drawing-toolbar button, .drawing-toolbar select { touch-action: manipulation; }

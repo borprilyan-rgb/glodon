@@ -9,6 +9,8 @@ import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
+import SectionExercise from './components/SectionExercise'
+import { getSectionExercise } from './data/sectionExercises'
 import Presentation, { PresentationEntry } from './components/Presentation'
 
 const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
@@ -32,6 +34,8 @@ function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESS
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const hashParts = window.location.hash.replace(/^#\/?/, '').split('/')
+  const exerciseMatch = path.match(/^\/(tas|trb)\/exercise\/section-([1-3])$/)
+  if (exerciseMatch) return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
@@ -226,15 +230,16 @@ export default function App() {
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && route.page !== 'welcome'} language={language} onLanguageChange={setLanguage} t={t}>
-    <PresentationEntry language={language} step={activeStep} />
+    {route.page !== 'exercise' && <PresentationEntry language={language} step={activeStep} />}
+    {route.page === 'exercise' && <SectionExercise key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />}
     {route.page === 'hub' && <CourseHub tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'contact' && <ContactPage t={t} />}
-    {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" t={t} />}
-    {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" t={t} />}
-    {product === 'tas' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={allSteps[activeIndex + 1]} product="tas" t={t} />}
+    {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
+    {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
+    {product === 'tas' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
     {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
-    {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} t={t} />}
-    {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" t={t} />}
+    {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} language={language} t={t} />}
+    {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" language={language} t={t} />}
     {product === 'tme' && route.page === 'welcome' && <LandingPage product="tme" course={tme} allSteps={tme.allSteps} completed={tmeProgress.completed} started={tmeProgress.started} continueStep={continueTmeStep} t={t} />}
     {product === 'tme' && route.page === 'course' && <CourseMapPage parts={filteredTmeParts} allSteps={tme.allSteps} completed={tmeProgress.completed} started={tmeProgress.started} lastLesson={tmeProgress.lastLesson} continueStep={continueTmeStep} onReset={resetTme} query={query} setQuery={setQuery} product="tme" course={tme} t={t} />}
     {product === 'tme' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={tme.allSteps.length} isComplete={tmeProgress.completed.has(activeStep.id)} selectedChecks={tmeProgress.checklists[activeStep.id] || []} onCheck={updateTmeCheck} onToggle={toggleTmeComplete} previous={tme.allSteps[activeIndex - 1]} next={tme.allSteps[activeIndex + 1]} product="tme" t={t} />}

@@ -17,7 +17,7 @@ Produk: TAS / TRB / TME-C
 Pelajaran terkait:
 Pertanyaan:`
 
-const containsPlaceholder = (value) => /YOUR_EMAIL|X{2,}/i.test(value)
+const containsPlaceholder = (value) => /YOUR_EMAIL|X{2,}|@example\.com$/i.test(value)
 
 export const isValidEmail = (email) => !containsPlaceholder(email) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 export const isValidWhatsapp = (number, display = number) => !containsPlaceholder(number) && !containsPlaceholder(display) && /^[1-9]\d{7,14}$/.test(number)
