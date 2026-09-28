@@ -2,7 +2,6 @@
 export const contactConfig = {
   email: 'contact@example.com',
   whatsappDisplay: '+62 XXX XXXX XXXX',
-
-  // Use country code and digits only when replacing this value.
+  // Add a real number with country code when contact details are configured.
   whatsappNumber: '',
 }
