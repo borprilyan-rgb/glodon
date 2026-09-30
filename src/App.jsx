@@ -72,6 +72,8 @@ function normaliseProgress(saved, initialStepId, storedLastLesson) {
   return { completed, checklists, started, lastLesson: initialStepId || storedLastLesson || (!Array.isArray(saved) && saved?.lastLesson) || null }
 }
 
+// TODO: Consolidate duplicated TAS/TRB/TME progress loading, persistence and checklist updates
+// only with migration coverage; preserve all storage keys and product-specific validation.
 function loadTasProgress(initialStepId) {
   try {
     if (!localStorage.getItem(TAS_MIGRATION_KEY)) {

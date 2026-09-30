@@ -1,60 +1,106 @@
-# Cubicost TAS Technical Tutorial
+# Cubicost Learning Centre
 
-A responsive, self-paced technical tutorial that teaches beginners how to prepare drawings, model building elements, control measurement rules, calculate quantities, and configure reports in Cubicost TAS.
+A bilingual, self-paced learning application for Cubicost TAS, TRB, and TME-C, with technical guides, section tests, downloadable score cards, and presentation mode.
 
-## Technology
+## Available modules
 
-- React and JSX
-- Vite
-- Plain CSS
-- Lucide React icons
-- Browser `localStorage` for tutorial progress
+- **TAS:** Project and drawing preparation, building element modelling, quantities, and reports.
+- **TRB:** Model preparation, reinforcement modelling, quantity verification, and reports.
+- **TME-C:** MEP modelling and measurement guides.
+- **Tests:** Separate TAS and TRB test pages with three section assessments per course, resume/retry actions, results, and PNG score-card downloads. TME-C tests are not available yet.
+- **Participant profile:** Name, job title, and employee ID are required before accessing tests; details appear on score cards and can be edited.
+- **Presentation mode:** Slide walkthroughs, fullscreen viewing, image enlargement, and drawing annotations. Open it from the home page or `/present`.
+- **Progress tracking:** Per-course completed lessons, started lessons, checklists, and the last visited lesson.
 
-No backend is required.
+Bahasa Indonesia is the default; English is available through the header language controls. Course content is maintained under `src/data/tas/`, `src/data/trb/`, and `src/data/tme/`, with shared UI translations in `src/data/uiText.js`.
 
-## Languages
+## Technology and storage
 
-Bahasa Indonesia is the default language and English remains available from the language switch in the desktop sidebar or mobile header. The selected language is saved separately from tutorial progress in browser `localStorage`.
+React with JSX, Vite, plain CSS, and Lucide React icons. This is a client-side application: **there is currently no centralized backend or admin reporting database**, and participant entry is not account authentication.
 
-- Indonesian tutorial content: `src/data/tutorialData.id.js`
-- English tutorial content: `src/data/tutorialData.en.js`
-- Shared interface translations: `src/data/uiText.js`
+Progress, participant information, language preference, test answers, and test scores are stored in browser `localStorage`. They are specific to the browser profile and site origin; they do not sync across devices. Clearing site data removes these records. Presentation return navigation also uses `sessionStorage`.
 
-To change the default, update the initial `language` state fallback in `src/App.jsx` and the `lang` attribute in `index.html`. Keep stable part and step IDs identical in both tutorial data files so routes and completion progress remain shared.
+Preserve the existing storage keys and stable lesson IDs when editing content. `src/App.jsx` includes legacy TAS progress and curriculum migrations; do not remove or reset them without a migration plan.
 
 ## Install and run
 
+For a fresh checkout, install the locked dependencies:
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Vite prints the local development URL in the terminal. Create a production build with:
+If dependencies are already installed, use `npm run dev` directly. Vite prints the development URL.
 
 ```bash
 npm run build
+npm run lint
+npm run preview
 ```
 
-Preview that build locally with `npm run preview`. Run code checks with `npm run lint`.
+The build is written to `dist/`. `preview` serves that production build locally. Build tooling belongs in `devDependencies`, so include development dependencies when building.
 
-## Screenshots
+Playwright specifications are in `tests/`; there is currently no npm test script. To run them manually, start the development server on `http://127.0.0.1:5173`, then run `npx playwright test` in another terminal. Playwright browser binaries must already be installed or provisioned separately.
 
-Place genuine TAS screenshots in these folders:
+## Routes and deployment
+
+Navigation uses **pathname routes**:
+
+| Route | Page |
+| --- | --- |
+| `/` | Course hub |
+| `/tas`, `/trb`, `/tme` | Course introductions |
+| `/:product/course` | Learning module map |
+| `/:product/lesson/:stepId` | Lesson |
+| `/:product/tests` | Tests and score card (TME-C shows an availability message) |
+| `/:product/tests/section-1` through `section-3` | TAS/TRB section tests |
+| `/present` | Presentation mode |
+| `/contact` | Contact information |
+
+Some legacy hash links and `/tas/exercise/...` or `/trb/exercise/...` links remain supported for compatibility; new links use pathname routes.
+
+Deploy `dist/` to a static host configured to serve `index.html` for application routes while serving existing assets normally. Deep links and page refreshes require this SPA fallback. `vercel.json` contains the Vercel rewrite configuration; configure an equivalent fallback on other hosts.
+
+## Project structure
 
 ```text
-public/tutorial/tas/part-1/
-public/tutorial/tas/part-2/
-public/tutorial/tas/part-3/
+src/
+  App.jsx                  Routing, application state, progress persistence/migrations
+  main.jsx                 React entry point
+  components/              Course hub, lessons, tests, participant form, presentation UI
+  config/                  Shared contact configuration
+  data/
+    tas/                   TAS curriculum and first-section assessment
+    trb/                   TRB curriculum
+    tme/                   TME-C curriculum
+    sectionExercises.js    Shared assessment definitions and scoring
+    participant.js         Participant fields and storage loading
+    testScores.js          Stored test results
+    downloadScoreCard.js   PNG score-card export
+    presentation.js        Presentation content and translations
+    uiText.js              Shared UI translations
+    ...                    Product metadata, screenshot copy, and content utilities
+  styles/                  Global, assessment, and presentation styles
+public/
+  branding/                Company and product images
+  tutorial/                TAS, TRB, and TME screenshots/manual excerpts
+  ...                      Other static assets
+tests/                    Playwright specifications
+artifacts/                 Existing visual-check scripts and reference outputs
+preview/                   Screenshot preparation/review artifacts
+index.html                 HTML entry point
+vite.config.js             Vite configuration
+eslint.config.js           ESLint configuration
+vercel.json                Static-host SPA rewrites
+package.json               Scripts and dependency declarations
+package-lock.json          Locked dependency versions
 ```
 
-Use the filenames and capture guidance in `SCREENSHOT_CHECKLIST.md`. Until a file is added, its lesson displays a labeled placeholder. Keep screenshots free of confidential project information.
+## Content and screenshots
 
-Each numbered lesson instruction is also a screenshot action. The media records are generated by `src/data/tutorialUtils.js` from the localized lesson data, using stable action IDs and predictable numbered filenames. A lesson may set `comparisonAt` to an action number to render that action as a side-by-side comparison. For example, the 3D deduction lesson uses `comparisonAt: 5` and expects `3d-deduction-before.webp` plus `3d-deduction-after.webp`.
+Edit the active product curricula through their `src/data/<product>/index.js` entry points (TAS delegates to `curriculum.js`). Keep lesson IDs stable to preserve routes and saved progress. Test definitions live in `src/data/sectionExercises.js` and `src/data/tas/sectionOneExercise.js`.
 
-## Edit tutorial content
+Screenshots and processed manual excerpts live under `public/tutorial/<product>/`. Follow the paths referenced by the current curriculum and consult `SCREENSHOT_CHECKLIST.md`, `TRB_SCREENSHOT_CHECKLIST.md`, `TME_SCREENSHOT_CHECKLIST.md`, and the screenshot inventory documents. Use genuine application screenshots without confidential project information.
 
-All parts and steps are defined in `src/data/tutorialData.js`. Add or edit step objects there rather than placing lesson text in components. Each step has a stable `id`, instructions, review checks, and optional note, warning, and screenshot metadata. Hash routes are generated from the part and step IDs.
-
-## Deploy
-
-Run `npm run build`, then deploy the generated `dist/` directory to any static host such as GitHub Pages, Netlify, Cloudflare Pages, or an internal web server. Because navigation uses hash routes, no server rewrite configuration is needed.
+Generated builds, installed dependencies, Playwright reports, editor `.history/` snapshots, and `*.log` files are excluded from version control.
