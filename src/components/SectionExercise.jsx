@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck, RotateCcw } from 'lucide-react'
 import { getSectionExercise } from '../data/sectionExercises'
 import '../styles/exercise.css'
+import ParticipantDetails from './ParticipantDetails'
 import { saveTestScore } from '../data/testScores'
 
 function OfficePlan({ c, value, onSelect }) {
@@ -21,7 +22,7 @@ function Options({ field, legend, options, answers, onAnswer }) {
   return <fieldset className="exercise-options"><legend>{legend}</legend>{options.map(([value, text]) => <label key={value} className={answers[field] === value ? 'is-selected' : ''}><input type="radio" name={field} value={value} checked={answers[field] === value} onChange={() => onAnswer(field, value)} /><span>{text}</span></label>)}</fieldset>
 }
 
-export default function SectionExercise({ language, onScoreSaved, exercise = getSectionExercise('tas', 1) }) {
+export default function SectionExercise({ language, profile, onEditParticipant, onScoreSaved, exercise = getSectionExercise('tas', 1) }) {
   const { copy, storageKey: exerciseStorageKey, load: loadExercise, issues: questionIssues, answered: questionAnswered, points: questionPoints, score: scoreExercise, product } = exercise
   const c = copy[language]
   const questionCount = c.questions.length
@@ -74,6 +75,7 @@ export default function SectionExercise({ language, onScoreSaved, exercise = get
 
   return <article className="section-exercise">
     <header className="exercise-header"><span className="eyebrow">{c.badge}</span><h1>{c.title}</h1><p>{c.duration}</p></header>
+    <div className="exercise-participant"><ParticipantDetails profile={profile} language={language} /><button type="button" className="text-link" onClick={onEditParticipant}>{language === 'en' ? 'Edit details' : 'Ubah data diri'}</button></div>
     {!started ? <div className="exercise-layout"><section className="exercise-card"><ClipboardCheck size={34} /><h2>{c.entry}</h2><p>{c.intro}</p><p className="exercise-pass-rule">{c.passRule}</p><p>{c.scope}</p><button className="primary-button" type="button" onClick={() => setState((current) => ({ ...current, started: true }))}>{c.start}<ArrowRight size={18} /></button></section>{brief}</div> : submitted ? <>
       <section className={`exercise-card exercise-result ${result.passed ? 'is-passed' : ''}`}><span>{c.result}</span><h2 ref={heading} tabIndex={-1}>{result.passed ? c.passed : c.notPassed}</h2><strong className="exercise-score">{result.total}<small>/100</small></strong><p>{c.passRule}</p>{!result.criticalPassed && <p className="exercise-critical">{c.critical}</p>}<p>{c.scope}</p><button className="primary-button" type="button" onClick={() => { setState({ started: true, submitted: false, index: 0, answers: {} }); setError(false) }}><RotateCcw size={17} />{c.retry}</button></section>
       <div className="exercise-bottom"><a href={`/?scores=${product}`}>{language === 'en' ? 'View test scores' : 'Lihat nilai tes'}</a></div>

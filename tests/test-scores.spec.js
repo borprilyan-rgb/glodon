@@ -71,18 +71,45 @@ test('opening scores keeps desktop course cards and buttons aligned', async ({ p
   await page.screenshot({ path: 'test-results/score-cards-mobile.png', fullPage: true })
 })
 
-test('student name updates all score cards and persists across reloads', async ({ page }) => {
-  await page.goto(`${origin}/`)
+test('profile name changes through the entry form and stays on score cards', async ({ page }) => {
+  await page.goto(`${origin}/tas/exercise/section-1`)
   await page.locator('button[lang="en"]').click()
+  await expect(page.locator('.lesson-topbar input')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Edit details' }).click()
   await page.getByLabel('Name', { exact: true }).fill('Ayu Putri')
-  await page.locator('.course-scores summary').first().click()
-  await expect(page.locator('.course-scores__student strong')).toHaveText(['Ayu Putri', 'Ayu Putri', 'Ayu Putri'])
+  await page.getByRole('button', { name: 'Continue to test' }).click()
+  await page.goto(`${origin}/?scores=tas`)
+  await expect(page.locator('.course-scores .participant-details > div:first-child dd')).toHaveText(['Ayu Putri', 'Ayu Putri', 'Ayu Putri'])
+  await expect(page.getByText('Section test scores', { exact: true })).toHaveCount(0)
   await page.reload()
-  await expect(page.getByLabel('Name', { exact: true })).toHaveValue('Ayu Putri')
-  await page.getByLabel('Name', { exact: true }).fill('Budi Santoso')
-  await expect(page.locator('.course-scores__student strong')).toHaveText(['Budi Santoso', 'Budi Santoso', 'Budi Santoso'])
-  await page.locator('button[lang="id"]').click()
-  await expect(page.getByLabel('Nama', { exact: true })).toHaveValue('Budi Santoso')
-  await page.getByLabel('Nama', { exact: true }).fill('   ')
-  await expect(page.locator('.course-scores__student')).toHaveCount(0)
+  await expect(page.locator('.course-scores').first().locator('dd').first()).toHaveText('Ayu Putri')
+})
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' }))
+  })
+})
+
+test('score card downloads a PNG after a completed test', async ({ page }) => {
+  await page.goto(`${origin}/?scores=tas`)
+  const card = page.locator('.course-scores').first()
+  await expect(card.getByRole('button', { name: 'Unduh kartu nilai' })).toBeDisabled()
+  await page.evaluate(() => {
+    localStorage.setItem('cubicost:tas:section-3-exercise:v1', JSON.stringify({ started: true, submitted: true, index: 4, answers: { q1: '0', q2: '1', q3: '2', q4: '0', q5: '1' } }))
+    localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Ayu Putri', jobTitle: 'Quantity Surveyor', employeeId: '001-A' }))
+  })
+  await page.reload()
+  await expect(card.getByRole('button', { name: 'Unduh kartu nilai' })).toBeEnabled()
+  await expect(card).not.toContainText('Hanya tersimpan di browser ini.')
+  const downloadEvent = page.waitForEvent('download')
+  await card.getByRole('button', { name: 'Unduh kartu nilai' }).click()
+  const download = await downloadEvent
+  expect(download.suggestedFilename()).toBe('cubicost-tas-Ayu-Putri.png')
+  await download.saveAs('test-results/downloaded-score-id.png')
+  expect(await download.failure()).toBeNull()
+  await page.locator('button[lang="en"]').click()
+  const englishEvent = page.waitForEvent('download')
+  await card.getByRole('button', { name: 'Download score card' }).click()
+  await (await englishEvent).saveAs('test-results/downloaded-score-en.png')
 })

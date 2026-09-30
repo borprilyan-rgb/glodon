@@ -10,6 +10,8 @@ import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
 import SectionExercise from './components/SectionExercise'
+import ParticipantEntry from './components/ParticipantEntry'
+import { PARTICIPANT_KEY, loadParticipant, hasParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
 import { getSectionExercise } from './data/sectionExercises'
 import Presentation, { PresentationEntry } from './components/Presentation'
@@ -24,6 +26,7 @@ const TRB_PROGRESS_KEY = 'cubicost:tutorial:trb:progress'
 const TRB_LAST_LESSON_KEY = 'cubicost:tutorial:trb:lastLesson'
 const TME_PROGRESS_KEY = 'cubicost:tutorial:tme:progress'
 const TME_LAST_LESSON_KEY = 'cubicost:tutorial:tme:lastLesson'
+const STUDENT_NAME_KEY = 'cubicost:student-name'
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
 const TAS_LESSON_IDS = new Set(getTasData('en').allSteps.map((step) => step.id))
 const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
@@ -128,6 +131,17 @@ export default function App() {
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
   const [testScores, setTestScores] = useState(readTestScores)
+  const [participant, setParticipant] = useState(loadParticipant)
+  const [editingParticipant, setEditingParticipant] = useState(false)
+  const [nameSaveFailed, setNameSaveFailed] = useState(false)
+  function saveParticipant(profile) {
+    setParticipant(profile)
+    try {
+      localStorage.setItem(PARTICIPANT_KEY, JSON.stringify(profile))
+      localStorage.setItem(STUDENT_NAME_KEY, profile.name)
+      setNameSaveFailed(false)
+    } catch { setNameSaveFailed(true) }
+  }
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
   const tme = getTmeData(language)
@@ -233,8 +247,9 @@ export default function App() {
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && route.page !== 'welcome'} language={language} onLanguageChange={setLanguage} t={t}>
     {route.page !== 'exercise' && <PresentationEntry language={language} step={activeStep} />}
-    {route.page === 'exercise' && <SectionExercise onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />}
-    {route.page === 'hub' && <CourseHub language={language} scores={testScores} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
+    {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
+    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} onEditParticipant={() => setEditingParticipant(true)} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
+    {route.page === 'hub' && <CourseHub profile={participant} language={language} scores={testScores} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}

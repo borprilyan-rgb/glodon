@@ -98,3 +98,10 @@ test('number navigation preserves answers and identifies missing fields at submi
   await expect(page.getByRole('textbox', { name: 'Ground elevation (m)' })).toHaveValue('-0,5 m')
   await expect(page.getByRole('navigation').getByRole('button', { name: /^Question 3:/ })).toHaveAttribute('aria-current', 'step')
 })
+
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' }))
+  })
+})

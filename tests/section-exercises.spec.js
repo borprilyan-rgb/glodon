@@ -98,3 +98,10 @@ test('all TAS and TRB sections have entry links and TME has none', async ({ page
   await page.goto(`${origin}/trb/exercise/section-1`)
   await page.screenshot({ path: 'test-results/trb-exercise-desktop.png', fullPage: true })
 })
+
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' }))
+  })
+})
