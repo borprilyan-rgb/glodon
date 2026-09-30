@@ -1,11 +1,10 @@
 import { ArrowRight, Check, Circle, Play } from 'lucide-react'
 import { getStepPath } from '../data/tutorialUtils'
 import ProgressBar from './ProgressBar'
-import ExerciseEntry from './ExerciseEntry'
 import { useState } from 'react'
 import { getProductConfig, getProductLabel } from '../data/productConfig'
 
-export default function CourseMapPage({ parts, allSteps, completed, started, lastLesson, continueStep, onReset, query, setQuery, product = 'tas', course, t, language = 'id' }) {
+export default function CourseMapPage({ parts, allSteps, completed, started, lastLesson, continueStep, onReset, query, setQuery, product = 'tas', course, t }) {
   const config = getProductConfig(product, t, course)
   const percentage = Math.round((completed.size / allSteps.length) * 100)
   const getState = (step) => completed.has(step.id) ? 'completed' : started.has(step.id) ? 'inProgress' : 'notStarted'
@@ -20,6 +19,6 @@ export default function CourseMapPage({ parts, allSteps, completed, started, las
       const state = getState(step)
       const isCurrent = step.id === lastLesson
       return <a className={`course-lesson is-${state} ${isCurrent ? 'is-current' : ''}`} href={getStepPath(step, product)} key={step.id} aria-current={isCurrent ? 'page' : undefined}><span className="course-lesson__status">{state === 'completed' ? <Check size={16} /> : state === 'inProgress' ? <Play size={14} /> : <Circle size={14} />}</span><span className="course-lesson__copy"><small>{t.step} {step.stepNumber}</small><strong>{step.title}</strong><span>{t[state]}</span></span><span className="course-lesson__action">{state === 'completed' ? t.completed : state === 'inProgress' ? t.resumeLesson : t.startLesson}<ArrowRight size={15} /></span></a>
-    })}<ExerciseEntry language={language} product={product} section={Number(part.number)} /></div></section>)}</div>
+    })}</div></section>)}</div>
   </div>
 }

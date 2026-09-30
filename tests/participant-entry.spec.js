@@ -29,7 +29,7 @@ test('test entry requires all details, persists employee ID and displays profile
   await page.getByRole('button', { name: 'Ubah data diri' }).click()
   await form.getByLabel('Jabatan').fill('Engineer')
   await form.getByRole('button').click()
-  await page.goto(`${origin}/?scores=tas`)
+  await page.goto(`${origin}/tas/tests?scores=tas`)
   await expect(page.locator('.course-scores').first().locator('dd')).toHaveText(['Ayu Putri', 'Engineer', '001-A'])
 })
 

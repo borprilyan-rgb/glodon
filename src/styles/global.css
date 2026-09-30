@@ -268,10 +268,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .hub-course-group { display: grid; grid-template-rows: subgrid; grid-row: span 2; min-width: 0; row-gap: 14px; }
 .course-scores { align-self: start; min-width: 0; padding: 2px 30px; background: white; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 5px 18px rgba(32,61,88,.04); }
 @media (max-width: 600px) { .course-scores { padding: 2px 16px; } }
-.course-scores summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 14px 0; color: var(--blue); font-weight: 800; cursor: pointer; list-style: none; }
-.course-scores summary::-webkit-details-marker { display: none; }
-.course-scores summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-.course-scores[open] summary svg { transform: rotate(180deg); }
 .course-scores__content { padding-bottom: 18px; border-top: 1px solid var(--line); }
 .course-scores__content > p, .course-scores__content small { color: var(--muted); font-size: 12px; line-height: 1.6; }
 .course-scores ul { list-style: none; padding: 0; margin: 12px 0; }
@@ -304,3 +300,14 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .score-download:hover:not(:disabled) { background: #edf5ff; }
 .score-download:disabled { opacity: .5; cursor: not-allowed; }
 .score-download:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+.hub-test-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--blue); font-size: 14px; font-weight: 700; }
+.test-page { padding-top: 24px; }
+.test-page__layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr); gap: 24px; align-items: start; margin-top: 24px; }
+.test-list { display: grid; gap: 18px; }
+.test-profile .participant-details { display: flex; flex-wrap: wrap; gap: 20px 48px; margin-top: 0; }
+.test-profile button { background: none; border: 0; padding: 8px 0; cursor: pointer; }
+.test-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 900px) { .test-page__layout { grid-template-columns: 1fr; } }
+
+.course-scores__heading { margin: 0; padding: 16px 0; color: var(--blue); font-size: 16px; font-weight: 800; }

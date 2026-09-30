@@ -44,7 +44,7 @@ for (const [product, section, correct] of exercises) {
     await page.goto(`${origin}${definition.path}`)
     await page.locator('button[lang="en"]').click()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(definition.copy.en.title)
-    await page.getByRole('button', { name: 'Start exercise' }).click()
+    await page.getByRole('button', { name: 'Start test' }).click()
     for (let index = 0; index < correct.length; index++) {
       await expect(page.getByText(`Question ${index + 1} / ${correct.length}`, { exact: true })).toBeVisible()
       await page.locator(`input[name="q${index + 1}"][value="${correct[index]}"]`).check()
@@ -68,7 +68,7 @@ test('section progress is isolated and mobile numbered navigation fits', async (
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto(`${origin}/trb/exercise/section-2`)
   await page.locator('.mobile-header-language').click()
-  await page.getByRole('button', { name: 'Start exercise' }).click()
+  await page.getByRole('button', { name: 'Start test' }).click()
   await page.locator('input[name="q1"][value="2"]').check()
   await page.getByRole('navigation').getByRole('button', { name: /^Question 10:/ }).click()
   await page.reload()
@@ -76,7 +76,7 @@ test('section progress is isolated and mobile numbered navigation fits', async (
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/trb-exercise-mobile.png', fullPage: true })
   await page.goto(`${origin}/tas/exercise/section-2`)
-  await page.getByRole('button', { name: 'Start exercise' }).click()
+  await page.getByRole('button', { name: 'Start test' }).click()
   await expect(page.getByText('Question 1 / 8')).toBeVisible()
   await expect(page.locator('input:checked')).toHaveCount(0)
   await page.goto(`${origin}/trb/exercise/section-2`)
@@ -85,15 +85,15 @@ test('section progress is isolated and mobile numbered navigation fits', async (
   await expect(page.locator('input[name="q1"][value="2"]')).toBeChecked()
 })
 
-test('all TAS and TRB sections have entry links and TME has none', async ({ page }) => {
+test('course maps and lessons do not embed test entry cards', async ({ page }) => {
   for (const product of ['tas', 'trb', 'tme']) {
     await page.goto(`${origin}/${product}/course`)
-    await expect(page.locator('.exercise-entry a')).toHaveCount(product === 'tme' ? 0 : 3)
+    await expect(page.locator('.exercise-entry a')).toHaveCount(0)
   }
   for (const [product, section] of exercises) {
     const part = (product === 'tas' ? getTasData('en') : getTrbData('en')).tutorialParts[section - 1]
     await page.goto(`${origin}/${product}/lesson/${part.steps.at(-1).id}`)
-    await expect(page.locator('.exercise-entry a')).toHaveAttribute('href', `/${product}/exercise/section-${section}`)
+    await expect(page.locator('.exercise-entry a')).toHaveCount(0)
   }
   await page.goto(`${origin}/trb/exercise/section-1`)
   await page.screenshot({ path: 'test-results/trb-exercise-desktop.png', fullPage: true })

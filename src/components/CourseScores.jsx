@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { downloadScoreCard } from '../data/downloadScoreCard'
 import ParticipantDetails from './ParticipantDetails'
-import { ChevronDown, Download } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { getSectionExercise } from '../data/sectionExercises'
 import { scoreLabel, scoreStatus } from '../data/testScores'
 import { getTasData } from '../data/tas'
@@ -26,8 +26,8 @@ export default function CourseScores({ product, scores, language, profile }) {
     } catch { setDownloadFailed(true) }
     finally { setDownloading(false) }
   }
-  return <details className="course-scores" open={new URLSearchParams(window.location.search).get('scores') === product || undefined}>
-    <summary>{scoreLabel(language)}<ChevronDown size={18} aria-hidden="true" /></summary>
+  return <section className="course-scores" aria-labelledby={`score-heading-${product}`}>
+    <h2 className="course-scores__heading" id={`score-heading-${product}`}>{scoreLabel(language)}</h2>
     <div className="course-scores__content">
       <ParticipantDetails profile={profile} language={language} />
       {sections.length ? <>
@@ -43,5 +43,5 @@ export default function CourseScores({ product, scores, language, profile }) {
       {downloadFailed && <p role="alert">{en ? 'The image could not be downloaded. Please try again.' : 'Gambar tidak dapat diunduh. Silakan coba lagi.'}</p>}
       </> : <p>{en ? 'Tests are not available for this course yet.' : 'Tes untuk kursus ini belum tersedia.'}</p>}
     </div>
-  </details>
+  </section>
 }

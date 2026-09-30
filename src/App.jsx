@@ -10,6 +10,7 @@ import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
 import SectionExercise from './components/SectionExercise'
+import TestPage from './components/TestPage'
 import ParticipantEntry from './components/ParticipantEntry'
 import { PARTICIPANT_KEY, loadParticipant, hasParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
@@ -38,8 +39,11 @@ function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESS
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const hashParts = window.location.hash.replace(/^#\/?/, '').split('/')
-  const exerciseMatch = path.match(/^\/(tas|trb)\/exercise\/section-([1-3])$/)
-  if (exerciseMatch) return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
+  const exerciseMatch = path.match(/^\/(tas|trb)\/(?:exercise|tests)\/section-([1-3])$/)
+  if (exerciseMatch) {
+    if (path.includes('/exercise/')) window.history.replaceState({}, '', path.replace('/exercise/', '/tests/'))
+    return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
+  }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
@@ -54,6 +58,7 @@ function routeFromLocation() {
   }
   const [product, view, stepId] = path.split('/').filter(Boolean)
   if (!['tas', 'trb', 'tme'].includes(product)) return { page: 'hub' }
+  if (view === 'tests') return { product, page: 'tests' }
   if (view === 'course') return { product, page: 'course' }
   if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId: product === 'tas' ? mapTasLessonId(stepId) || stepId : stepId }
   return { product, page: 'welcome' }
@@ -245,11 +250,12 @@ export default function App() {
   const visibleProgress = product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
-  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && route.page !== 'welcome'} language={language} onLanguageChange={setLanguage} t={t}>
-    {route.page !== 'exercise' && <PresentationEntry language={language} step={activeStep} />}
+  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
+    {!['exercise', 'tests'].includes(route.page) && <PresentationEntry language={language} step={activeStep} />}
     {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} onEditParticipant={() => setEditingParticipant(true)} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
-    {route.page === 'hub' && <CourseHub profile={participant} language={language} scores={testScores} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
+    {route.page === 'tests' && (product !== 'tme' && (!hasParticipant(participant) || editingParticipant) ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <TestPage product={product} parts={activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} language={language} onEditParticipant={() => setEditingParticipant(true)} />)}
+    {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}

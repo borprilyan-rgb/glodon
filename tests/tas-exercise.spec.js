@@ -21,7 +21,7 @@ test('exercise validates, resumes, scores and retries on mobile', async ({ page 
   await page.goto('http://127.0.0.1:5173/tas/exercise/section-1')
   await page.locator('button[lang="en"]').click()
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.getByRole('button', { name: 'Start exercise' }).click()
+  await page.getByRole('button', { name: 'Start test' }).click()
   const next = () => page.getByRole('button', { name: 'Next question' }).click()
   const choose = (field, value) => page.locator(`input[name="${field}"][value="${value}"]`).check()
   await next()
@@ -65,10 +65,10 @@ test('exercise validates, resumes, scores and retries on mobile', async ({ page 
   await expect(page.locator('input:checked')).toHaveCount(0)
 })
 
-test('course map and final lesson link to the exercise', async ({ page }) => {
+test('learning pages stay separate from tests and legacy test URLs remain usable', async ({ page }) => {
   for (const path of ['/tas/course', '/tas/lesson/axis-grid']) {
     await page.goto(`http://127.0.0.1:5173${path}`)
-    await expect(page.locator('.exercise-entry a[href="/tas/exercise/section-1"]')).toHaveCount(1)
+    await expect(page.locator('.exercise-entry a')).toHaveCount(0)
   }
   await page.goto('http://127.0.0.1:5173/tas/exercise/section-1')
   await page.screenshot({ path: 'test-results/exercise-desktop.png', fullPage: true })
@@ -78,7 +78,7 @@ test('course map and final lesson link to the exercise', async ({ page }) => {
 test('number navigation preserves answers and identifies missing fields at submission', async ({ page }) => {
   await page.goto('http://127.0.0.1:5173/tas/exercise/section-1')
   await page.locator('button[lang="en"]').click()
-  await page.getByRole('button', { name: 'Start exercise' }).click()
+  await page.getByRole('button', { name: 'Start test' }).click()
   const jump = (number) => page.getByRole('navigation', { name: 'Question navigation' }).getByRole('button', { name: new RegExp(`^Question ${number}:`) }).click()
   await jump(3)
   await page.getByRole('textbox', { name: 'Project name' }).fill('ASG Training')

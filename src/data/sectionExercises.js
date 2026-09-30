@@ -56,7 +56,7 @@ export function getSectionExercise(product, section) {
   const key = `${product}-${section}`
   if (definitions.has(key)) return definitions.get(key)
   if (key === 'tas-1') {
-    const definition = { product, section, path: first.exercisePath, copy: first.exerciseCopy, storageKey: first.exerciseStorageKey, load: first.loadExercise, issues: first.questionIssues, answered: first.questionAnswered, points: first.questionPoints, score: first.scoreExercise, officePlan: true }
+    const definition = { product, section, path: '/tas/tests/section-1', copy: first.exerciseCopy, storageKey: first.exerciseStorageKey, load: first.loadExercise, issues: first.questionIssues, answered: first.questionAnswered, points: first.questionPoints, score: first.scoreExercise, officePlan: true }
     definitions.set(key, definition)
     return definition
   }
@@ -87,7 +87,7 @@ export function getSectionExercise(product, section) {
       return { started: Boolean(saved.started), submitted: Boolean(saved.started && saved.submitted) && bank.every((_, index) => answered(index, answers)), index: Math.max(0, Math.min(bank.length - 1, Number.isInteger(saved.index) ? saved.index : 0)), answers }
     } catch { return empty }
   }
-  const definition = { product, section, path: `/${product}/exercise/section-${section}`, copy, storageKey, load, issues, answered, points, score }
+  const definition = { product, section, path: `/${product}/tests/section-${section}`, copy, storageKey, load, issues, answered, points, score }
   definitions.set(key, definition)
   return definition
 }
