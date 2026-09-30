@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight, Maximize, Minimize, Play, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Maximize, Minimize, X } from 'lucide-react'
 import { presentationCopy } from '../data/presentation'
 import { getProductLabel } from '../data/productConfig'
 import '../styles/presentation.css'
@@ -11,14 +11,13 @@ import DrawingToolbar from './DrawingToolbar'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
-export function PresentationEntry({ language, step }) {
+export function PresentationEntry({ language }) {
   const c = presentationCopy[language]
   const [returnPath, setReturnPath] = useState(() => {
     try { const path = sessionStorage.getItem(DEMO_KEY); return path?.startsWith('/present?') ? path : null } catch { return null }
   })
-  if (step && !returnPath) return null
+  if (!returnPath) return null
   return <div className="presentation-entry">
-    <>{!step && <a className="secondary-button" href="/present"><Play size={16} />{c.present}</a>}</>
     {returnPath && <div className="presentation-return"><a href={returnPath}>{c.back}</a><button type="button" aria-label={c.dismiss} onClick={() => { try { sessionStorage.removeItem(DEMO_KEY) } catch { /* Storage may be unavailable. */ } setReturnPath(null) }}><X size={16} /></button></div>}
   </div>
 }

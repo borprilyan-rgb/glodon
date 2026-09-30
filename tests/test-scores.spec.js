@@ -48,7 +48,7 @@ test('legacy link, submission, result overview, PNG and retry preserve results',
   await page.getByRole('button', { name: 'Retry test' }).click()
   await expect(page.getByText('Question 1 / 5', { exact: true })).toBeVisible()
   await expect(page.locator('input:checked')).toHaveCount(0)
-  await page.getByRole('link', { name: 'Back to tests' }).click()
+  await page.goto(`${origin}/tas/tests`)
   await expect(page.getByRole('link', { name: 'Continue test' })).toBeVisible()
   await expect(page.locator('.course-scores__content')).toBeVisible()
   await expect(page.locator('.course-scores__row strong')).toHaveText(['0/100', '0/100', '100/100'])

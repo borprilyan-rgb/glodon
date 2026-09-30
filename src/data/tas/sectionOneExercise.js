@@ -22,7 +22,7 @@ export const exerciseCopy = {
     correct: 'Understood', review: 'Needs review', result: 'Your result', passed: 'Section 1 passed', notPassed: 'Review and try again',
     critical: 'Drawing scale and alignment must both be fully correct, even with a score of 80 or higher.',
     retry: 'Try again', reviewLesson: 'Review lesson', newTab: 'opens in a new tab', course: 'Back to course map',
-    saved: 'Your answers and result are saved in this browser.', noStorage: 'Browser saving is unavailable. Keep this page open until you finish.',
+    noStorage: 'Browser saving is unavailable. Keep this page open until you finish.',
     summary: 'Topic results', reference: 'Reference drawing',
     questions: [
       { id: 'settings', topic: 'Measurement Settings', title: 'The imported wall-finish settings differ from the project specification. What should you do?', type: 'choice', lesson: 'measurement-settings', options: [['review', 'Review the wall-finish position and additional-height settings against the specification.'], ['copy', 'Keep all settings copied from the previous project.'], ['guess', 'Choose whichever settings give the lowest quantity.']], explanation: 'Review the relevant settings against this project’s requirements. Settings copied from another project may not apply.' },
@@ -55,7 +55,7 @@ export const exerciseCopy = {
     correct: 'Sudah dipahami', review: 'Perlu ditinjau', result: 'Hasil latihan', passed: 'Lulus Bagian 1', notPassed: 'Tinjau materi dan coba lagi',
     critical: 'Skala gambar dan penyelarasan harus benar seluruhnya, meskipun nilai total sudah mencapai 80.',
     retry: 'Coba lagi', reviewLesson: 'Tinjau materi', newTab: 'dibuka di tab baru', course: 'Kembali ke peta kursus',
-    saved: 'Jawaban dan hasil disimpan di browser ini.', noStorage: 'Penyimpanan browser tidak tersedia. Biarkan halaman ini terbuka sampai selesai.',
+    noStorage: 'Penyimpanan browser tidak tersedia. Biarkan halaman ini terbuka sampai selesai.',
     summary: 'Hasil per topik', reference: 'Gambar referensi',
     questions: [
       { id: 'settings', topic: 'Measurement Settings', title: 'Pengaturan wall finish yang diimpor berbeda dengan spesifikasi proyek. Apa yang harus dilakukan?', type: 'choice', lesson: 'measurement-settings', options: [['review', 'Periksa posisi wall finish dan additional height terhadap spesifikasi proyek.'], ['copy', 'Pertahankan semua pengaturan dari proyek sebelumnya.'], ['guess', 'Pilih pengaturan yang menghasilkan kuantitas terkecil.']], explanation: 'Periksa pengaturan terhadap kebutuhan proyek ini. Pengaturan dari proyek lain belum tentu sesuai.' },
