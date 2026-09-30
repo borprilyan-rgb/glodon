@@ -265,3 +265,32 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 @media (prefers-reduced-motion: reduce) {
   .action-list__item, .course-part__toggle { scroll-behavior: auto; transition: none; }
 }
+.hub-course-group { display: grid; grid-template-rows: subgrid; grid-row: span 2; min-width: 0; row-gap: 14px; }
+.course-scores { align-self: start; min-width: 0; padding: 2px 30px; background: white; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 5px 18px rgba(32,61,88,.04); }
+@media (max-width: 600px) { .course-scores { padding: 2px 16px; } }
+.course-scores summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 14px 0; color: var(--blue); font-weight: 800; cursor: pointer; list-style: none; }
+.course-scores summary::-webkit-details-marker { display: none; }
+.course-scores summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.course-scores[open] summary svg { transform: rotate(180deg); }
+.course-scores__content { padding-bottom: 18px; border-top: 1px solid var(--line); }
+.course-scores__content > p, .course-scores__content small { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.course-scores ul { list-style: none; padding: 0; margin: 12px 0; }
+.course-scores li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.course-scores__row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-size: 13px; line-height: 1.6; }
+.course-scores__row a { color: var(--navy); overflow-wrap: anywhere; }
+.course-scores__row a:hover { text-decoration: underline; }
+.course-scores__row strong { white-space: nowrap; }
+.course-scores__passed, .course-scores__review, .course-scores__pending { display: block; margin-top: 6px; font-size: 12px; font-weight: 700; }
+.course-scores__passed { color: #23754f; }
+.course-scores__review { color: #956013; }
+.course-scores li p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+.course-scores__pending { color: var(--muted); }
+
+.student-details { display: grid; gap: 9px; max-width: 520px; margin-bottom: 28px; }
+.student-details label { color: var(--navy); font-size: 14px; font-weight: 700; }
+.student-details input { width: 100%; min-width: 0; min-height: 46px; padding: 11px 14px; border: 1px solid #afc1d1; border-radius: 6px; background: white; color: var(--navy); font: inherit; }
+.student-details input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.student-details small { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.course-scores__student { display: grid; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.course-scores__student strong { color: var(--navy); font-size: 16px; overflow-wrap: anywhere; }

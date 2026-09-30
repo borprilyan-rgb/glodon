@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck, RotateCcw } from 'lucide-react'
 import { getSectionExercise } from '../data/sectionExercises'
 import '../styles/exercise.css'
+import { saveTestScore } from '../data/testScores'
 
 function OfficePlan({ c, value, onSelect }) {
   return <div className="exercise-plan">
@@ -20,7 +21,7 @@ function Options({ field, legend, options, answers, onAnswer }) {
   return <fieldset className="exercise-options"><legend>{legend}</legend>{options.map(([value, text]) => <label key={value} className={answers[field] === value ? 'is-selected' : ''}><input type="radio" name={field} value={value} checked={answers[field] === value} onChange={() => onAnswer(field, value)} /><span>{text}</span></label>)}</fieldset>
 }
 
-export default function SectionExercise({ language, exercise = getSectionExercise('tas', 1) }) {
+export default function SectionExercise({ language, onScoreSaved, exercise = getSectionExercise('tas', 1) }) {
   const { copy, storageKey: exerciseStorageKey, load: loadExercise, issues: questionIssues, answered: questionAnswered, points: questionPoints, score: scoreExercise, product } = exercise
   const c = copy[language]
   const questionCount = c.questions.length
@@ -41,8 +42,11 @@ export default function SectionExercise({ language, exercise = getSectionExercis
   const result = submitted ? scoreExercise(answers) : null
 
   useEffect(() => {
-    try { localStorage.setItem(exerciseStorageKey, JSON.stringify(state)) } catch { setSaveFailed(true) }
-  }, [state, exerciseStorageKey])
+    try {
+      localStorage.setItem(exerciseStorageKey, JSON.stringify(state))
+      if (state.submitted) saveTestScore(exercise, state.answers)
+    } catch { setSaveFailed(true) }
+  }, [state, exerciseStorageKey, exercise])
   useEffect(() => { if (started) heading.current?.focus() }, [index, submitted, started])
 
   function answer(field, value) {
@@ -54,6 +58,8 @@ export default function SectionExercise({ language, exercise = getSectionExercis
     if (index < questionCount - 1) { setState((current) => ({ ...current, index: current.index + 1 })); setError(false); return }
     const missing = c.questions.findIndex((_, questionIndex) => !questionAnswered(questionIndex, answers))
     if (missing !== -1) { setState((current) => ({ ...current, index: missing })); setError(true); return }
+    try { saveTestScore(exercise, answers) } catch { setSaveFailed(true) }
+    onScoreSaved?.()
     setState((current) => ({ ...current, submitted: true }))
     setError(false)
   }
@@ -70,6 +76,7 @@ export default function SectionExercise({ language, exercise = getSectionExercis
     <header className="exercise-header"><span className="eyebrow">{c.badge}</span><h1>{c.title}</h1><p>{c.duration}</p></header>
     {!started ? <div className="exercise-layout"><section className="exercise-card"><ClipboardCheck size={34} /><h2>{c.entry}</h2><p>{c.intro}</p><p className="exercise-pass-rule">{c.passRule}</p><p>{c.scope}</p><button className="primary-button" type="button" onClick={() => setState((current) => ({ ...current, started: true }))}>{c.start}<ArrowRight size={18} /></button></section>{brief}</div> : submitted ? <>
       <section className={`exercise-card exercise-result ${result.passed ? 'is-passed' : ''}`}><span>{c.result}</span><h2 ref={heading} tabIndex={-1}>{result.passed ? c.passed : c.notPassed}</h2><strong className="exercise-score">{result.total}<small>/100</small></strong><p>{c.passRule}</p>{!result.criticalPassed && <p className="exercise-critical">{c.critical}</p>}<p>{c.scope}</p><button className="primary-button" type="button" onClick={() => { setState({ started: true, submitted: false, index: 0, answers: {} }); setError(false) }}><RotateCcw size={17} />{c.retry}</button></section>
+      <div className="exercise-bottom"><a href={`/?scores=${product}`}>{language === 'en' ? 'View test scores' : 'Lihat nilai tes'}</a></div>
       <section className="exercise-results" aria-label={c.summary}>{c.questions.map((item, itemIndex) => {
         const correct = result.scores[itemIndex] === questionPoints[itemIndex]
         return <article key={item.id} className="exercise-card"><div className="exercise-result-heading"><h3>{item.topic}</h3><strong>{result.scores[itemIndex]} / {questionPoints[itemIndex]}</strong></div><span className={correct ? 'exercise-correct' : 'exercise-review'}>{correct && <CheckCircle2 size={16} />}{correct ? c.correct : c.review}</span><p>{item.explanation}</p><a href={`/${product}/lesson/${item.lesson}`} target="_blank" rel="noopener noreferrer" aria-label={`${c.reviewLesson}: ${item.topic} (${c.newTab})`}>{c.reviewLesson} <span aria-hidden="true">↗</span></a></article>

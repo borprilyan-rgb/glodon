@@ -10,6 +10,7 @@ import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
 import SectionExercise from './components/SectionExercise'
+import { readTestScores } from './data/testScores'
 import { getSectionExercise } from './data/sectionExercises'
 import Presentation, { PresentationEntry } from './components/Presentation'
 
@@ -126,6 +127,7 @@ export default function App() {
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
+  const [testScores, setTestScores] = useState(readTestScores)
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
   const tme = getTmeData(language)
@@ -231,8 +233,8 @@ export default function App() {
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && route.page !== 'welcome'} language={language} onLanguageChange={setLanguage} t={t}>
     {route.page !== 'exercise' && <PresentationEntry language={language} step={activeStep} />}
-    {route.page === 'exercise' && <SectionExercise key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />}
-    {route.page === 'hub' && <CourseHub tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
+    {route.page === 'exercise' && <SectionExercise onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />}
+    {route.page === 'hub' && <CourseHub language={language} scores={testScores} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}

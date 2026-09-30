@@ -101,8 +101,8 @@ const lessons = [
 ]
 
 const partDefinitions = {
-  id: [['01', 'Transfer Model dan Persiapan Gambar', 'Transfer model TAS dan siapkan gambar yang diperlukan di TRB.'], ['02', 'Pemodelan Tulangan', 'Definisikan dan periksa reinforcement untuk elemen utama.'], ['03', 'Verifikasi Kuantitas dan Laporan', 'Hitung, validasi, kelompokkan, dan laporkan hasil reinforcement.']],
-  en: [['01', 'Model Transfer and Drawing Preparation', 'Transfer the TAS model and prepare the required drawings in TRB.'], ['02', 'Rebar Modelling', 'Define and check reinforcement for the main elements.'], ['03', 'Quantity Verification and Reports', 'Calculate, validate, classify and report reinforcement results.']],
+  id: [['01', 'Persiapan Model', 'Transfer model TAS dan siapkan gambar yang diperlukan di TRB.'], ['02', 'Pemodelan Tulangan', 'Definisikan dan periksa reinforcement untuk elemen utama.'], ['03', 'Verifikasi Kuantitas dan Laporan', 'Hitung, validasi, kelompokkan, dan laporkan hasil reinforcement.']],
+  en: [['01', 'Model Preparation', 'Transfer the TAS model and prepare the required drawings in TRB.'], ['02', 'Rebar Modelling', 'Define and check reinforcement for the main elements.'], ['03', 'Quantity Verification and Reports', 'Calculate, validate, classify and report reinforcement results.']],
 }
 
 const partRanges = [[0, 4], [4, 14], [14, 18]]
