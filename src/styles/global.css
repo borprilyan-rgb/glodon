@@ -329,3 +329,5 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .exercise-hub__scores > h2 { color: var(--navy); font-size: 26px; margin-bottom: 24px; }
 .exercise-hub__scores h3 { color: var(--navy); font-size: 18px; margin: 0 0 12px; }
 .exercise-hub__scores .hub-course-grid { align-items: start; }
+
+.hub-course-card__actions { flex-wrap: wrap; }

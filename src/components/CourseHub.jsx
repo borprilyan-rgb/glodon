@@ -1,4 +1,4 @@
-import { ArrowRight, Clock3, Mail } from 'lucide-react'
+import { ArrowRight, Clock3 } from 'lucide-react'
 import { getStepPath } from '../data/tutorialUtils'
 import ProgressBar from './ProgressBar'
 
@@ -25,7 +25,7 @@ function CourseCard({ product, data, description, t }) {
     <div className="hub-course-card__top"><ProductMark product={product} /><span className="status-badge"><Clock3 size={13} />{status}</span></div>
     <h2>Cubicost {productLabel}</h2><p>{description}</p>
     <div className="hub-course-card__progress"><ProgressBar completed={data.progress.completed.size} total={data.allSteps.length} t={t} /></div>
-    <div className="hub-course-card__actions"><a className="primary-button" href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={16} /></a><a className="text-link" href={`/${product}`}>{t.viewCourse}</a></div>
+    <div className="hub-course-card__actions"><a className="primary-button" href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={16} /></a><a className="outline-nav-button" href={`/${product}`}>{t.viewCourse}<ArrowRight size={16} aria-hidden="true" /></a></div>
     </article>
   </>
 }
@@ -36,5 +36,5 @@ export default function CourseHub({ tas, trb, tme, t, language }) {
     <CourseCard product="tas" data={tas} language={language} description={t.tasCardDescription} t={t} />
     <CourseCard product="trb" data={trb} language={language} description={t.trbCardDescription} t={t} />
     <CourseCard product="tme" data={tme} language={language} description={t.tmeCardDescription} t={t} />
-  </section><a className="hub-contact-link outline-nav-button" href="/contact"><Mail size={16} aria-hidden="true" />{t.stillNeedHelp} <strong>{t.contactUs}</strong></a></div>
+  </section></div>
 }
