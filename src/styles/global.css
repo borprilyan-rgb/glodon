@@ -311,3 +311,21 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 @media (max-width: 900px) { .test-page__layout { grid-template-columns: 1fr; } }
 
 .course-scores__heading { margin: 0; padding: 16px 0; color: var(--blue); font-size: 16px; font-weight: 800; }
+
+.outline-nav-button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 14px; border: 1px solid #b8c9d8; border-radius: 6px; background: transparent; font-size: 13px; line-height: 1.4; }
+.outline-nav-button:hover { background: white; border-color: #7fa7cc; }
+.outline-nav-button svg { flex-shrink: 0; }
+
+.outline-nav-button { color: var(--blue); font-weight: 700; text-decoration: none; }
+.outline-nav-button:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.hub-contact-link.outline-nav-button { display: flex; }
+.landing-contact-link.outline-nav-button { display: inline-flex; }
+.lesson-help-link { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.outline-nav-button:hover, .lesson-help-link .outline-nav-button:hover, .hub-contact-link.outline-nav-button:hover strong { text-decoration: none; }
+
+.exercise-hub__card { min-height: 280px; }
+.exercise-hub__card > .primary-button { margin-top: auto; gap: 8px; justify-content: center; }
+.exercise-hub__scores { margin: 40px 0 28px; }
+.exercise-hub__scores > h2 { color: var(--navy); font-size: 26px; margin-bottom: 24px; }
+.exercise-hub__scores h3 { color: var(--navy); font-size: 18px; margin: 0 0 12px; }
+.exercise-hub__scores .hub-course-grid { align-items: start; }

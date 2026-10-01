@@ -55,6 +55,7 @@ Navigation uses **pathname routes**:
 | `/:product/lesson/:stepId` | Lesson |
 | `/:product/tests` | Tests and score card (TME-C shows an availability message) |
 | `/:product/tests/section-1` through `section-3` | TAS/TRB section tests |
+| `/exercises` | Test selection and score overview |
 | `/present` | Presentation mode |
 | `/contact` | Contact information |
 

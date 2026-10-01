@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ArrowLeft, LayoutGrid } from 'lucide-react'
 import CourseScores from './CourseScores'
 import ParticipantDetails from './ParticipantDetails'
 import { getSectionExercise } from '../data/sectionExercises'
@@ -34,6 +35,6 @@ export default function TestPage({ product, parts, scores, profile, language, on
         </article>
       })}</section><CourseScores product={product} scores={scores} profile={profile} language={language} /></div>
     </> : <section className="exercise-card"><p>{en ? 'Tests are not available for this course yet.' : 'Tes untuk kursus ini belum tersedia.'}</p></section>}
-    <div className="exercise-bottom"><a href={`/${product}/course`}>{en ? 'Back to learning module' : 'Kembali ke modul belajar'}</a><a href="/">{en ? 'All courses' : 'Semua kursus'}</a></div>
+    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to learning module' : 'Kembali ke modul belajar'}</a><a className="outline-nav-button" href="/exercises"><LayoutGrid size={16} aria-hidden="true" />{en ? 'All tests' : 'Semua tes'}</a></div>
   </article>
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { participantFields, participantLabels } from '../data/participant'
 import '../styles/exercise.css'
 
@@ -16,6 +17,6 @@ export default function ParticipantEntry({ profile, language, onContinue, produc
       </label>)}
       <button className="primary-button" type="submit">{en ? 'Continue to test' : 'Lanjut ke tes'}</button>
     </form>
-    <div className="exercise-bottom"><a href={`/${product}/course`}>{en ? 'Back to course' : 'Kembali ke materi'}</a></div>
+    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to course' : 'Kembali ke materi'}</a></div>
   </section>
 }

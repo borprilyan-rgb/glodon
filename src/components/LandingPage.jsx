@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
+import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Mail, Maximize2 } from 'lucide-react'
 import { getProductConfig } from '../data/productConfig'
 import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
@@ -29,7 +29,7 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
           <a className="primary-button" href={getStepPath(progressLesson, product)}>{t.landingPrimary[state]}<ArrowRight size={17} /></a>
           <a className="secondary-button" href={config.courseRoute}>{t.viewCourseMap}</a>
         </div>
-        <a className="landing-contact-link" href="/contact">{t.stillNeedHelp} {t.contactUs}</a>
+        <a className="landing-contact-link outline-nav-button" href="/contact"><Mail size={16} aria-hidden="true" />{t.stillNeedHelp} {t.contactUs}</a>
         <p className="landing-course-info">{t.learningSummary(config.partCount, allSteps.length)}</p>
         <aside className="landing-progress" aria-label={t.overallProgress}>
           <ProgressBar completed={completed.size} total={allSteps.length} t={t} />

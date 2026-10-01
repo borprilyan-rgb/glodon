@@ -58,3 +58,4 @@
 .exercise-field [aria-invalid="true"] { border: 2px solid #a12b24; }
 .exercise-error li { margin-top: 8px; }
 @media (max-width: 760px) { .exercise-layout, .exercise-results { grid-template-columns: 1fr; }.exercise-card, .exercise-brief { padding: 20px; }.exercise-navigation button { flex: 1; justify-content: center; font-size: 13px; }.exercise-question h2 { font-size: 21px; }.exercise-grid-point { width: 40px; height: 40px; }.exercise-result-heading { align-items: start; } }
+
