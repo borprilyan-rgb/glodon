@@ -2,7 +2,7 @@ import { getSectionExercise } from './sectionExercises'
 
 export const scoreLabel = (language) => language === 'en' ? 'Score' : 'Nilai'
 export const scoreStatus = (result, language) => !result
-  ? (language === 'en' ? 'Test not done yet' : 'Tes belum dikerjakan')
+  ? (language === 'en' ? 'Exercise not done yet' : 'Latihan belum dikerjakan')
   : language === 'en' ? (result.passed ? 'Passed' : 'Not passed') : (result.passed ? 'Lulus' : 'Belum lulus')
 
 export function readTestScores() {

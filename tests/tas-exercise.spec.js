@@ -21,7 +21,7 @@ test('exercise validates, resumes, scores and retries on mobile', async ({ page 
   await page.goto('http://127.0.0.1:5173/tas/exercise/section-1')
   await page.locator('button[lang="en"]').click()
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.getByRole('button', { name: 'Start test' }).click()
+  await page.getByRole('button', { name: 'Start exercise' }).click()
   const next = () => page.getByRole('button', { name: 'Next question' }).click()
   const choose = (field, value) => page.locator(`input[name="${field}"][value="${value}"]`).check()
   await next()
@@ -78,7 +78,7 @@ test('learning pages stay separate from tests and legacy test URLs remain usable
 test('number navigation preserves answers and identifies missing fields at submission', async ({ page }) => {
   await page.goto('http://127.0.0.1:5173/tas/exercise/section-1')
   await page.locator('button[lang="en"]').click()
-  await page.getByRole('button', { name: 'Start test' }).click()
+  await page.getByRole('button', { name: 'Start exercise' }).click()
   const jump = (number) => page.getByRole('navigation', { name: 'Question navigation' }).getByRole('button', { name: new RegExp(`^Question ${number}:`) }).click()
   await jump(3)
   await page.getByRole('textbox', { name: 'Project name' }).fill('ASG Training')

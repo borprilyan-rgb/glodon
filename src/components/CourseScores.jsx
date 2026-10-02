@@ -41,7 +41,7 @@ export default function CourseScores({ product, scores, language, profile }) {
       })}</ul>
       <button type="button" className="score-download" disabled={!scores.length || downloading} onClick={download}><Download size={16} aria-hidden="true" />{downloading ? (en ? 'Preparing image?' : 'Menyiapkan gambar?') : (en ? 'Download score card' : 'Unduh kartu nilai')}</button>
       {downloadFailed && <p role="alert">{en ? 'The image could not be downloaded. Please try again.' : 'Gambar tidak dapat diunduh. Silakan coba lagi.'}</p>}
-      </> : <p>{en ? 'Tests are not available for this course yet.' : 'Tes untuk kursus ini belum tersedia.'}</p>}
+      </> : <p>{en ? 'Exercises are not available for this course yet.' : 'Latihan untuk kursus ini belum tersedia.'}</p>}
     </div>
   </section>
 }

@@ -31,7 +31,7 @@ function CourseCard({ product, data, description, t }) {
 }
 
 export default function CourseHub({ tas, trb, tme, t, language }) {
-  return <div className="course-hub"><header className="course-hub__intro"><span className="eyebrow">{language === 'en' ? 'Learning & Assessment' : 'Pembelajaran & Evaluasi'}</span><h1>{t.hubTitle}</h1><p>{language === 'en' ? 'Learn Cubicost, revisit the guides, and test your understanding.' : 'Pelajari Cubicost, tinjau kembali panduan, dan uji pemahaman Anda.'}</p></header>
+  return <div className="course-hub"><header className="course-hub__intro"><span className="eyebrow">{language === 'en' ? 'Learning & Assessment' : 'Pembelajaran & Evaluasi'}</span><h1>{t.hubTitle}</h1><p>{language === 'en' ? 'Learn Cubicost, revisit the guides, and practise the workflows.' : 'Pelajari Cubicost, tinjau kembali panduan, dan latih pemahaman Anda.'}</p></header>
     <section className="hub-course-grid" aria-label={t.allCourses}>
     <CourseCard product="tas" data={tas} language={language} description={t.tasCardDescription} t={t} />
     <CourseCard product="trb" data={trb} language={language} description={t.trbCardDescription} t={t} />
