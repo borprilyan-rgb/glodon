@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import { ArrowRight, BookOpen, CheckCircle2, FileCheck2, Image, Layers3, Maximize2 } from 'lucide-react'
+import { ArrowRight, Image, Maximize2 } from 'lucide-react'
 import { getProductConfig } from '../data/productConfig'
 import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
-
-const outcomeIcons = [BookOpen, Layers3, FileCheck2]
 
 export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', course, t }) {
   const [imageAvailable, setImageAvailable] = useState(true)
@@ -40,13 +38,6 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
         </div>}
         <p className="landing-preview__caption">{t.productPreviewCaption(config.name)}</p>
       </div>
-    </section>
-    <section className="learning-outcomes" aria-labelledby="outcomes-title">
-      <div className="section-heading"><span className="eyebrow">{config.name}</span><h2 id="outcomes-title">{t.whatYouWillLearn}</h2></div>
-      <div className="outcome-grid">{config.outcomes.map(({ title, description }, index) => {
-        const Icon = outcomeIcons[index]
-        return <article className="outcome-card" key={title}><span><Icon size={20} /></span><div><h3>{title}</h3><p>{description}</p></div><CheckCircle2 className="outcome-card__check" size={17} aria-hidden="true" /></article>
-      })}</div>
     </section>
     {lightboxOpen && <ImageLightbox items={[previewItem]} index={0} onIndexChange={() => {}} onClose={() => setLightboxOpen(false)} t={t} opener={lightboxOpener} />}
   </div>

@@ -15,8 +15,8 @@ export default function ParticipantEntry({ profile, language, onContinue, produc
       {participantFields.map(field => <label className="exercise-field" key={field} htmlFor={`participant-${field}`}>{participantLabels[language][field]}
         <input id={`participant-${field}`} name={field} type="text" required pattern=".*\S.*" maxLength={100} autoComplete={field === 'name' ? 'name' : field === 'jobTitle' ? 'organization-title' : 'off'} value={draft[field]} onChange={event => setDraft(current => ({ ...current, [field]: event.target.value }))} />
       </label>)}
-      <button className="primary-button" type="submit">{en ? 'Continue to test' : 'Lanjut ke tes'}</button>
+      <button className="primary-button" type="submit">{en ? 'Continue to Test' : 'Lanjut ke Tes'}</button>
     </form>
-    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to course' : 'Kembali ke materi'}</a></div>
+    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to Course' : 'Kembali ke Materi'}</a></div>
   </section>
 }

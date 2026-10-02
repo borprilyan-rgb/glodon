@@ -13,7 +13,7 @@ export default function ExerciseHub({ language, profile, scores }) {
         <span className="product-mark"><img src={`/branding/cubicost-${product}-logo.png`} alt={`Cubicost ${label(product)}`} /></span>
         <h2>Cubicost {label(product)}</h2>
         <p>{product === 'tme' ? (en ? 'Tests are not available yet.' : 'Tes belum tersedia.') : (en ? `${completed} of 3 section tests completed` : `${completed} dari 3 tes bagian selesai`)}</p>
-        <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{product === 'tme' ? (en ? 'View availability' : 'Lihat ketersediaan') : (en ? 'Open tests' : 'Buka tes')}<ArrowRight size={16} aria-hidden="true" /></a>
+        <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{product === 'tme' ? (en ? 'View Availability' : 'Lihat Ketersediaan') : (en ? 'Open Tests' : 'Buka Tes')}<ArrowRight size={16} aria-hidden="true" /></a>
       </article>
     })}</section>
     <section className="exercise-hub__scores" aria-labelledby="test-score-overview"><h2 id="test-score-overview">{en ? 'Test score overview' : 'Ringkasan nilai tes'}</h2>
