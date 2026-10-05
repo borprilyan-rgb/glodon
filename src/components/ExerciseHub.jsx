@@ -19,6 +19,6 @@ export default function ExerciseHub({ language, profile, scores }) {
     <section className="exercise-hub__scores" aria-labelledby="test-score-overview"><h2 id="test-score-overview">{en ? 'Exercise score overview' : 'Ringkasan nilai latihan'}</h2>
       <div className="hub-course-grid">{products.map(product => <div key={product}><h3>Cubicost {label(product)}</h3><CourseScores product={product} language={language} profile={profile} scores={scores.filter(score => score.exercise.product === product)} /></div>)}</div>
     </section>
-    <a className="outline-nav-button" href="/"><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to learning' : 'Kembali ke pembelajaran'}</a>
+    <a className="outline-nav-button" href="/"><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back To Learning' : 'Kembali Ke Pembelajaran'}</a>
   </div>
 }

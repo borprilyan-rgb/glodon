@@ -35,6 +35,6 @@ export default function TestPage({ product, parts, scores, profile, language, on
         </article>
       })}</section><CourseScores product={product} scores={scores} profile={profile} language={language} /></div>
     </> : <section className="exercise-card"><p>{en ? 'Exercises are not available for this course yet.' : 'Latihan untuk kursus ini belum tersedia.'}</p></section>}
-    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back to Learning Module' : 'Kembali ke Modul Belajar'}</a><a className="outline-nav-button" href="/exercises"><LayoutGrid size={16} aria-hidden="true" />{en ? 'All Exercises' : 'Semua Latihan'}</a></div>
+    <div className="exercise-bottom"><a className="outline-nav-button" href={`/${product}/course`}><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back To Learning Module' : 'Kembali Ke Modul Belajar'}</a><a className="outline-nav-button" href="/exercises"><LayoutGrid size={16} aria-hidden="true" />{en ? 'All Exercises' : 'Semua Latihan'}</a></div>
   </article>
 }

@@ -5,7 +5,7 @@ export const exerciseCopy = {
   en: {
     title: 'Prepare a Small Office Project', badge: 'TAS · Section 1 exercise', entry: 'Check your Section 1 understanding',
     intro: 'Use a fictional two-floor office to practise project setup decisions. Answer eight questions using the drawing and project brief.',
-    duration: '10–15 minutes · 8 questions · 100 points', start: 'Start Exercise', resume: 'Continue exercise',
+    duration: '10–15 minutes · 8 questions · 100 points', start: 'Start Exercise', resume: 'Continue Exercise',
     passRule: 'Pass with at least 80/100, plus full marks for both drawing scale and alignment.',
     scope: 'This exercise checks your understanding. It does not assess a completed TAS model.',
     brief: 'Project brief', project: 'Project name', ground: 'Ground elevation (m)', ruleSet: 'Measurement rules',
@@ -21,7 +21,7 @@ export const exerciseCopy = {
     diagram: 'Office reference plan: A to B is 6,000 mm; 1 to 2 is 4,000 mm',
     correct: 'Understood', review: 'Needs review', result: 'Your result', passed: 'Section 1 passed', notPassed: 'Review and try again',
     critical: 'Drawing scale and alignment must both be fully correct, even with a score of 80 or higher.',
-    retry: 'Try Again', reviewLesson: 'Review Lesson', newTab: 'opens in a new tab', course: 'Back to Course Map',
+    retry: 'Try Again', reviewLesson: 'Review Lesson', newTab: 'opens in a new tab', course: 'Back To Course Map',
     noStorage: 'Browser saving is unavailable. Keep this page open until you finish.',
     summary: 'Topic results', reference: 'Reference drawing',
     questions: [
@@ -54,7 +54,7 @@ export const exerciseCopy = {
     diagram: 'Denah referensi kantor: A ke B adalah 6.000 mm; 1 ke 2 adalah 4.000 mm',
     correct: 'Sudah dipahami', review: 'Perlu ditinjau', result: 'Hasil latihan', passed: 'Lulus Bagian 1', notPassed: 'Tinjau materi dan coba lagi',
     critical: 'Skala gambar dan penyelarasan harus benar seluruhnya, meskipun nilai total sudah mencapai 80.',
-    retry: 'Coba Lagi', reviewLesson: 'Tinjau Materi', newTab: 'dibuka di tab baru', course: 'Kembali ke Peta Kursus',
+    retry: 'Coba Lagi', reviewLesson: 'Tinjau Materi', newTab: 'dibuka di tab baru', course: 'Kembali Ke Peta Kursus',
     noStorage: 'Penyimpanan browser tidak tersedia. Biarkan halaman ini terbuka sampai selesai.',
     summary: 'Hasil per topik', reference: 'Gambar referensi',
     questions: [

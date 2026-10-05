@@ -25,7 +25,7 @@ function CourseCard({ product, data, description, t }) {
     <div className="hub-course-card__top"><ProductMark product={product} /><span className="status-badge"><Clock3 size={13} />{status}</span></div>
     <h2>Cubicost {productLabel}</h2><p>{description}</p>
     <div className="hub-course-card__progress"><ProgressBar completed={data.progress.completed.size} total={data.allSteps.length} t={t} /></div>
-    <div className="hub-course-card__actions"><a className="primary-button" href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={16} /></a><a className="outline-nav-button" href={`/${product}`}>{t.viewCourse}<ArrowRight size={16} aria-hidden="true" /></a></div>
+    <div className="hub-course-card__actions"><a className={`primary-button${started && !complete ? ' primary-button--continue' : ''}`} href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={16} /></a><a className="outline-nav-button" href={`/${product}`}>{t.viewCourse}<ArrowRight size={16} aria-hidden="true" /></a></div>
     </article>
   </>
 }

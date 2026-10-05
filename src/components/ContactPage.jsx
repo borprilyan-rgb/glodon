@@ -32,7 +32,7 @@ function ContactAction({ href, children, external = false }) {
 }
 
 export default function ContactPage({ t }) {
-  const configured = emailIsValid && whatsappIsValid
+  const configured = emailIsValid || whatsappIsValid
   return <div className="contact-page">
     <header className="contact-intro">
       <span className="eyebrow">{t.contact}</span>
