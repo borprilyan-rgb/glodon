@@ -13,7 +13,8 @@ export default function ParticipantEntry({ profile, language, onContinue, produc
       onContinue(Object.fromEntries(participantFields.map(field => [field, draft[field].trim()])))
     }}>
       {participantFields.map(field => <label className="exercise-field" key={field} htmlFor={`participant-${field}`}>{participantLabels[language][field]}
-        <input id={`participant-${field}`} name={field} type="text" required pattern=".*\S.*" maxLength={100} autoComplete={field === 'name' ? 'name' : field === 'jobTitle' ? 'organization-title' : 'off'} value={draft[field]} onChange={event => setDraft(current => ({ ...current, [field]: event.target.value }))} />
+        <input id={`participant-${field}`} name={field} type="text" inputMode={field === 'employeeId' ? 'numeric' : undefined} required pattern={field === 'employeeId' ? '[0-9]{6}' : '.*\\S.*'} minLength={field === 'employeeId' ? 6 : undefined} maxLength={field === 'employeeId' ? 6 : 100} autoComplete={field === 'name' ? 'name' : field === 'jobTitle' ? 'organization-title' : 'off'} value={draft[field]} onChange={event => setDraft(current => ({ ...current, [field]: field === 'employeeId' ? event.target.value.replace(/\D/g, '').slice(0, 6) : event.target.value }))} />
+        {field === 'employeeId' && draft.employeeId.length > 0 && draft.employeeId.length < 6 && <small className="participant-field-hint">{en ? 'Employee ID must contain exactly 6 digits.' : 'No. karyawan terdiri atas 6 angka.'}</small>}
       </label>)}
       <button className="primary-button" type="submit">{en ? 'Continue To Exercise' : 'Lanjut Ke Latihan'}</button>
     </form>

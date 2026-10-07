@@ -13,7 +13,7 @@ import ContactPage from './components/ContactPage'
 import SectionExercise from './components/SectionExercise'
 import TestPage from './components/TestPage'
 import ParticipantEntry from './components/ParticipantEntry'
-import { PARTICIPANT_KEY, loadParticipant, hasParticipant } from './data/participant'
+import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
 import { getSectionExercise } from './data/sectionExercises'
 import Presentation, { PresentationEntry } from './components/Presentation'
@@ -141,15 +141,23 @@ export default function App() {
   const [query, setQuery] = useState('')
   const [testScores, setTestScores] = useState(readTestScores)
   const [participant, setParticipant] = useState(loadParticipant)
+  const [participantEditUntil, setParticipantEditUntil] = useState(loadParticipantEditLockUntil)
   const [editingParticipant, setEditingParticipant] = useState(false)
   const [nameSaveFailed, setNameSaveFailed] = useState(false)
   function saveParticipant(profile) {
+    const editUntil = Date.now() + PARTICIPANT_EDIT_LOCK_MS
     setParticipant(profile)
+    setParticipantEditUntil(editUntil)
     try {
       localStorage.setItem(PARTICIPANT_KEY, JSON.stringify(profile))
+      localStorage.setItem(PARTICIPANT_EDIT_LOCK_KEY, String(editUntil))
       localStorage.setItem(STUDENT_NAME_KEY, profile.name)
       setNameSaveFailed(false)
     } catch { setNameSaveFailed(true) }
+  }
+  function beginParticipantEdit() {
+    if (loadParticipantEditLockUntil() > Date.now()) return
+    setEditingParticipant(true)
   }
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
@@ -257,8 +265,8 @@ export default function App() {
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
     {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
-    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} onEditParticipant={() => setEditingParticipant(true)} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
-    {route.page === 'tests' && (product !== 'tme' && (!hasParticipant(participant) || editingParticipant) ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <TestPage product={product} parts={activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} language={language} onEditParticipant={() => setEditingParticipant(true)} />)}
+    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
+    {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <TestPage product={product} parts={activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
     {route.page === 'contact' && <ContactPage t={t} />}

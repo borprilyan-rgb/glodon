@@ -57,5 +57,13 @@
 .exercise-numbers svg { position: absolute; right: 2px; bottom: 2px; }
 .exercise-field [aria-invalid="true"] { border: 2px solid #a12b24; }
 .exercise-error li { margin-top: 8px; }
+.participant-profile-card { display: grid; gap: 16px; margin-bottom: 24px; }
+.participant-profile-card__heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.participant-profile-card__heading h2 { margin: 5px 0 0; font-size: 21px; }
+.participant-profile-card__heading .eyebrow { color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.participant-profile-card .participant-details { display: flex; flex-wrap: wrap; gap: 12px 40px; margin: 0; }
+.participant-profile-card__heading .secondary-button { min-height: 42px; padding: 10px 16px; gap: 8px; }
+.participant-profile-card__timer { margin: 0; color: var(--muted); font-size: 12px; }
+.participant-field-hint { color: var(--muted); font-size: 12px; font-weight: 400; }
 @media (max-width: 760px) { .exercise-layout, .exercise-results { grid-template-columns: 1fr; }.exercise-card, .exercise-brief { padding: 20px; }.exercise-navigation button { flex: 1; justify-content: center; font-size: 13px; }.exercise-question h2 { font-size: 21px; }.exercise-grid-point { width: 40px; height: 40px; }.exercise-result-heading { align-items: start; } }
 

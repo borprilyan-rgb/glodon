@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { ArrowLeft, LayoutGrid } from 'lucide-react'
 import CourseScores from './CourseScores'
-import ParticipantDetails from './ParticipantDetails'
+import ParticipantCard from './ParticipantCard'
 import { getSectionExercise } from '../data/sectionExercises'
 import { scoreStatus, saveTestScore } from '../data/testScores'
 import '../styles/exercise.css'
 
-export default function TestPage({ product, parts, scores, profile, language, onEditParticipant }) {
+export default function TestPage({ product, parts, scores, profile, participantEditUntil, language, onEditParticipant }) {
   const en = language === 'en'
   const courseName = `Cubicost ${product === 'tme' ? 'TME-C' : product.toUpperCase()}`
   const [retryFailed, setRetryFailed] = useState(false)
@@ -21,7 +21,7 @@ export default function TestPage({ product, parts, scores, profile, language, on
   return <article className="section-exercise test-page">
     <header className="exercise-header"><span className="eyebrow">Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</span><h1>{en ? `${courseName} Knowledge Exercise` : `Latihan Pemahaman ${courseName}`}</h1><p>{en ? 'Do a section exercise, review your results, and download your score card.' : 'Kerjakan latihan per bagian, tinjau hasil, dan unduh kartu nilai Anda.'}</p></header>
     {sections.length ? <>
-      <section className="exercise-card test-profile"><ParticipantDetails profile={profile} language={language} /><button className="text-link" type="button" onClick={onEditParticipant}>{en ? 'Edit Details' : 'Ubah Data Diri'}</button></section>
+      <ParticipantCard profile={profile} language={language} editUntil={participantEditUntil} onEdit={onEditParticipant} />
       {retryFailed && <p role="alert">{en ? 'Unable to start a new attempt. Open the result and try again there.' : 'Tidak dapat memulai percobaan baru. Buka hasil dan coba lagi dari sana.'}</p>}
       <div className="test-page__layout"><section className="test-list" aria-label={en ? 'Section exercises' : 'Latihan per bagian'}>{sections.map(exercise => {
         const state = exercise.load()
