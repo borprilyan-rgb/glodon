@@ -28,7 +28,7 @@ export default function TestPage({ product, parts, scores, profile, language, on
         const result = scores.find(score => score.exercise.path === exercise.path)?.result
         const inProgress = state.started && !state.submitted
         return <article className="exercise-card" key={exercise.path}>
-          <span className="eyebrow">{en ? 'Section' : 'Bagian'} {exercise.section}</span><h2>{parts[exercise.section - 1].title}</h2>
+          <span className="eyebrow">{en ? 'Section' : 'Bagian'} {exercise.section}</span><h2>{product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title}</h2>
           <p>{exercise.copy[language].duration}</p><p>{inProgress ? (en ? 'In progress' : 'Sedang dikerjakan') : scoreStatus(result, language)}</p>
           <div className="test-actions"><a className="primary-button" href={exercise.path}>{inProgress ? (en ? 'Continue Exercise' : 'Lanjutkan Latihan') : state.submitted ? (en ? 'View Result' : 'Lihat Hasil') : (en ? 'Start Exercise' : 'Mulai Latihan')}</a>
           {state.submitted && <button className="secondary-button" type="button" onClick={() => retry(exercise, state)}>{en ? 'Retry Exercise' : 'Coba Lagi'}</button>}</div>

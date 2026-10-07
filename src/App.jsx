@@ -40,7 +40,7 @@ function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESS
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const hashParts = window.location.hash.replace(/^#\/?/, '').split('/')
-  const exerciseMatch = path.match(/^\/(tas|trb)\/(?:exercise|tests)\/section-([1-3])$/)
+  const exerciseMatch = path.match(/^\/(tas|trb|tme)\/(?:exercise|tests)\/section-([1-3])$/)
   if (exerciseMatch) {
     if (path.includes('/exercise/')) window.history.replaceState({}, '', path.replace('/exercise/', '/tests/'))
     return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }

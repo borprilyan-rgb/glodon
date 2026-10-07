@@ -12,8 +12,8 @@ export default function ExerciseHub({ language, profile, scores }) {
       return <article className="hub-course-card exercise-hub__card" key={product}>
         <span className="product-mark"><img src={`/branding/cubicost-${product}-logo.png`} alt={`Cubicost ${label(product)}`} /></span>
         <h2>Cubicost {label(product)}</h2>
-        <p>{product === 'tme' ? (en ? 'Exercises are not available yet.' : 'Latihan belum tersedia.') : (en ? `${completed} of 3 section exercises completed` : `${completed} dari 3 latihan bagian selesai`)}</p>
-        <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{product === 'tme' ? (en ? 'View Availability' : 'Lihat Ketersediaan') : (en ? 'Open Exercises' : 'Buka Latihan')}<ArrowRight size={16} aria-hidden="true" /></a>
+        <p>{en ? `${completed} of 3 section exercises completed` : `${completed} dari 3 latihan bagian selesai`}</p>
+        <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{en ? 'Open Exercises' : 'Buka Latihan'}<ArrowRight size={16} aria-hidden="true" /></a>
       </article>
     })}</section>
     <section className="exercise-hub__scores" aria-labelledby="test-score-overview"><h2 id="test-score-overview">{en ? 'Exercise score overview' : 'Ringkasan nilai latihan'}</h2>

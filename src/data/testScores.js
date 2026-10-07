@@ -6,7 +6,7 @@ export const scoreStatus = (result, language) => !result
   : language === 'en' ? (result.passed ? 'Passed' : 'Not passed') : (result.passed ? 'Lulus' : 'Belum lulus')
 
 export function readTestScores() {
-  return ['tas', 'trb'].flatMap((product) => [1, 2, 3].flatMap((section) => {
+  return ['tas', 'trb', 'tme'].flatMap((product) => [1, 2, 3].flatMap((section) => {
     const exercise = getSectionExercise(product, section)
     const current = exercise.load()
     let saved
