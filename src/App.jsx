@@ -285,7 +285,7 @@ export default function App() {
   const visibleProgress = product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
-  if (route.page === 'admin') return <Suspense fallback={<p role="status">Loading admin page…</p>}><AdminResults /></Suspense>
+  if (route.page === 'admin') return <Suspense fallback={<p role="status">{language === 'en' ? 'Loading admin page…' : 'Memuat halaman admin…'}</p>}><AdminResults language={language} onLanguageChange={setLanguage} /></Suspense>
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
     {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}

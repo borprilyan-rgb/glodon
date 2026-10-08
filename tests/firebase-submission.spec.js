@@ -4,6 +4,8 @@ import { collection, doc, setDoc, getDocs, getDoc, query, where } from 'firebase
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 import { answersFor } from './firebase/fixtures.mjs'
 import { readFileSync } from 'node:fs'
+import { randomUUID } from 'node:crypto'
+import { provisionAdmin, passwordSignIn } from './firebase/adminAuth.mjs'
 
 const origin = 'http://127.0.0.1:5173'
 const profile = { name: 'Firebase Test', jobTitle: 'Engineer', employeeId: '987654' }
@@ -83,39 +85,38 @@ test('failed central save persists across refresh; acknowledgment retry cannot d
   } finally { await env.cleanup() }
 })
 
-test('admin Google identity is denied until its UID is authorized, then can filter and export CSV', async ({ page }) => {
+test('admin password identity is denied until its UID is authorized, then can filter and export CSV', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('cubicost-tas-tutorial-language-v1', 'en'))
   await page.goto(`${origin}/admin/results`)
-  await expect(page.getByRole('button', { name: 'Sign In With Google' })).toBeVisible()
-  const uid = await page.evaluate(async () => {
-    const { getServices } = await import('/src/firebase/client.js')
-    const { signInWithCredential, GoogleAuthProvider } = await import('/node_modules/.vite/deps/firebase_auth.js')
-    if (getServices('admin').auth.app.options.projectId !== 'demo-cubicost') throw new Error('This test only supports the local demo project.')
-    const token = JSON.stringify({ sub: 'admin-test', email: 'admin@example.test', email_verified: true })
-    const result = await signInWithCredential(getServices('admin').auth, GoogleAuthProvider.credential(token))
-    return result.user.uid
-  })
+  await expect(page.getByRole('button', { name: 'Sign In', exact: true })).toBeVisible()
+  await expect(page.getByLabel('Password', { exact: true })).toBeVisible()
+  const email = `admin-${randomUUID()}@example.test`
+  const password = `Aa1!${randomUUID()}`
+  const uid = await provisionAdmin(page, { email, password })
+  await passwordSignIn(page, { email, password, uid, authorized: false })
   await expect(page.getByRole('alert')).toContainText('not authorized')
-  await expect(page.getByRole('button', { name: 'Load Results', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Apply Filters', exact: true })).toHaveCount(0)
   const env = await environment()
   try {
     await env.withSecurityRulesDisabled(async context => { await setDoc(doc(context.firestore(), 'admins', uid), { enabled: true }) })
     await page.reload()
-    await expect(page.getByRole('button', { name: 'Load Results', exact: true })).toBeVisible()
+
+    await expect(page.getByRole('button', { name: 'Apply Filters', exact: true })).toBeVisible()
     await page.getByLabel('Employee ID', { exact: true }).fill('987654')
     await page.getByLabel('Course', { exact: true }).selectOption('tme')
     await page.getByLabel('Section', { exact: true }).selectOption('2')
-    await page.getByRole('button', { name: 'Load Results', exact: true }).click()
-    await expect(page.locator('tbody tr')).toHaveCount(2)
+    await page.getByRole('button', { name: 'Apply Filters', exact: true }).click()
+    await expect(page.locator('.admin-result-row')).toHaveCount(2)
     await page.getByLabel('From date').fill('2050-01-01')
-    await page.getByLabel('Through date').fill('2050-01-01')
-    await page.getByRole('button', { name: 'Load Results', exact: true }).click()
-    await expect(page.locator('tbody tr')).toHaveCount(0)
+    await page.getByLabel('To date').fill('2050-01-01')
+    await page.getByRole('button', { name: 'Apply Filters', exact: true }).click()
+    await expect(page.locator('.admin-result-row')).toHaveCount(0)
     await page.getByLabel('From date').fill('')
-    await page.getByLabel('Through date').fill('')
-    await page.getByRole('button', { name: 'Load Results', exact: true }).click()
-    await expect(page.locator('tbody tr')).toHaveCount(2)
+    await page.getByLabel('To date').fill('')
+    await page.getByRole('button', { name: 'Apply Filters', exact: true }).click()
+    await expect(page.locator('.admin-result-row')).toHaveCount(2)
     const downloaded = page.waitForEvent('download')
-    await page.getByRole('button', { name: 'Export All Matching Results to CSV' }).click()
+    await page.getByRole('button', { name: 'Export CSV' }).click()
     const download = await downloaded
     expect(download.suggestedFilename()).toBe('cubicost-test-results.csv')
     expect(await download.failure()).toBeNull()
@@ -125,6 +126,6 @@ test('admin Google identity is denied until its UID is authorized, then can filt
     expect(csv).toContain("'987654")
     expect(csv.split('\r\n')).toHaveLength(3)
     await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
-    await expect(page.locator('tbody tr')).toHaveCount(0)
+    await expect(page.locator('.admin-result-row')).toHaveCount(0)
   } finally { await env.cleanup() }
 })

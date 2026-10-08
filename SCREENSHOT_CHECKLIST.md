@@ -38,5 +38,4 @@ Location: `public/tutorial/tas/manual/`
 - Pages 100-101: `quantity-reports-01.webp` through `quantity-reports-05.webp`
 
 Location: `public/tutorial/tas/manual/`
-
 Each caption should note that the reference interface is TAS C v10.300 and may differ slightly in newer versions.

@@ -64,19 +64,35 @@ test('participants cannot read others, list attempts, spoof ownership or promote
   await assertFails(setDoc(doc(environment.unauthenticatedContext().firestore(), 'testAttempts', randomUUID()), attempt()))
 })
 
-test('only enabled admin UIDs with Google tokens can list all results; admins cannot alter results', async () => {
+test('only enabled admin UIDs with password tokens can list all results; admins cannot alter results', async () => {
   await environment.withSecurityRulesDisabled(async context => { await setDoc(doc(context.firestore(), 'admins', 'admin'), { enabled: true }) })
   const data = attempt()
   await setDoc(doc(db(), 'testAttempts', data.attemptId), data)
-  const admin = db('admin', 'google.com')
+  const admin = db('admin', 'password')
   await assertSucceeds(getDocs(collection(admin, 'testAttempts')))
   await assertSucceeds(getDoc(doc(admin, 'testAttempts', data.attemptId)))
+  const passwordAdmin = admin
+  await assertFails(getDoc(doc(db('admin', 'google.com'), 'admins', 'admin')))
+  await assertFails(getDocs(collection(db('admin', 'google.com'), 'testAttempts')))
+  await assertFails(getDoc(doc(db('admin', 'google.com'), 'testAttempts', data.attemptId)))
+  await assertSucceeds(getDoc(doc(passwordAdmin, 'admins', 'admin')))
+  await assertSucceeds(getDocs(collection(passwordAdmin, 'testAttempts')))
+  await assertSucceeds(getDoc(doc(passwordAdmin, 'testAttempts', data.attemptId)))
   await assertFails(getDocs(collection(db('stranger', 'google.com'), 'testAttempts')))
+  await assertFails(getDocs(collection(db('stranger', 'password'), 'testAttempts')))
+  await assertFails(getDocs(collection(db('admin', 'custom'), 'testAttempts')))
+  await assertFails(setDoc(doc(passwordAdmin, 'admins', 'admin'), { enabled: true }))
+  await assertFails(updateDoc(doc(passwordAdmin, 'admins', 'admin'), { enabled: false }))
+  await assertFails(deleteDoc(doc(passwordAdmin, 'admins', 'admin')))
+  await assertFails(getDocs(collection(passwordAdmin, 'admins')))
+  await assertFails(deleteDoc(doc(passwordAdmin, 'testAttempts', data.attemptId)))
   await assertFails(getDocs(collection(db('admin', 'anonymous'), 'testAttempts')))
   await assertFails(updateDoc(doc(admin, 'testAttempts', data.attemptId), { score: 0 }))
+  await assertFails(updateDoc(doc(passwordAdmin, 'testAttempts', data.attemptId), { score: 0 }))
   await assertFails(setDoc(doc(admin, 'testAttempts', randomUUID()), attempt('tme', 1, { uid: 'admin' })))
   await environment.withSecurityRulesDisabled(async context => { await updateDoc(doc(context.firestore(), 'admins', 'admin'), { enabled: false }) })
   await assertFails(getDocs(collection(admin, 'testAttempts')))
+  await assertFails(getDocs(collection(passwordAdmin, 'testAttempts')))
 })
 
 test('invalid identity, scoring, dates, versions, answer types and extra fields are denied', async () => {

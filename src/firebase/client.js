@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app'
-import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, browserPopupRedirectResolver, connectAuthEmulator, signInAnonymously, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'firebase/auth'
+import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, connectAuthEmulator, signInAnonymously, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator, doc, runTransaction, serverTimestamp, getDocFromServer, collection, query, where, orderBy, limit, startAfter, getDocsFromServer, Timestamp } from 'firebase/firestore'
 import { jakartaDateRange } from './resultsCsv.js'
 
@@ -21,7 +21,6 @@ export function getServices(role = 'participant') {
   const app = getApps().find(app => app.name === name) || initializeApp(config, name)
   const auth = initializeAuth(app, {
     persistence: role === 'admin' ? [browserSessionPersistence, inMemoryPersistence] : [indexedDBLocalPersistence, browserLocalPersistence, inMemoryPersistence],
-    popupRedirectResolver: browserPopupRedirectResolver,
   })
   const db = getFirestore(app)
   if (import.meta.env.VITE_FIREBASE_USE_EMULATORS === 'true') {
@@ -70,11 +69,12 @@ export async function sendAttempt(payload) {
   return confirmation.data().submittedAt.toDate().toISOString()
 }
 
-export const signInAdmin = () => signInWithPopup(getServices('admin').auth, new GoogleAuthProvider())
+export const signInAdmin = (email, password) => signInWithEmailAndPassword(getServices('admin').auth, email.trim(), password)
+export const resetAdminPassword = email => sendPasswordResetEmail(getServices('admin').auth, email.trim())
 export const signOutAdmin = () => signOut(getServices('admin').auth)
 export const observeAdmin = callback => onAuthStateChanged(getServices('admin').auth, callback)
 export async function isAuthorizedAdmin(user) {
-  if (!user?.providerData.some(provider => provider.providerId === 'google.com')) return false
+  if (!user || user.isAnonymous || (await user.getIdTokenResult()).signInProvider !== 'password') return false
   const record = await getDocFromServer(doc(getServices('admin').db, 'admins', user.uid))
   return record.exists() && record.data().enabled === true
 }

@@ -58,7 +58,7 @@ Navigation uses **pathname routes**:
 | `/exercises` | Test selection and score overview |
 | `/present` | Presentation mode |
 | `/contact` | Contact information |
-| `/admin/results` | Google-authenticated admin results and CSV export |
+| `/admin/results` | Email/password admin login, results and CSV export |
 
 Some legacy hash links and `/tas/exercise/...` or `/trb/exercise/...` links remain supported for compatibility; new links use pathname routes.
 

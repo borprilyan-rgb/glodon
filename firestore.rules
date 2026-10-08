@@ -4,9 +4,9 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
-    function googleUser() { return signedIn() && request.auth.token.firebase.sign_in_provider == 'google.com'; }
+    function adminProvider() { return signedIn() && request.auth.token.firebase.sign_in_provider == 'password'; }
     function admin() {
-      return googleUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      return adminProvider() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
         && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.enabled == true;
     }
     function answer(value) { return value is string && value.size() > 0 && value.size() <= 100; }
@@ -55,7 +55,7 @@ service cloud.firestore {
         && validAnswers(d);
     }
     match /admins/{uid} {
-      allow get: if googleUser() && request.auth.uid == uid;
+      allow get: if adminProvider() && request.auth.uid == uid;
       allow list, create, update, delete: if false;
     }
     match /testAttempts/{id} {
