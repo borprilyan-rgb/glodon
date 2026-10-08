@@ -15,7 +15,7 @@ export function getSectionExercise(product, section) {
   const key = `${product}-${section}`
   if (definitions.has(key)) return definitions.get(key)
   if (key === 'tas-1') {
-    const definition = { product, section, path: '/tas/tests/section-1', copy: first.exerciseCopy, storageKey: first.exerciseStorageKey, load: first.loadExercise, issues: first.questionIssues, answered: first.questionAnswered, points: first.questionPoints, score: first.scoreExercise, officePlan: true }
+    const definition = { product, section, path: '/tas/tests/section-1', copy: first.exerciseCopy, storageKey: first.exerciseStorageKey, load: first.loadExercise, issues: first.questionIssues, answered: first.questionAnswered, points: first.questionPoints, score: first.scoreExercise, expectedAnswers: first.expectedAnswers, officePlan: true }
     definitions.set(key, definition)
     return definition
   }

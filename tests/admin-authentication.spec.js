@@ -21,6 +21,32 @@ async function identities(page) {
 for (const language of ['en', 'id']) test(`${language} compact login supports keyboard password visibility, generic failure/reset messages and no registration`, async ({ page }, testInfo) => {
   await page.setViewportSize(language === 'en' ? { width: 1280, height: 800 } : { width: 390, height: 844 })
   await open(page, language)
+  await expect(page.locator('.lesson-topbar')).toHaveCount(1)
+  await expect(page.locator('.lesson-topbar .admin-label')).toHaveText('Admin')
+  await expect(page.locator('.admin-table, .admin-filters')).toHaveCount(0)
+  await expect(page.locator('.lesson-topbar .admin-signout')).toHaveCount(0)
+  if (language === 'en') {
+    await expect(page.locator('.lesson-brand')).toContainText('Cubicost Learning Centre')
+    await expect(page.locator('.lesson-brand img')).toHaveAttribute('src', '/branding/company-logo.png')
+    await page.locator('button[lang="id"]').click()
+    await expect(page.getByRole('heading', { name: 'Hasil Tes', exact: true })).toBeVisible()
+    await page.locator('button[lang="en"]').click()
+    await page.locator('.lesson-topbar').getByRole('link', { name: 'Contact', exact: true }).click()
+  } else {
+    await expect(page.locator('.mobile-header__logo')).toBeVisible()
+    await page.locator('.mobile-header-language').click()
+    await expect(page.getByRole('heading', { name: 'Test Results', exact: true })).toBeVisible()
+    await page.locator('.mobile-header-language').click()
+    await page.locator('.mobile-header-row button[aria-expanded]').click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+    await page.getByRole('dialog').getByRole('link', { name: 'Kontak', exact: true }).click()
+  }
+  await expect(page).toHaveURL(`${origin}/contact`)
+  await page.goBack()
+  await expect(page).toHaveURL(`${origin}/admin/results`)
+  await expect(page.locator('.admin-login')).toBeVisible()
+  await expect(page.locator('.admin-table')).toHaveCount(0)
+
   const c = language === 'en'
     ? { password: 'Password', show: 'Show password', hide: 'Hide password', login: 'Sign In', forgot: 'Forgot Password', invalid: 'Check your email and password', reset: 'If this account supports', setup: 'One-time password setup' }
     : { password: 'Kata sandi', show: 'Tampilkan kata sandi', hide: 'Sembunyikan kata sandi', login: 'Masuk', forgot: 'Lupa Kata Sandi', invalid: 'Periksa email dan kata sandi', reset: 'Jika akun ini mendukung', setup: 'Pengaturan kata sandi satu kali' }
@@ -98,6 +124,8 @@ test('unauthorized password accounts cannot load results or register through the
   const participant = await page.evaluate(async () => (await import('/src/firebase/client.js')).participantUid())
   await passwordSignIn(page, { email, password, uid, authorized: false })
   await expect(page.getByRole('button', { name: 'Apply Filters', exact: true })).toHaveCount(0)
+  await expect(page.locator('.lesson-topbar .admin-label')).toHaveText('Admin')
+  await expect(page.locator('.admin-table, .admin-results-toolbar')).toHaveCount(0)
   await expect(page.getByRole('button', { name: /google|register|sign up|link password/i })).toHaveCount(0)
   expect(await identities(page)).toEqual({ admin: uid, participant, anonymous: true })
 })

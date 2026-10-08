@@ -133,5 +133,5 @@ export function createTrbSectionTwoExercise(getCourse) {
       return { started: Boolean(saved.started), submitted: Boolean(saved.started && saved.submitted) && correct.every((_, index) => answered(index, answers)), index: Math.max(0, Math.min(7, Number.isInteger(saved.index) ? saved.index : 0)), answers }
     } catch { return empty }
   }
-  return { product: 'trb', section: 2, path: '/trb/tests/section-2', copy, storageKey, load, issues, answered, points, score }
+  return { product: 'trb', section: 2, path: '/trb/tests/section-2', copy, storageKey, expectedAnswers: { ...Object.fromEntries(correct.map((value, index) => [`q${index + 1}`, value])), ...Object.fromEntries(Object.entries(numeric).map(([name, field]) => [name, String(field.value)])) }, load, issues, answered, points, score }
 }

@@ -248,5 +248,5 @@ export function createTmeSectionExercise(section) {
       }
     } catch { return empty }
   }
-  return { product: 'tme', section, path, copy, storageKey, load, issues, answered, points: pointsForQuestion, score }
+  return { product: 'tme', section, path, copy, storageKey, expectedAnswers: Object.fromEntries(answerKeys.map((value, index) => [`q${index + 1}`, value])), load, issues, answered, points: pointsForQuestion, score }
 }

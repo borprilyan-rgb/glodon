@@ -91,6 +91,7 @@ export function questionIssues(index, answers) {
 export function questionAnswered(index, answers) {
   return questionIssues(index, answers).length === 0
 }
+export const expectedAnswers = { settings: 'review', rules: 'inspect', projectName: 'ASG Training', ground: '-0.5', ruleSet: 'SMPI', attributes: 'private', height1: '3.5', height2: '3.5', grade: 'K-300', copy: 'yes', drawing: 'split', length: '6000', verify: 'independent', grid: 'A/1', alignmentCheck: 'other' }
 export const questionPoints = [15, 15, 10, 10, 15, 10, 15, 10]
 export function scoreExercise(a) {
   const scores = [

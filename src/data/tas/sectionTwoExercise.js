@@ -129,5 +129,5 @@ export function createSectionTwoExercise(getCourse) {
       return { started: Boolean(saved.started), submitted: Boolean(saved.started && saved.submitted) && choices.every((_, index) => answered(index, answers)), index: Math.max(0, Math.min(7, Number.isInteger(saved.index) ? saved.index : 0)), answers }
     } catch { return empty }
   }
-  return { product: 'tas', section: 2, path: '/tas/tests/section-2', copy, storageKey, load, issues, answered, points: questionPoints, score }
+  return { product: 'tas', section: 2, path: '/tas/tests/section-2', copy, storageKey, expectedAnswers: { ...Object.fromEntries(choices.map((value, index) => [`q${index + 1}`, value])), ...Object.fromEntries(Object.entries(numericAnswers).map(([name, value]) => [name, String(value)])) }, load, issues, answered, points: questionPoints, score }
 }

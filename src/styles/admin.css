@@ -1,20 +1,18 @@
 .admin-results { padding: 20px 24px; font-size: 14px; }
-.admin-header, .admin-heading, .admin-header-tools, .admin-results-toolbar { display: flex; align-items: center; gap: 12px; }
-.admin-header { justify-content: space-between; flex-wrap: wrap; margin-bottom: 8px; }
-.admin-heading { flex-wrap: wrap; }
+.admin-heading, .admin-results-toolbar { display: flex; align-items: center; gap: 12px; }
+.admin-heading { flex-wrap: wrap; margin-bottom: 12px; }
 .admin-heading h1 { font-size: 24px; line-height: 1.25; margin: 0; }
 .admin-heading a, .admin-details-toggle { color: var(--blue-dark); font-weight: 600; }
 .admin-heading a:hover, .admin-details-toggle:hover { text-decoration: underline; }
-.admin-header-tools { flex-wrap: wrap; min-width: 0; }
-.admin-email { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
-.admin-header .language-switcher { margin: 0; align-self: center; }
+.lesson-topbar--admin { grid-template-columns: minmax(210px, 1fr) auto auto; gap: 16px; }
+.lesson-topbar--admin .lesson-topbar__tools { grid-column: 2; }
+.lesson-topbar--admin .lesson-topbar__actions { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.admin-label { color: #a9bdd0; font-size: 11px; font-weight: 600; }
+.admin-email { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.admin-signout { min-height: 32px; padding: 5px 10px; border: 1px solid #48647f; border-radius: 5px; color: white; background: transparent; font-size: 12px; white-space: nowrap; }
+.admin-signout:hover { background: #1b3b5d; }
+.admin-signout:focus-visible { outline: 2px solid white; outline-offset: 2px; }
 .admin-results .primary-button, .admin-results .secondary-button { min-height: 40px; padding: 8px 12px; font-size: 13px; }
-.admin-results .admin-signout { min-height: 32px; padding: 5px 10px; }
-.admin-info { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 8px 0 12px; }
-.admin-info details[open] { flex-basis: 100%; }
-.admin-account, .admin-about { color: var(--muted); font-size: 13px; }
-.admin-results summary { cursor: pointer; width: fit-content; }
-.admin-results details p { margin: 8px 0; line-height: 1.5; overflow-wrap: anywhere; }
 .admin-alert { background: #fff1ee; color: #a12b24; border-radius: 6px; padding: 10px 12px; overflow-wrap: anywhere; }
 .admin-login.exercise-card { padding: 16px; }
 .admin-login p { margin-bottom: 12px; }
@@ -38,21 +36,42 @@
 .admin-table time, .admin-score { white-space: nowrap; }
 .admin-details-toggle { padding: 0; min-height: 28px; border: 0; background: transparent; font-size: 13px; }
 .admin-row-details { background: #f5f9fd; }
-.admin-row-details dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; margin: 0 0 12px; }
+.admin-job-title { margin: 0 0 12px; }
 .admin-row-details dt { font-size: 12px; color: var(--muted); }
 .admin-row-details dd { margin: 3px 0 0; overflow-wrap: anywhere; }
 .admin-row-details h2 { margin: 0 0 8px; font-size: 14px; }
-.admin-row-details pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+
 .admin-empty { padding: 14px; margin: 0; color: var(--muted); }
 @media (max-width: 1000px) {
   .admin-filters.exercise-card { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .admin-results { padding: 16px 12px; }
-  .admin-header { align-items: flex-start; gap: 10px; }
-  .admin-header-tools { gap: 8px; }
-  .admin-email { max-width: 180px; font-size: 12px; }
   .admin-heading h1 { font-size: 22px; }
   .admin-filters.exercise-card { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px; }
-  .admin-results .admin-signout { min-height: 40px; }
 }
+@media (min-width: 768px) and (max-width: 1100px) {
+  .lesson-topbar--admin .admin-email { max-width: 120px; }
+}
+@media (max-width: 767px) {
+  .lesson-topbar--admin .lesson-topbar__tools { display: none; }
+  .lesson-topbar--admin .lesson-topbar__actions { margin-top: 4px; }
+  .lesson-topbar--admin .admin-email { flex: 1; max-width: none; min-width: 0; }
+  .lesson-topbar--admin .admin-signout { min-height: 40px; margin-left: auto; }
+}
+
+.admin-answer-review, .admin-job-title { max-width: calc(100vw - 88px); }
+.admin-answer-review ol { margin: 0; padding-left: 24px; }
+.admin-answer-question { padding: 10px 0; border-top: 1px solid var(--line); }
+.admin-answer-question h3 { margin: 0 0 6px; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.admin-answer-status { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 8px; font-size: 12px; font-weight: 700; }
+.admin-answer-status.is-correct { color: #17653e; }
+.admin-answer-status.is-incorrect { color: #a12b24; }
+.admin-answer-status.is-partial { color: #795008; }
+.admin-answer-fields { margin: 0; }
+.admin-answer-fields > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; margin-bottom: 5px; }
+.admin-answer-fields dd { margin: 0; }
+.admin-answer-fields dt, .admin-answer-fields dd { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.admin-answer-expected { margin-top: 8px; padding: 8px 10px; background: #eaf0f6; border-radius: 5px; }
+.admin-answer-expected h4 { margin: 0 0 5px; font-size: 12px; }
+.admin-answer-explanation, .admin-answer-fallback { margin: 8px 0 0; font-size: 12px; line-height: 1.6; }
