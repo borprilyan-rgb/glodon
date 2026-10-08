@@ -47,7 +47,7 @@ test('TRB section 3 restores complete submissions and ignores the old test versi
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' })))
+  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
 })
 
 test('TRB section 3 mobile quantities validate and persist across languages', async ({ page }) => {

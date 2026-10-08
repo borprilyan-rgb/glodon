@@ -6,3 +6,11 @@ test-results/
 playwright-report/
 .history/
 *.log
+.cache/
+.review-backups/
+.env
+.env.*
+!.env.example
+!.env.test
+firebase-debug.log
+firestore-debug.log

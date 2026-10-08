@@ -45,7 +45,7 @@ test('TRB section 2 restores complete current answers and ignores old submission
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' })))
+  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
 })
 
 test('TRB section 2 mobile inputs validate, restore and switch languages', async ({ page }) => {

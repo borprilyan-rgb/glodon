@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { getTasData } from './data/tas/index.js'
 import { getTrbData } from './data/trb/index.js'
 import { getTmeData } from './data/tme/index.js'
@@ -13,10 +13,13 @@ import ContactPage from './components/ContactPage'
 import SectionExercise from './components/SectionExercise'
 import TestPage from './components/TestPage'
 import ParticipantEntry from './components/ParticipantEntry'
-import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant } from './data/participant'
+import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
 import { getSectionExercise } from './data/sectionExercises'
 import Presentation, { PresentationEntry } from './components/Presentation'
+import SubmissionQueue from './components/SubmissionQueue'
+
+const AdminResults = lazy(() => import('./components/AdminResults'))
 
 const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
 const TAS_PROGRESS_KEY = 'cubicost:tutorial:tas:progress'
@@ -48,6 +51,7 @@ function routeFromLocation() {
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
+  if (path === '/admin/results') return { page: 'admin' }
   if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
     window.history.replaceState({}, '', '/trb/course')
     return { product: 'trb', page: 'course' }
@@ -67,9 +71,10 @@ function routeFromLocation() {
 }
 
 function normaliseProgress(saved, initialStepId, storedLastLesson) {
-  const completed = new Set(Array.isArray(saved) ? saved : saved?.completed || [])
-  const checklists = Array.isArray(saved) ? {} : saved?.checklists || {}
-  const started = new Set(Array.isArray(saved) ? saved : saved?.started || [...completed, ...Object.keys(checklists)])
+  const completed = new Set((Array.isArray(saved) ? saved : Array.isArray(saved?.completed) ? saved.completed : []).filter(id => typeof id === 'string'))
+  const rawChecks = !Array.isArray(saved) && saved?.checklists
+  const checklists = Object.fromEntries(Object.entries(rawChecks && typeof rawChecks === 'object' ? rawChecks : {}).filter(([, checks]) => Array.isArray(checks)).map(([id, checks]) => [id, checks.filter(index => Number.isInteger(index) && index >= 0)]))
+  const started = new Set((Array.isArray(saved) ? saved : Array.isArray(saved?.started) ? saved.started : [...completed, ...Object.keys(checklists)]).filter(id => typeof id === 'string'))
   if (initialStepId) started.add(initialStepId)
   return { completed, checklists, started, lastLesson: initialStepId || storedLastLesson || (!Array.isArray(saved) && saved?.lastLesson) || null }
 }
@@ -106,7 +111,11 @@ function loadTasProgress(initialStepId) {
       localStorage.setItem(TAS_CURRICULUM_MIGRATION_KEY, '1')
     }
     return normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY))
-  } catch { return normaliseProgress([], initialStepId, null) }
+  } catch {
+    // A failed migration write must not hide progress that is still readable.
+    try { return normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || localStorage.getItem(LEGACY_TAS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY)) }
+    catch { return normaliseProgress([], initialStepId, null) }
+  }
 }
 
 function loadTrbProgress(initialStepId) {
@@ -134,7 +143,9 @@ function loadTmeProgress(initialStepId) {
 export default function App() {
   const initialRoute = routeFromLocation()
   const [route, setRoute] = useState(initialRoute)
-  const [language, setLanguage] = useState(() => localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'id')
+  const [language, setLanguage] = useState(() => {
+    try { return localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'id' } catch { return 'id' }
+  })
   const [tasProgress, setTasProgress] = useState(() => loadTasProgress(initialRoute.product === 'tas' ? initialRoute.stepId : null))
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
@@ -144,7 +155,10 @@ export default function App() {
   const [participantEditUntil, setParticipantEditUntil] = useState(loadParticipantEditLockUntil)
   const [editingParticipant, setEditingParticipant] = useState(false)
   const [nameSaveFailed, setNameSaveFailed] = useState(false)
+  const [progressSaveFailed, setProgressSaveFailed] = useState({})
   function saveParticipant(profile) {
+    if (!hasParticipant(profile) || (hasParticipant(participant) && (participantEditUntil > Date.now() || !canEditParticipant(participant)))) return
+    profile = { ...profile, updatedAt: Date.now() }
     const editUntil = Date.now() + PARTICIPANT_EDIT_LOCK_MS
     setParticipant(profile)
     setParticipantEditUntil(editUntil)
@@ -156,7 +170,7 @@ export default function App() {
     } catch { setNameSaveFailed(true) }
   }
   function beginParticipantEdit() {
-    if (loadParticipantEditLockUntil() > Date.now()) return
+    if (participantEditUntil > Date.now() || !canEditParticipant(participant)) return
     setEditingParticipant(true)
   }
   const { tutorialParts, allSteps } = getTasData(language)
@@ -191,18 +205,27 @@ export default function App() {
     return () => { window.removeEventListener('popstate', onLocationChange); window.removeEventListener('hashchange', onLocationChange) }
   }, [])
   useEffect(() => {
-    localStorage.setItem(TAS_PROGRESS_KEY, JSON.stringify({ completed: [...tasProgress.completed], checklists: tasProgress.checklists, started: [...tasProgress.started] }))
-    tasProgress.lastLesson ? localStorage.setItem(TAS_LAST_LESSON_KEY, tasProgress.lastLesson) : localStorage.removeItem(TAS_LAST_LESSON_KEY)
+    try {
+      localStorage.setItem(TAS_PROGRESS_KEY, JSON.stringify({ completed: [...tasProgress.completed], checklists: tasProgress.checklists, started: [...tasProgress.started] }))
+      tasProgress.lastLesson ? localStorage.setItem(TAS_LAST_LESSON_KEY, tasProgress.lastLesson) : localStorage.removeItem(TAS_LAST_LESSON_KEY)
+      queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, tas: false })))
+    } catch { queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, tas: true }))) }
   }, [tasProgress])
   useEffect(() => {
-    localStorage.setItem(TRB_PROGRESS_KEY, JSON.stringify({ completed: [...trbProgress.completed], checklists: trbProgress.checklists, started: [...trbProgress.started] }))
-    trbProgress.lastLesson ? localStorage.setItem(TRB_LAST_LESSON_KEY, trbProgress.lastLesson) : localStorage.removeItem(TRB_LAST_LESSON_KEY)
+    try {
+      localStorage.setItem(TRB_PROGRESS_KEY, JSON.stringify({ completed: [...trbProgress.completed], checklists: trbProgress.checklists, started: [...trbProgress.started] }))
+      trbProgress.lastLesson ? localStorage.setItem(TRB_LAST_LESSON_KEY, trbProgress.lastLesson) : localStorage.removeItem(TRB_LAST_LESSON_KEY)
+      queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, trb: false })))
+    } catch { queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, trb: true }))) }
   }, [trbProgress])
   useEffect(() => {
-    localStorage.setItem(TME_PROGRESS_KEY, JSON.stringify({ completed: [...tmeProgress.completed], checklists: tmeProgress.checklists, started: [...tmeProgress.started] }))
-    tmeProgress.lastLesson ? localStorage.setItem(TME_LAST_LESSON_KEY, tmeProgress.lastLesson) : localStorage.removeItem(TME_LAST_LESSON_KEY)
+    try {
+      localStorage.setItem(TME_PROGRESS_KEY, JSON.stringify({ completed: [...tmeProgress.completed], checklists: tmeProgress.checklists, started: [...tmeProgress.started] }))
+      tmeProgress.lastLesson ? localStorage.setItem(TME_LAST_LESSON_KEY, tmeProgress.lastLesson) : localStorage.removeItem(TME_LAST_LESSON_KEY)
+      queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, tme: false })))
+    } catch { queueMicrotask(() => setProgressSaveFailed(current => ({ ...current, tme: true }))) }
   }, [tmeProgress])
-  useEffect(() => { localStorage.setItem(LANGUAGE_KEY, language); document.documentElement.lang = language }, [language])
+  useEffect(() => { try { localStorage.setItem(LANGUAGE_KEY, language) } catch { /* Keep the language usable without storage. */ } document.documentElement.lang = language }, [language])
 
   const activeData = route.product === 'trb' ? trb : route.product === 'tme' ? tme : { tutorialParts, allSteps }
   const activeIndex = activeData.allSteps.findIndex((step) => step.id === route.stepId && (!route.partId || step.partId === route.partId))
@@ -262,13 +285,16 @@ export default function App() {
   const visibleProgress = product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+  if (route.page === 'admin') return <Suspense fallback={<p role="status">Loading admin page…</p>}><AdminResults /></Suspense>
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
     {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
+    {(product ? progressSaveFailed[product] : Object.values(progressSaveFailed).some(Boolean)) && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <TestPage product={product} parts={activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
+    {['exercise', 'tests', 'exercises'].includes(route.page) && <SubmissionQueue language={language} course={product} />}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}

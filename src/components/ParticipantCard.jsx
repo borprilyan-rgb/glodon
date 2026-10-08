@@ -13,7 +13,7 @@ function formatCountdown(milliseconds) {
 export default function ParticipantCard({ profile, language, editUntil, onEdit }) {
   const en = language === 'en'
   const [deadline, setDeadline] = useState(() => Math.max(editUntil || 0, loadParticipantEditLockUntil()))
-  const [now, setNow] = useState(Date.now())
+  const [now, setNow] = useState(() => Date.now())
   const remaining = Math.max(0, deadline - now)
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export default function ParticipantCard({ profile, language, editUntil, onEdit }
       setNow(Date.now())
       setDeadline(Math.max(editUntil || 0, loadParticipantEditLockUntil()))
     }
-    update()
     const timer = window.setInterval(update, 1000)
     return () => window.clearInterval(timer)
   }, [editUntil])

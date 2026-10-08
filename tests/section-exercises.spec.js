@@ -39,7 +39,15 @@ test('every new exercise covers its section, has bilingual questions and scores 
     }
     expect(exerciseForLastLesson(product, part.steps.at(-1).id)?.path).toBe(definition.path)
   }
-  expect(getSectionExercise('tme', 1)).toBeNull()
+  for (const section of [1, 2, 3]) {
+    const definition = getSectionExercise('tme', section)
+    expect(definition.path).toBe(`/tme/tests/section-${section}`)
+    expect(definition.copy.en.questions).toHaveLength(5)
+    expect(definition.copy.id.questions).toHaveLength(5)
+    expect(definition.points.reduce((sum, points) => sum + points, 0)).toBe(100)
+    expect(definition.answered(0, { q1: '99' })).toBe(false)
+    expect(definition.score({})).toMatchObject({ total: 0, passed: false })
+  }
   expect(exerciseForLastLesson('tme', 'measurement-settings')).toBeNull()
 })
 
@@ -131,6 +139,6 @@ test('course maps and lessons do not embed test entry cards', async ({ page }) =
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
-    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' }))
+    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' }))
   })
 })

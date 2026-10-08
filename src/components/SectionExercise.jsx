@@ -4,6 +4,7 @@ import { getSectionExercise } from '../data/sectionExercises'
 import '../styles/exercise.css'
 import ParticipantCard from './ParticipantCard'
 import { saveTestScore } from '../data/testScores'
+import { submissionStore } from '../firebase/submissionStore'
 
 function OfficePlan({ c, value, onSelect }) {
   return <div className="exercise-plan">
@@ -46,6 +47,7 @@ export default function SectionExercise({ language, profile, participantEditUnti
     try {
       localStorage.setItem(exerciseStorageKey, JSON.stringify(state))
       if (state.submitted) saveTestScore(exercise, state.answers)
+      setSaveFailed(false)
     } catch { setSaveFailed(true) }
   }, [state, exerciseStorageKey, exercise])
   useEffect(() => { if (started) heading.current?.focus() }, [index, submitted, started])
@@ -60,6 +62,8 @@ export default function SectionExercise({ language, profile, participantEditUnti
     const missing = c.questions.findIndex((_, questionIndex) => !questionAnswered(questionIndex, answers))
     if (missing !== -1) { setState((current) => ({ ...current, index: missing })); setError(true); return }
     try { saveTestScore(exercise, answers) } catch { setSaveFailed(true) }
+    const attempt = submissionStore.enqueue(exercise, profile, answers)
+    void submissionStore.sync(attempt.payload.attemptId)
     onScoreSaved?.()
     setState((current) => ({ ...current, submitted: true }))
     setError(false)
@@ -76,8 +80,8 @@ export default function SectionExercise({ language, profile, participantEditUnti
   return <article className="section-exercise">
     <header className="exercise-header"><span className="eyebrow">{c.badge}</span><h1>{c.title}</h1><p>{c.duration}</p></header>
     <ParticipantCard profile={profile} language={language} editUntil={participantEditUntil} onEdit={onEditParticipant} />
-    {!started ? <div className="exercise-layout"><section className="exercise-card"><ClipboardCheck size={34} /><h2>{c.entry}</h2><p>{c.intro}</p><p className="exercise-pass-rule">{c.passRule}</p><p>{c.scope}</p><button className="primary-button" type="button" onClick={() => setState((current) => ({ ...current, started: true }))}>{language === 'en' ? 'Start Exercise' : 'Mulai Latihan'}<ArrowRight size={18} /></button></section>{brief}</div> : submitted ? <>
-      <section className={`exercise-card exercise-result ${result.passed ? 'is-passed' : ''}`}><span>{c.result}</span><h2 ref={heading} tabIndex={-1}>{result.passed ? c.passed : c.notPassed}</h2><strong className="exercise-score">{result.total}<small>/100</small></strong><p>{c.passRule}</p>{!result.criticalPassed && <p className="exercise-critical">{c.critical}</p>}<p>{c.scope}</p><div className="test-actions"><button className="primary-button" type="button" onClick={() => { setState({ started: true, submitted: false, index: 0, answers: {} }); setError(false) }}><RotateCcw size={17} />{c.retry}</button><a className="secondary-button" href={`/${product}/tests?scores=${product}`}>{language === 'en' ? 'View Exercise Scores' : 'Lihat Nilai Latihan'}</a></div></section>
+    {!started ? <div className="exercise-layout"><section className="exercise-card"><ClipboardCheck size={34} /><h2>{c.entry}</h2><p>{c.intro}</p><p className="exercise-pass-rule">{c.passRule}</p><p>{c.scope}</p><button className="primary-button" type="button" onClick={() => { submissionStore.begin(exercise); setState((current) => ({ ...current, started: true })) }}>{language === 'en' ? 'Start Exercise' : 'Mulai Latihan'}<ArrowRight size={18} /></button></section>{brief}</div> : submitted ? <>
+      <section className={`exercise-card exercise-result ${result.passed ? 'is-passed' : ''}`}><span>{c.result}</span><h2 ref={heading} tabIndex={-1}>{result.passed ? c.passed : c.notPassed}</h2><strong className="exercise-score">{result.total}<small>/100</small></strong><p>{c.passRule}</p>{!result.criticalPassed && <p className="exercise-critical">{c.critical}</p>}<p>{c.scope}</p><div className="test-actions"><button className="primary-button" type="button" onClick={() => { submissionStore.startNew(exercise); setState({ started: true, submitted: false, index: 0, answers: {} }); setError(false) }}><RotateCcw size={17} />{c.retry}</button><a className="secondary-button" href={`/${product}/tests?scores=${product}`}>{language === 'en' ? 'View Exercise Scores' : 'Lihat Nilai Latihan'}</a></div></section>
       <section className="exercise-results" aria-label={c.summary}>{c.questions.map((item, itemIndex) => {
         const correct = result.scores[itemIndex] === questionPoints[itemIndex]
         return <article key={item.id} className="exercise-card"><div className="exercise-result-heading"><h3>{item.topic}</h3><strong>{result.scores[itemIndex]} / {questionPoints[itemIndex]}</strong></div><span className={correct ? 'exercise-correct' : 'exercise-review'}>{correct && <CheckCircle2 size={16} />}{correct ? c.correct : c.review}</span><p>{item.explanation}</p><a className="outline-nav-button" href={`/${product}/lesson/${item.lesson}`} target="_blank" rel="noopener noreferrer" aria-label={`${c.reviewLesson}: ${item.topic} (${c.newTab})`}>{c.reviewLesson} <ArrowUpRight size={16} aria-hidden="true" /></a>{item.relatedLessons?.map(lesson => <a key={lesson.id} className="outline-nav-button" href={`/${product}/lesson/${lesson.id}`} target="_blank" rel="noopener noreferrer" aria-label={`${c.reviewLesson}: ${lesson.title} (${c.newTab})`}>{lesson.title} <ArrowUpRight size={16} aria-hidden="true" /></a>)}</article>

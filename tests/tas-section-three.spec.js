@@ -35,7 +35,7 @@ test('section 3 saved submissions require all eight actions and numeric answers'
 })
 
 test('section 3 volume inputs validate and persist across languages on mobile', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' })))
+  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/tas/tests/section-3')
   await page.locator('.mobile-header-language').click()

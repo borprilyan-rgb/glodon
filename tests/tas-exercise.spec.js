@@ -102,6 +102,6 @@ test('number navigation preserves answers and identifies missing fields at submi
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
-    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' }))
+    if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' }))
   })
 })

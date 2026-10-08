@@ -44,7 +44,7 @@ test('TRB saved submissions reject incomplete answers and ignore the previous te
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' })))
+  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
 })
 
 test('TRB mobile dimensions validate and persist across languages', async ({ page }) => {

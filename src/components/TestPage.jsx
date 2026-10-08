@@ -5,6 +5,7 @@ import ParticipantCard from './ParticipantCard'
 import { getSectionExercise } from '../data/sectionExercises'
 import { scoreStatus, saveTestScore } from '../data/testScores'
 import '../styles/exercise.css'
+import { submissionStore } from '../firebase/submissionStore'
 
 export default function TestPage({ product, parts, scores, profile, participantEditUntil, language, onEditParticipant }) {
   const en = language === 'en'
@@ -14,6 +15,7 @@ export default function TestPage({ product, parts, scores, profile, participantE
     try {
       saveTestScore(exercise, state.answers)
       localStorage.setItem(exercise.storageKey, JSON.stringify({ started: true, submitted: false, index: 0, answers: {} }))
+      submissionStore.startNew(exercise)
       window.location.assign(exercise.path)
     } catch { setRetryFailed(true) }
   }

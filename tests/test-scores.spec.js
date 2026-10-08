@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 const origin = 'http://127.0.0.1:5173'
-const profile = { name: 'Ayu Putri', jobTitle: 'Quantity Surveyor', employeeId: '001-A' }
+const profile = { name: 'Ayu Putri', jobTitle: 'Quantity Surveyor', employeeId: '000012' }
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(profile => {
     if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify(profile))
@@ -33,7 +33,8 @@ test('hub separates learning and tests; score cards live on test pages', async (
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.screenshot({ path: 'test-results/test-page-desktop.png', fullPage: true })
   await page.goto(`${origin}/tme/tests`)
-  await expect(page.getByText('Latihan untuk kursus ini belum tersedia.')).toBeVisible()
+  await expect(page.locator('.test-list > article')).toHaveCount(3)
+  await expect(page.getByRole('button', { name: 'Unduh kartu nilai' })).toBeDisabled()
 })
 
 test('legacy link, submission, result overview, PNG and retry preserve results', async ({ page }) => {
@@ -67,7 +68,7 @@ test('legacy link, submission, result overview, PNG and retry preserve results',
   await expect(page.locator('.course-scores__row strong')).toHaveText(['0/100', '0/100', '100/100'])
 })
 
-test('test page edits profile and loads existing results without changing learning progress', async ({ page }) => {
+test('test page lets a legacy profile edit once and loads results without changing learning progress', async ({ page }) => {
   await page.goto(`${origin}/trb/tests`)
   await page.evaluate(() => localStorage.setItem('cubicost:trb:section-1-exercise:v2', JSON.stringify({ started: true, submitted: true, index: 7, answers: { q1: '0', q2: '1', q3: '0', q4: '0', q5: '1', q6: '0', q7: '1', q8: '0', height1: '3.2', height2: '3.3', gridDistance: '4000' } })))
   await page.reload()
@@ -76,6 +77,7 @@ test('test page edits profile and loads existing results without changing learni
   await page.getByRole('button', { name: 'Lanjut ke latihan' }).click()
   await expect(page.locator('.course-scores__content')).toBeVisible()
   await expect(page.locator('.course-scores dd').first()).toHaveText('Budi')
+  await expect(page.getByRole('button', { name: 'Ubah data diri' })).toBeDisabled()
   await expect(page.locator('.course-scores__review')).toHaveText('Belum lulus')
   await expect(page.locator('.course-scores__pending')).toHaveCount(2)
   await expect(page.locator('.lesson-topbar input')).toHaveCount(0)

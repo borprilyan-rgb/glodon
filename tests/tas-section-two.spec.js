@@ -31,7 +31,7 @@ test('section 2 loads only current answers and requires complete dimensions for 
 })
 
 test('section 2 dimensions validate and persist on mobile in both languages', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '0012' })))
+  await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/tas/tests/section-2')
   await page.locator('.mobile-header-language').click()

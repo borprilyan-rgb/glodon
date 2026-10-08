@@ -1,0 +1,69 @@
+// Generated from the assessment definitions by npm run firebase:rules.
+// Scores are client-calculated; this validates shape, not correctness.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function googleUser() { return signedIn() && request.auth.token.firebase.sign_in_provider == 'google.com'; }
+    function admin() {
+      return googleUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.enabled == true;
+    }
+    function answer(value) { return value is string && value.size() > 0 && value.size() <= 100; }
+    function validAnswers(d) {
+      let a = d.answers;
+      return a is map && ((d.course == 'tas' && d.section == 1 && d.assessmentVersion == 'v1'
+        && a.keys().hasAll(["settings","rules","projectName","ground","ruleSet","attributes","height1","height2","grade","copy","drawing","length","verify","grid","alignmentCheck"]) && a.keys().hasOnly(["settings","rules","projectName","ground","ruleSet","attributes","height1","height2","grade","copy","drawing","length","verify","grid","alignmentCheck"])
+        && answer(a.settings) && answer(a.rules) && answer(a.projectName) && answer(a.ground) && answer(a.ruleSet) && answer(a.attributes) && answer(a.height1) && answer(a.height2) && answer(a.grade) && answer(a.copy) && answer(a.drawing) && answer(a.length) && answer(a.verify) && answer(a.grid) && answer(a.alignmentCheck) && a.settings in ["review","copy","guess"] && a.rules in ["disable","inspect","report"] && a.attributes in ["public","private","all"] && a.drawing in ["split","same","delete"])
+        || (d.course == 'tas' && d.section == 2 && d.assessmentVersion == 'v2'
+        && a.keys().hasAll(["q1","q2","q3","q4","slabThickness","q5","q6","q7","openingWidth","openingHeight","q8"]) && a.keys().hasOnly(["q1","q2","q3","q4","slabThickness","q5","q6","q7","openingWidth","openingHeight","q8"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.q4) && answer(a.slabThickness) && answer(a.q5) && answer(a.q6) && answer(a.q7) && answer(a.openingWidth) && answer(a.openingHeight) && answer(a.q8) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"] && a.q6 in ["0","1","2"] && a.q7 in ["0","1","2"] && a.q8 in ["0","1","2"])
+        || (d.course == 'tas' && d.section == 3 && d.assessmentVersion == 'v2'
+        && a.keys().hasAll(["q1","q2","q3","beamVolume","q4","q5","reportVolume","q6","q7","q8"]) && a.keys().hasOnly(["q1","q2","q3","beamVolume","q4","q5","reportVolume","q6","q7","q8"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.beamVolume) && answer(a.q4) && answer(a.q5) && answer(a.reportVolume) && answer(a.q6) && answer(a.q7) && answer(a.q8) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"] && a.q6 in ["0","1","2"] && a.q7 in ["0","1","2"] && a.q8 in ["0","1","2"])
+        || (d.course == 'trb' && d.section == 1 && d.assessmentVersion == 'v2'
+        && a.keys().hasAll(["q1","q2","q3","q4","height1","height2","q5","q6","q7","gridDistance","q8"]) && a.keys().hasOnly(["q1","q2","q3","q4","height1","height2","q5","q6","q7","gridDistance","q8"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.q4) && answer(a.height1) && answer(a.height2) && answer(a.q5) && answer(a.q6) && answer(a.q7) && answer(a.gridDistance) && answer(a.q8) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"] && a.q6 in ["0","1","2"] && a.q7 in ["0","1","2"] && a.q8 in ["0","1","2"])
+        || (d.course == 'trb' && d.section == 2 && d.assessmentVersion == 'v2'
+        && a.keys().hasAll(["q1","q2","columnCount","columnDiameter","tieSpacing","q3","q4","q5","q6","slabSpacing","q7","supportLength","q8"]) && a.keys().hasOnly(["q1","q2","columnCount","columnDiameter","tieSpacing","q3","q4","q5","q6","slabSpacing","q7","supportLength","q8"])
+        && answer(a.q1) && answer(a.q2) && answer(a.columnCount) && answer(a.columnDiameter) && answer(a.tieSpacing) && answer(a.q3) && answer(a.q4) && answer(a.q5) && answer(a.q6) && answer(a.slabSpacing) && answer(a.q7) && answer(a.supportLength) && answer(a.q8) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"] && a.q6 in ["0","1","2"] && a.q7 in ["0","1","2"] && a.q8 in ["0","1","2"])
+        || (d.course == 'trb' && d.section == 3 && d.assessmentVersion == 'v2'
+        && a.keys().hasAll(["q1","q2","q3","barLength","barWeight","q4","q5","reportWeight","q6","q7","q8"]) && a.keys().hasOnly(["q1","q2","q3","barLength","barWeight","q4","q5","reportWeight","q6","q7","q8"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.barLength) && answer(a.barWeight) && answer(a.q4) && answer(a.q5) && answer(a.reportWeight) && answer(a.q6) && answer(a.q7) && answer(a.q8) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"] && a.q6 in ["0","1","2"] && a.q7 in ["0","1","2"] && a.q8 in ["0","1","2"])
+        || (d.course == 'tme' && d.section == 1 && d.assessmentVersion == 'v1'
+        && a.keys().hasAll(["q1","q2","q3","q4","q5"]) && a.keys().hasOnly(["q1","q2","q3","q4","q5"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.q4) && answer(a.q5) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"])
+        || (d.course == 'tme' && d.section == 2 && d.assessmentVersion == 'v1'
+        && a.keys().hasAll(["q1","q2","q3","q4","q5"]) && a.keys().hasOnly(["q1","q2","q3","q4","q5"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.q4) && answer(a.q5) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"])
+        || (d.course == 'tme' && d.section == 3 && d.assessmentVersion == 'v1'
+        && a.keys().hasAll(["q1","q2","q3","q4","q5"]) && a.keys().hasOnly(["q1","q2","q3","q4","q5"])
+        && answer(a.q1) && answer(a.q2) && answer(a.q3) && answer(a.q4) && answer(a.q5) && a.q1 in ["0","1","2"] && a.q2 in ["0","1","2"] && a.q3 in ["0","1","2"] && a.q4 in ["0","1","2"] && a.q5 in ["0","1","2"]));
+    }
+    function validAttempt(d, id) {
+      let keys = ['attemptId', 'uid', 'name', 'jobTitle', 'employeeId', 'course', 'section', 'answers', 'score', 'maximumScore', 'passed', 'assessmentVersion', 'scoreVerified', 'submittedAt'];
+      return d.keys().hasAll(keys) && d.keys().hasOnly(keys)
+        && d.attemptId == id && id.matches('^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$')
+        && d.uid == request.auth.uid
+        && answer(d.name) && d.name.matches('.*\\S.*') && answer(d.jobTitle) && d.jobTitle.matches('.*\\S.*')
+        && d.employeeId is string && d.employeeId.matches('^[0-9]{6}$')
+        && d.section is int && d.section >= 1 && d.section <= 3
+        && d.score is int && d.score >= 0 && d.score <= 100 && d.maximumScore == 100
+        && d.passed is bool && (!d.passed || d.score >= 80)
+        && d.scoreVerified == false
+        && d.submittedAt is timestamp && d.submittedAt == request.time
+        && validAnswers(d);
+    }
+    match /admins/{uid} {
+      allow get: if googleUser() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+    match /testAttempts/{id} {
+      allow create: if signedIn() && request.auth.token.firebase.sign_in_provider == 'anonymous' && validAttempt(request.resource.data, id);
+      // Permit checking an absent ID so participants can use a create-only transaction.
+      allow get: if admin() || (signedIn() && (!exists(/databases/$(database)/documents/testAttempts/$(id)) || resource.data.uid == request.auth.uid));
+      allow list: if admin();
+      allow update, delete: if false;
+    }
+  }
+}

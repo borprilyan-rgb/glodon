@@ -7,8 +7,8 @@ A bilingual, self-paced learning application for Cubicost TAS, TRB, and TME-C, w
 - **TAS:** Project and drawing preparation, building element modelling, quantities, and reports.
 - **TRB:** Model preparation, reinforcement modelling, quantity verification, and reports.
 - **TME-C:** MEP modelling and measurement guides.
-- **Tests:** Separate TAS and TRB test pages with three section assessments per course, resume/retry actions, results, and PNG score-card downloads. TME-C tests are not available yet.
-- **Participant profile:** Name, job title, and employee ID are required before accessing tests; details appear on score cards and can be edited.
+- **Tests:** Separate TAS, TRB, and TME-C test pages with three section assessments per course, resume/retry actions, results, and PNG score-card downloads.
+- **Participant profile:** Name, job title, and a six-digit employee ID are required before accessing tests; details appear on score cards. Editing unlocks one hour after registration or the last edit. Older profiles without a timestamp can be edited once, then follow the same lock.
 - **Presentation mode:** Slide walkthroughs, fullscreen viewing, image enlargement, and drawing annotations. Open it from the home page or `/present`.
 - **Progress tracking:** Per-course completed lessons, started lessons, checklists, and the last visited lesson.
 
@@ -16,7 +16,7 @@ Bahasa Indonesia is the default; English is available through the header languag
 
 ## Technology and storage
 
-React with JSX, Vite, plain CSS, and Lucide React icons. This is a client-side application: **there is currently no centralized backend or admin reporting database**, and participant entry is not account authentication.
+React with JSX, Vite, plain CSS, and Lucide React icons. This is a client-side application: **new test attempts can be stored centrally in Firebase, with a protected admin results page**, and participant employee IDs remain self-reported. See [Firebase setup](FIREBASE_SETUP.md) for required Console configuration, rules, indexes, and emulator tests.
 
 Progress, participant information, language preference, test answers, and test scores are stored in browser `localStorage`. They are specific to the browser profile and site origin; they do not sync across devices. Clearing site data removes these records. Presentation return navigation also uses `sessionStorage`.
 
@@ -41,7 +41,7 @@ npm run preview
 
 The build is written to `dist/`. `preview` serves that production build locally. Build tooling belongs in `devDependencies`, so include development dependencies when building.
 
-Playwright specifications are in `tests/`; there is currently no npm test script. To run them manually, start the development server on `http://127.0.0.1:5173`, then run `npx playwright test` in another terminal. Playwright browser binaries must already be installed or provisioned separately.
+Playwright specifications are in `tests/`. Run `npm run test:unit` for submission and CSV unit tests, and `npm run test:firebase` for Firestore rules and the complete Playwright suite against local Firebase emulators. Playwright starts the development server on `http://127.0.0.1:5173`; leave that port free. Java 21 or later and Playwright browser binaries are required. See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for setup details. Tests use a demo project and do not submit to production.
 
 ## Routes and deployment
 
@@ -53,11 +53,12 @@ Navigation uses **pathname routes**:
 | `/tas`, `/trb`, `/tme` | Course introductions |
 | `/:product/course` | Learning module map |
 | `/:product/lesson/:stepId` | Lesson |
-| `/:product/tests` | Tests and score card (TME-C shows an availability message) |
-| `/:product/tests/section-1` through `section-3` | TAS/TRB section tests |
+| `/:product/tests` | Tests and score card |
+| `/:product/tests/section-1` through `section-3` | TAS/TRB/TME-C section tests |
 | `/exercises` | Test selection and score overview |
 | `/present` | Presentation mode |
 | `/contact` | Contact information |
+| `/admin/results` | Google-authenticated admin results and CSV export |
 
 Some legacy hash links and `/tas/exercise/...` or `/trb/exercise/...` links remain supported for compatibility; new links use pathname routes.
 
