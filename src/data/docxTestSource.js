@@ -18,7 +18,7 @@ export const tasDocxSource = {
       title: 'Pemodelan Element Sistem',
       questions: [
         ['Jika pile cap berada 1 meter di bawah elevasi lantai saat ini, pengaturan Top Elevation yang tepat adalah?', 'Floor_Bottom_Elevation + 1', 'Floor_Bottom_Elevation - 1', 'Floor_Top_Elevation - 1', 'B'],
-        ['Urutan Auto Identify balok yang benar adalah?', 'Pick Sideline → Pick Label → Auto Identify', 'Auto Identify → Pick Label → Pick Sideline', 'Pick Label → Auto Identify→ Pick Sideline', 'A'],
+        ['Urutan Auto Identify slab yang benar adalah?', 'Pick Sideline → Pick Label → Auto Identify', 'Auto Identify → Pick Label → Pick Sideline', 'Pick Label → Auto Identify→ Pick Sideline', 'C'],
         ['Jika pada saat Auto Identify untuk balok ada yang tidak berhasil, metode apa yang dapat digunakan?', 'Menghapus seluruh gambar acuan', 'Menggunakan pemodelan manual', 'Calculate ulang', 'B'],
         ['Pada saat melakukan perubahan finishing pada Room Finish apa yang harus dilakukan setelah merubahnya?', 'Regenerate Room Finish', 'Auto Identify', 'Room Finish otomatis berubah', 'A'],
         ['Bagaimana cara mengganti tampilan Floor Finish yang sudah termodelkan?', 'Pilih Measurement Rules Floor Finish', 'Pilih View Expression', 'Pilih Material Texture atau Fill Color pada Attribute Editor', 'C'],
