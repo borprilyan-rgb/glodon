@@ -21,7 +21,7 @@ export default function TestPage({ product, parts, scores, profile, participantE
   }
   const sections = [1, 2, 3].map(section => getSectionExercise(product, section)).filter(Boolean)
   return <article className="section-exercise test-page">
-    <header className="exercise-header"><span className="eyebrow">Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</span><h1>{en ? `${courseName} Knowledge Exercise` : `Latihan Pemahaman ${courseName}`}</h1><p>{en ? 'Do a section exercise, review your results, and download your score card.' : 'Kerjakan latihan per bagian, tinjau hasil, dan unduh kartu nilai Anda.'}</p></header>
+    <header className="exercise-header"><span className="eyebrow">Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</span><h1>{product === 'tas' || product === 'trb' ? sections[0]?.copy[language].title : (en ? `${courseName} Knowledge Exercise` : `Latihan Pemahaman ${courseName}`)}</h1>{product === 'tme' && <p>{en ? 'Do a section exercise, review your results, and download your score card.' : 'Kerjakan latihan per bagian, tinjau hasil, dan unduh kartu nilai Anda.'}</p>}</header>
     {sections.length ? <>
       <ParticipantCard profile={profile} language={language} editUntil={participantEditUntil} onEdit={onEditParticipant} />
       {retryFailed && <p role="alert">{en ? 'Unable to start a new attempt. Open the result and try again there.' : 'Tidak dapat memulai percobaan baru. Buka hasil dan coba lagi dari sana.'}</p>}
@@ -30,8 +30,8 @@ export default function TestPage({ product, parts, scores, profile, participantE
         const result = scores.find(score => score.exercise.path === exercise.path)?.result
         const inProgress = state.started && !state.submitted
         return <article className="exercise-card" key={exercise.path}>
-          <span className="eyebrow">{en ? 'Section' : 'Bagian'} {exercise.section}</span><h2>{product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title}</h2>
-          <p>{exercise.copy[language].duration}</p><p>{inProgress ? (en ? 'In progress' : 'Sedang dikerjakan') : scoreStatus(result, language)}</p>
+          <span className="eyebrow">{en ? 'Section' : 'Bagian'} {exercise.section}</span><h2>{product === 'tas' || product === 'trb' ? exercise.copy[language].sectionTitle : (product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title)}</h2>
+          {exercise.copy[language].duration && <p>{exercise.copy[language].duration}</p>}<p>{inProgress ? (en ? 'In progress' : 'Sedang dikerjakan') : scoreStatus(result, language)}</p>
           <div className="test-actions"><a className="primary-button" href={exercise.path}>{inProgress ? (en ? 'Continue Exercise' : 'Lanjutkan Latihan') : state.submitted ? (en ? 'View Result' : 'Lihat Hasil') : (en ? 'Start Exercise' : 'Mulai Latihan')}</a>
           {state.submitted && <button className="secondary-button" type="button" onClick={() => retry(exercise, state)}>{en ? 'Retry Exercise' : 'Coba Lagi'}</button>}</div>
         </article>

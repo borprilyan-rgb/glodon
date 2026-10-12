@@ -1,6 +1,6 @@
 // Verbatim TAS and TRB assessment source from
 // DAFTAR PERTANYAAN UNTUK PRESENTASI GLODON F.docx.
-// Answer keys are stored exactly as marked in the source document.
+// Answer keys follow the DOCX except for the three corrections supplied by the user.
 export const tasDocxSource = {
   title: 'DAFTAR PERTANYAAN UNTUK PRESENTASI GLODON F',
   sections: [

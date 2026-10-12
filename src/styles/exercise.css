@@ -3,6 +3,7 @@
 .exercise-header h1 { font-size: clamp(28px, 4vw, 44px); margin: 12px 0; line-height: 1.15; }
 .exercise-header p { color: var(--muted); }
 .exercise-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 24px; align-items: start; }
+.exercise-layout--single { grid-template-columns: minmax(0, 1fr); }
 .exercise-card, .exercise-brief { padding: clamp(20px, 3vw, 32px); background: white; border: 1px solid var(--line); border-radius: 10px; }
 .exercise-card h2 { font-size: 24px; line-height: 1.35; margin: 16px 0 24px; }
 .exercise-card p, .exercise-brief p { line-height: 1.65; color: #536a80; }

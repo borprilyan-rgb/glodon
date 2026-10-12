@@ -1,4 +1,4 @@
-import { getSectionExercise } from './sectionExercises.js'
+import { getLegacySectionExercise, getSectionExercise } from './sectionExercises.js'
 
 const copy = {
   en: { answer: 'Answer', missing: 'Not answered', unknown: 'Unknown option', unavailable: 'The question definitions for this saved assessment are unavailable. Stored answers are shown without interpretation or correctness.', malformed: 'This saved answer data cannot be reviewed.', correct: 'Correct', incorrect: 'Incorrect', partial: 'Partially correct' },
@@ -9,7 +9,12 @@ const copy = {
 // are not retained in this checkout; never apply current questions to them.
 export function resolveAssessment(course, section, version) {
   const exercise = getSectionExercise(course, section)
-  return exercise && exercise.storageKey.match(/:(v\d+)$/)?.[1] === version ? exercise : null
+  if (exercise && exercise.storageKey.match(/:(v\d+)$/)?.[1] === version) return exercise
+  if (course === 'tas' || course === 'trb') {
+    const historical = getLegacySectionExercise(course, section)
+    if (historical && historical.storageKey.match(/:(v\d+)$/)?.[1] === version) return historical
+  }
+  return null
 }
 
 function answerFields(question, c, reviewCopy) {

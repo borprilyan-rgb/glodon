@@ -14,13 +14,16 @@ export default function CourseScores({ product, scores, language, profile }) {
   const [downloadFailed, setDownloadFailed] = useState(false)
   const parts = (product === 'tas' ? getTasData(language) : product === 'trb' ? getTrbData(language) : product === 'tme' ? getTmeData(language) : null)?.tutorialParts || []
   const sections = [1, 2, 3].map(section => getSectionExercise(product, section)).filter(Boolean)
+  const sectionTitle = exercise => product === 'tas' || product === 'trb'
+    ? exercise.copy[language].sectionTitle
+    : product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title
   async function download() {
     setDownloading(true)
     setDownloadFailed(false)
     try {
       await downloadScoreCard({ product, profile, language, rows: sections.map(exercise => ({
         section: exercise.section,
-        title: product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title,
+        title: sectionTitle(exercise),
         result: scores.find(score => score.exercise.path === exercise.path)?.result,
         critical: exercise.copy[language].critical,
       })) })
@@ -35,7 +38,7 @@ export default function CourseScores({ product, scores, language, profile }) {
       <ul>{sections.map(exercise => {
         const result = scores.find(score => score.exercise.path === exercise.path)?.result
         return <li key={exercise.path}>
-          <div className="course-scores__row"><a href={exercise.path}>{en ? 'Section' : 'Bagian'} {exercise.section}: {product === 'tme' ? exercise.copy[language].title : parts[exercise.section - 1].title}</a><strong>{result?.total ?? 0}/100</strong></div>
+          <div className="course-scores__row"><a href={exercise.path}>{en ? 'Section' : 'Bagian'} {exercise.section}: {sectionTitle(exercise)}</a><strong>{result?.total ?? 0}/100</strong></div>
         <span className={!result ? 'course-scores__pending' : result.passed ? 'course-scores__passed' : 'course-scores__review'}>{scoreStatus(result, language)}</span>
         {result && !result.criticalPassed && <p>{exercise.copy[language].critical}</p>}
       </li>

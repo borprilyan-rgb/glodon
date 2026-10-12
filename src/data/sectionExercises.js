@@ -1,6 +1,7 @@
 import { createTrbSectionThreeExercise } from './trb/sectionThreeExercise.js'
 import { createTrbSectionTwoExercise } from './trb/sectionTwoExercise.js'
 import { createTrbSectionOneExercise } from './trb/sectionOneExercise.js'
+import { createDocxAssessment } from './docxAssessment.js'
 import { createTmeSectionExercise } from './tme/sectionExercises.js'
 import { createSectionThreeExercise } from './tas/sectionThreeExercise.js'
 import { createSectionTwoExercise } from './tas/sectionTwoExercise.js'
@@ -10,43 +11,55 @@ import { getTmeData } from './tme/index.js'
 import { getTrbData } from './trb/index.js'
 
 const courses = { tas: getTasData, tme: getTmeData, trb: getTrbData }
-const definitions = new Map()
-export function getSectionExercise(product, section) {
+const legacyDefinitions = new Map()
+export function getLegacySectionExercise(product, section) {
   const key = `${product}-${section}`
-  if (definitions.has(key)) return definitions.get(key)
+  if (legacyDefinitions.has(key)) return legacyDefinitions.get(key)
   if (key === 'tas-1') {
     const definition = { product, section, path: '/tas/tests/section-1', copy: first.exerciseCopy, storageKey: first.exerciseStorageKey, load: first.loadExercise, issues: first.questionIssues, answered: first.questionAnswered, points: first.questionPoints, score: first.scoreExercise, expectedAnswers: first.expectedAnswers, officePlan: true }
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (product === 'tme' && section >= 1 && section <= 3) {
     const definition = createTmeSectionExercise(section)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (key === 'tas-2') {
     const definition = createSectionTwoExercise(getTasData)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (key === 'tas-3') {
     const definition = createSectionThreeExercise(getTasData)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (key === 'trb-1') {
     const definition = createTrbSectionOneExercise(getTrbData)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (key === 'trb-2') {
     const definition = createTrbSectionTwoExercise(getTrbData)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   if (key === 'trb-3') {
     const definition = createTrbSectionThreeExercise(getTrbData)
-    definitions.set(key, definition)
+    legacyDefinitions.set(key, definition)
+    return definition
+  }
+  return null
+}
+
+export function getSectionExercise(product, section) {
+  if (product === 'tme') return getLegacySectionExercise(product, section)
+  if ((product === 'tas' || product === 'trb') && section >= 1 && section <= 3) {
+    const key = `docx-${product}-${section}`
+    if (legacyDefinitions.has(key)) return legacyDefinitions.get(key)
+    const definition = createDocxAssessment(product, section)
+    legacyDefinitions.set(key, definition)
     return definition
   }
   return null
