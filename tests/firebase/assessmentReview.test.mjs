@@ -1,10 +1,10 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { getSectionExercise } from '../../src/data/sectionExercises.js'
+import { getLegacySectionExercise, getSectionExercise } from '../../src/data/sectionExercises.js'
 import { reviewAssessment, resolveAssessment } from '../../src/data/assessmentReview.js'
 
-function recordFor(course, section, answers) {
-  const exercise = getSectionExercise(course, section)
+function recordFor(course, section, answers, legacy = false) {
+  const exercise = legacy ? getLegacySectionExercise(course, section) : getSectionExercise(course, section)
   return { course, section, assessmentVersion: exercise.storageKey.match(/:(v\d+)$/)[1], answers: answers || { ...exercise.expectedAnswers } }
 }
 
@@ -41,7 +41,7 @@ test('zero choice indexes and zero numeric answers remain visible; slab partial 
   const tme = reviewAssessment(recordFor('tme', 1))
   assert.equal(tme.questions[0].status, 'correct')
   assert.match(tme.questions[0].answers[0].value, /perubahan desain/i)
-  const record = recordFor('tas', 2)
+  const record = recordFor('tas', 2, undefined, true)
   record.answers.slabThickness = '0'
   for (const language of ['en', 'id']) {
     const question = reviewAssessment(record, language).questions[3]
@@ -50,26 +50,26 @@ test('zero choice indexes and zero numeric answers remain visible; slab partial 
     assert.equal(question.maximum, 20)
     assert.deepEqual(question.answers[0], { label: language === 'en' ? 'Slab thickness' : 'Ketebalan pelat', value: '0 mm' })
     assert.equal(question.expected[0].value, '150 mm')
-    assert.equal(question.explanation, getSectionExercise('tas', 2).copy[language].questions[3].explanation)
+    assert.equal(question.explanation, getLegacySectionExercise('tas', 2).copy[language].questions[3].explanation)
   }
 })
 
 test('compound office setup and reinforcement quantities use the original labels, units and partial scoring', () => {
-  const office = recordFor('tas', 1)
+  const office = recordFor('tas', 1, undefined, true)
   office.answers.ground = '0'
   const project = reviewAssessment(office, 'en').questions[2]
   assert.equal(project.status, 'partial')
   assert.equal(project.earned, 7)
   assert.deepEqual(project.answers[1], { label: 'Ground elevation', value: '0 m' })
   assert.equal(project.expected[1].value, '-0.5 m')
-  const slab = recordFor('tas', 2)
+  const slab = recordFor('tas', 2, undefined, true)
   slab.answers.slabThickness = '150 mm'
   assert.equal(reviewAssessment(slab, 'en').questions[3].answers[0].value, '150 mm')
-  const volume = recordFor('tas', 3)
+  const volume = recordFor('tas', 3, undefined, true)
   volume.answers.beamVolume = '0,70 m3'
   assert.equal(reviewAssessment(volume, 'en').questions[2].answers[0].value, '0,70 m³')
   assert.equal(reviewAssessment(volume, 'en').questions[2].status, 'correct')
-  const rebar = reviewAssessment(recordFor('trb', 3), 'en')
+  const rebar = reviewAssessment(recordFor('trb', 3, undefined, true), 'en')
   assert.equal(rebar.questions[2].answers[0].value, '24 m')
   assert.equal(rebar.questions[2].answers[1].value, '59.28 kg')
   assert.equal(rebar.questions[4].answers[0].value, '2.5 t')

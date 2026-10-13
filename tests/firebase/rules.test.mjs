@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { randomUUID } from 'node:crypto'
 import { initializeTestEnvironment, assertFails, assertSucceeds } from '@firebase/rules-unit-testing'
 import { doc, setDoc, getDoc, getDocs, collection, updateDoc, deleteDoc, serverTimestamp, Timestamp, runTransaction } from 'firebase/firestore'
-import { getSectionExercise } from '../../src/data/sectionExercises.js'
+import { getLegacySectionExercise, getSectionExercise } from '../../src/data/sectionExercises.js'
 import { createSubmissionStore } from '../../src/firebase/submissionStore.js'
 import { participant, answersFor } from './fixtures.mjs'
 
@@ -112,4 +112,24 @@ test('invalid identity, scoring, dates, versions, answer types and extra fields 
   await assertFails(setDoc(doc(db(), 'testAttempts', missing.attemptId), missing))
   const mismatch = attempt()
   await assertFails(setDoc(doc(db(), 'testAttempts', randomUUID()), mismatch))
+})
+
+test('pending legacy TAS/TRB attempts remain accepted alongside the new DOCX assessments', async () => {
+  for (const course of ['tas', 'trb']) for (const section of [1, 2, 3]) {
+    const exercise = getLegacySectionExercise(course, section)
+    const store = createSubmissionStore({ storage: () => { throw new Error('No storage') }, uuid: randomUUID })
+    const data = { ...store.enqueue(exercise, participant, { ...exercise.expectedAnswers }).payload, uid: 'alice', submittedAt: serverTimestamp() }
+    await assertSucceeds(setDoc(doc(db(), 'testAttempts', data.attemptId), data))
+  }
+})
+
+test('DOCX assessments reject unsupported option values and incomplete answer maps', async () => {
+  for (const course of ['tas', 'trb']) {
+    const data = attempt(course, 1)
+    data.answers.q1 = '0'
+    await assertFails(setDoc(doc(db(), 'testAttempts', data.attemptId), data))
+    const missing = attempt(course, 1)
+    delete missing.answers.q5
+    await assertFails(setDoc(doc(db(), 'testAttempts', missing.attemptId), missing))
+  }
 })

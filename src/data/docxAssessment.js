@@ -7,11 +7,12 @@ const passScore = 70
 function interfaceCopy(product, section, source) {
   const productName = product.toUpperCase()
   const sectionTitle = source.sections[section - 1].title
+  const englishSectionTitle = ['Drawing and Measurement Preparation', 'System Element Modelling', 'Quantity Verification and Reports'][section - 1]
   const shared = {
-    title: source.title,
+    title: sectionTitle,
     sectionTitle,
-    badge: `${productName} · ${sectionTitle}`,
-    entry: sectionTitle,
+    badge: `${productName} · Bagian ${section} latihan`,
+    entry: `Periksa pemahaman: ${sectionTitle}`,
     intro: '',
     duration: '',
     passRule: product === 'trb' ? (source.passScoreNote || '') : '',
@@ -56,10 +57,14 @@ function interfaceCopy(product, section, source) {
   }
   return {
     id: { ...shared },
-    // The source document contains Indonesian wording only. Preserve it
-    // verbatim in English mode rather than creating unapproved translations.
+    // Preserve the source questions and answer options in Indonesian;
+    // localize interface headings independently.
     en: {
       ...shared,
+      title: englishSectionTitle,
+      sectionTitle: englishSectionTitle,
+      badge: `${productName} · Section ${section} exercise`,
+      entry: `Check your understanding: ${englishSectionTitle}`,
       start: 'Start Test',
       resume: 'Resume Test',
       question: 'Question',
@@ -105,7 +110,6 @@ export function createDocxAssessment(product, section) {
   const copy = Object.fromEntries(['en', 'id'].map(language => [language, {
     ...interfaceCopy(product, section, source)[language],
     questions,
-    badge: product.toUpperCase(),
     product,
   }]))
   const points = questionPoints.slice(0, questions.length)

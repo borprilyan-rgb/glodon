@@ -1,18 +1,23 @@
 import { writeFileSync } from 'node:fs'
-import { getSectionExercise } from '../src/data/sectionExercises.js'
+import { getLegacySectionExercise, getSectionExercise } from '../src/data/sectionExercises.js'
 
 const officeFields = ['settings', 'rules', 'projectName', 'ground', 'ruleSet', 'attributes', 'height1', 'height2', 'grade', 'copy', 'drawing', 'length', 'verify', 'grid', 'alignmentCheck']
 const validations = []
 for (const course of ['tas', 'trb', 'tme']) for (const section of [1, 2, 3]) {
-  const exercise = getSectionExercise(course, section)
-  const fields = exercise.officePlan ? officeFields : exercise.copy.en.questions.flatMap(question => [question.id, ...(question.fields || []).map(field => field.name)])
-  const values = fields.map(field => `answer(a.${field})`)
-  for (const question of exercise.copy.en.questions) {
-    if (question.type === 'choice' || ['dimensions', 'quantity'].includes(question.type)) values.push(`a.${question.id} in ${JSON.stringify(question.options.map(([value]) => value))}`)
+  const current = getSectionExercise(course, section)
+  const legacy = getLegacySectionExercise(course, section)
+  const definitions = legacy && legacy.storageKey !== current.storageKey ? [current, legacy] : [current]
+  for (const exercise of definitions) {
+    const fields = exercise.officePlan ? officeFields : exercise.copy.en.questions.flatMap(question => [question.id, ...(question.fields || []).map(field => field.name)])
+    const values = fields.map(field => `answer(a.${field})`)
+    for (const question of exercise.copy.en.questions) {
+      if (question.type === 'choice' || ['dimensions', 'quantity'].includes(question.type)) values.push(`a.${question.id} in ${JSON.stringify(question.options.map(([value]) => value))}`)
+    }
+    validations.push(`(d.course == '${course}' && d.section == ${section} && d.assessmentVersion == '${exercise.storageKey.match(/:(v\d+)$/)[1]}'
+          && (!d.passed || d.score >= ${exercise.docxSource ? 70 : 80})
+          && a.keys().hasAll(${JSON.stringify(fields)}) && a.keys().hasOnly(${JSON.stringify(fields)})
+          && ${values.join(' && ')})`)
   }
-  validations.push(`(d.course == '${course}' && d.section == ${section} && d.assessmentVersion == '${exercise.storageKey.match(/:(v\d+)$/)[1]}'
-        && a.keys().hasAll(${JSON.stringify(fields)}) && a.keys().hasOnly(${JSON.stringify(fields)})
-        && ${values.join(' && ')})`)
 }
 const rules = `// Generated from the assessment definitions by npm run firebase:rules.
 // Scores are client-calculated; this validates shape, not correctness.
@@ -39,7 +44,7 @@ service cloud.firestore {
         && d.employeeId is string && d.employeeId.matches('^[0-9]{6}$')
         && d.section is int && d.section >= 1 && d.section <= 3
         && d.score is int && d.score >= 0 && d.score <= 100 && d.maximumScore == 100
-        && d.passed is bool && (!d.passed || d.score >= 80)
+        && d.passed is bool
         && d.scoreVerified == false
         && d.submittedAt is timestamp && d.submittedAt == request.time
         && validAnswers(d);

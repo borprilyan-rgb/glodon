@@ -1,5 +1,11 @@
 # Cubicost Learning Centre
 
+## Current release
+
+This workspace is based on release **3.4b**, verified at Git commit `0c0104d5f7a026cc032936b71c1256a6f3ea734d` (`3.4b Answer Update`) on `origin/main`. The UI displays `v3.4b`; npm package and lockfile metadata use the equivalent valid SemVer `3.4.0-b`. The homepage visual refresh is a local, uncommitted addition to that release.
+
+The release introduces v3 DOCX-based TAS/TRB assessments and retains older assessment definitions for historical answer review. Local generated Firestore rules accept both current v3 attempts and the retained legacy versions. These rules must be reviewed and deployed separately before relying on production central saving of v3 TAS/TRB results; synchronizing the workspace does not deploy Firebase rules.
+
 A bilingual, self-paced learning application for Cubicost TAS, TRB, and TME-C, with technical guides, section tests, downloadable score cards, and presentation mode.
 
 ## Available modules

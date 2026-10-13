@@ -21,7 +21,7 @@ export default function TestPage({ product, parts, scores, profile, participantE
   }
   const sections = [1, 2, 3].map(section => getSectionExercise(product, section)).filter(Boolean)
   return <article className="section-exercise test-page">
-    <header className="exercise-header"><span className="eyebrow">Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</span><h1>{product === 'tas' || product === 'trb' ? sections[0]?.copy[language].title : (en ? `${courseName} Knowledge Exercise` : `Latihan Pemahaman ${courseName}`)}</h1>{product === 'tme' && <p>{en ? 'Do a section exercise, review your results, and download your score card.' : 'Kerjakan latihan per bagian, tinjau hasil, dan unduh kartu nilai Anda.'}</p>}</header>
+    <header className="exercise-header"><span className="eyebrow">Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</span><h1>{en ? `${courseName} Knowledge Exercise` : `Latihan Pemahaman ${courseName}`}</h1><p>{en ? 'Do a section exercise, review your results, and download your score card.' : 'Kerjakan latihan per bagian, tinjau hasil, dan unduh kartu nilai Anda.'}</p></header>
     {sections.length ? <>
       <ParticipantCard profile={profile} language={language} editUntil={participantEditUntil} onEdit={onEditParticipant} />
       {retryFailed && <p role="alert">{en ? 'Unable to start a new attempt. Open the result and try again there.' : 'Tidak dapat memulai percobaan baru. Buka hasil dan coba lagi dari sana.'}</p>}

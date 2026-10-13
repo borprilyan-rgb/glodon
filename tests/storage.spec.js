@@ -33,7 +33,7 @@ test('malformed progress and score records do not crash lessons or test pages', 
     const attemptId = '00000000-0000-4000-8000-000000000001'
     localStorage.setItem(`cubicost:firebase:attempt:${attemptId}`, JSON.stringify({ payload: { attemptId, course: 'tas', answers: {}, section: {}, score: {} }, status: 'saved', confirmedAt: 'invalid date' }))
     for (const product of ['tas', 'trb', 'tme']) localStorage.setItem(`cubicost:tutorial:${product}:progress`, JSON.stringify({ checklists: { 'measurement-settings': {}, 'export-tas-model': {} } }))
-    localStorage.setItem('cubicost:tas:section-1-exercise:v1:result', JSON.stringify({ answers: { settings: 'review', rules: 'inspect', projectName: {}, ground: '-0.5', ruleSet: 'SMPI', attributes: 'private', height1: '3.5', height2: '3.5', grade: 'K-300', copy: 'yes', drawing: 'split', length: '6000', verify: 'independent', grid: 'A/1', alignmentCheck: 'other' } }))
+    localStorage.setItem('cubicost:tas:section-1-exercise:v3:result', JSON.stringify({ answers: { settings: 'review', rules: 'inspect', projectName: {}, ground: '-0.5', ruleSet: 'SMPI', attributes: 'private', height1: '3.5', height2: '3.5', grade: 'K-300', copy: 'yes', drawing: 'split', length: '6000', verify: 'independent', grid: 'A/1', alignmentCheck: 'other' } }))
   })
   for (const product of ['tas', 'trb', 'tme']) {
     await page.goto(`${origin}/${product}/lesson/${product === 'trb' ? 'export-tas-model' : 'measurement-settings'}`)
@@ -73,9 +73,9 @@ test('registration and assessment remain usable without storage and report faile
   await page.getByRole('button', { name: 'Mulai Latihan' }).click()
   await expect(page.locator('.exercise-question')).toBeVisible()
   await expect(page.locator('.exercise-bottom [role="status"]')).toBeVisible()
-  await page.locator('input[name="settings"][value="review"]').check()
+  await page.locator('input[name="q1"][value="A"]').check()
   await page.locator('.exercise-navigation button[type="submit"]').click()
-  await expect(page.locator('.exercise-question-meta')).toContainText('2 / 8')
+  await expect(page.locator('.exercise-question-meta')).toContainText('2 / 5')
   expect(errors).toEqual([])
 })
 
@@ -90,9 +90,9 @@ test('assessment save warning clears after storage recovers and the next answer 
   await page.getByRole('button', { name: 'Mulai Latihan' }).click()
   await expect(page.locator('.exercise-bottom [role="status"]')).toBeVisible()
   await page.evaluate(() => window.restoreStorage())
-  await page.locator('input[name="settings"][value="review"]').check()
+  await page.locator('input[name="q1"][value="A"]').check()
   await expect(page.locator('.exercise-bottom [role="status"]')).toHaveCount(0)
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('cubicost:tas:section-1-exercise:v1')).answers.settings)).toBe('review')
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('cubicost:tas:section-1-exercise:v3')).answers.q1)).toBe('A')
   await page.reload()
-  await expect(page.locator('input[name="settings"][value="review"]')).toBeChecked()
+  await expect(page.locator('input[name="q1"][value="A"]')).toBeChecked()
 })
