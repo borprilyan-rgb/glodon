@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { getLegacySectionExercise, getSectionExercise } from '../../src/data/sectionExercises.js'
-import { reviewAssessment, resolveAssessment } from '../../src/data/assessmentReview.js'
+import { getHistoricalAssessment as getLegacySectionExercise, getCurrentAssessment as getSectionExercise } from '../../functions/src/assessments/registry.js'
+import { reviewAssessment, resolveAssessment } from '../../functions/src/assessments/review.js'
 
 function recordFor(course, section, answers, legacy = false) {
   const exercise = legacy ? getLegacySectionExercise(course, section) : getSectionExercise(course, section)

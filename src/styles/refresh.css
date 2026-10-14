@@ -202,3 +202,33 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 
 .hub-hero-cta { border: 0; cursor: pointer; font-family: inherit; }
 #learning-courses:focus { outline: none; }
+
+/* Audit fixes: light-header controls and fixed lesson navigation. */
+.lesson-topbar .admin-label { color: var(--muted); }
+.lesson-topbar .admin-signout { color: var(--navy); background: #fff; border-color: #ccd8ed; }
+.lesson-topbar .admin-signout:hover { background: #edf3ff; }
+.lesson-topbar .admin-signout:focus-visible { outline: 3px solid #3673cf; outline-offset: 3px; }
+@media (max-width: 767px) {
+  .mobile-header-row > .mobile-header__back { flex: 0 0 40px; color: var(--navy); }
+  .mobile-header-row > .mobile-header__logo { flex: 0 0 40px; }
+  .main-content--focused:has(.tutorial-step) footer { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+}
+
+@media (min-width: 768px) and (max-width: 1180px) {
+  .lesson-topbar:not(.lesson-topbar--admin) { grid-template-columns: minmax(0, auto) minmax(0, 1fr); gap: 16px; }
+  .lesson-topbar:not(.lesson-topbar--admin) .lesson-topbar__context { display: none; }
+  .lesson-topbar:not(.lesson-topbar--admin) .lesson-topbar__tools { grid-column: 2; justify-content: flex-end; }
+  .lesson-topbar:not(.lesson-topbar--admin) .lesson-topbar__tools .progress { width: 110px; }
+}
+
+@media (max-width: 767px) {
+  .mobile-action-navigation { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .mobile-action-navigation button, .mobile-action-navigation a { min-width: 0; }
+  .mobile-action-navigation button span, .mobile-action-navigation a span { min-width: 0; overflow-wrap: anywhere; }
+  .mobile-action-navigation svg { flex-shrink: 0; }
+}
+@media (max-width: 360px) {
+  .mobile-action-navigation { gap: 6px; padding-inline: 12px; }
+  .mobile-action-navigation button, .mobile-action-navigation a { padding-inline: 6px; font-size: 12px; line-height: 1.3; }
+  .mobile-action-navigation strong { min-width: 56px; font-size: 12px; }
+}

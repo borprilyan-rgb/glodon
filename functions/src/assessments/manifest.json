@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "sourceHashes": {
+    "sectionExercises.js": "ca7aea9dfd7e752a53ef13056703d571ac2908969e2ad1ab63cb2f71ac8405f4",
+    "docxAssessment.js": "c6b22d1af0ec294a9de8fb938aee7d2a1ecc1a82204a30b77a2a3547e05deb41",
+    "docxTestSource.js": "e30dcd5676dfc903d12b056a618e14a72a13c07c3f46645bbe3153cc7e147a0a",
+    "tas/sectionOneExercise.js": "bc2353105e1d717937454e21567cd4b0a44a1a7dbbe5b88aa63335edc495c871",
+    "tas/sectionTwoExercise.js": "41ff84e47735417bc5ac81907be35a85e3c68186ba2a1b601af73d90279a18a0",
+    "tas/sectionThreeExercise.js": "dccedbb443331179b017e96e2ea8012acb4dcf0659d8bce88ce640d752e2360f",
+    "trb/sectionOneExercise.js": "7c51be6bd8c1b3df63842083fb72e335721b3042d1ae265a5586d037f9efae3b",
+    "trb/sectionTwoExercise.js": "a03c8456758e14a36871607fd0a56c89a10422cd7505934e0e6223fb6424ae3b",
+    "trb/sectionThreeExercise.js": "29a007ab7e15a1fe92e009672a9ce29d691927cbf40784713710a1933998ff7b",
+    "tme/sectionExercises.js": "c144391bfeba324053c2524cd23abacd44e2c2bc2557addbf49b1306e36ec6fc",
+    "courseTopics.js": "2b87a117f3d89a5c57d98b09c290241c47ae3afc98849ae26fe384d4a232b9a8"
+  },
+  "entries": [
+    {
+      "versionId": "tas-1-v3",
+      "course": "tas",
+      "section": 1,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "09bf9dccfbee47e954f82ee00f6e36d5c4a095ad4c5f02815e19127980788c45",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tas-1-v1",
+      "course": "tas",
+      "section": 1,
+      "assessmentVersion": "v1",
+      "current": false,
+      "formHash": "cd22aa0de8fe2850668898c19360d7384c39deac9ad8f8a1b11f9fe9d31aad16",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tas-2-v3",
+      "course": "tas",
+      "section": 2,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "695ae88404a57deefe6f8669f1a63beadbbef4e74d4f1bfc514b274c8eb911d8",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tas-2-v2",
+      "course": "tas",
+      "section": 2,
+      "assessmentVersion": "v2",
+      "current": false,
+      "formHash": "a0af18b4a7da58e5898f5cceacec8e4b66bc57d76f44d0c9bc24709ffe90cad4",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tas-3-v3",
+      "course": "tas",
+      "section": 3,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "854671243c707b8203a620806cd57ec60fe68061aa2d925ae4104ad0642c8182",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tas-3-v2",
+      "course": "tas",
+      "section": 3,
+      "assessmentVersion": "v2",
+      "current": false,
+      "formHash": "7bbfa549030bb8e855e191632756bef7548716f6aa409ab929f0e2136df2ab7f",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-1-v3",
+      "course": "trb",
+      "section": 1,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "0e4e3fc9e6e256d794df8f8be858f0e658a8e08136df591e7771d25ceb3c23b2",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-1-v2",
+      "course": "trb",
+      "section": 1,
+      "assessmentVersion": "v2",
+      "current": false,
+      "formHash": "f055725b8c94023630f0c4b8b406326e0056656ec3b46a5eead5a8b19a1fc860",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-2-v3",
+      "course": "trb",
+      "section": 2,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "59ad15845de11d473f6fa5e79cd7e90f2477216352b477c66015d36972bc147a",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-2-v2",
+      "course": "trb",
+      "section": 2,
+      "assessmentVersion": "v2",
+      "current": false,
+      "formHash": "d5a62906d1791b9a2635722de8080574f7d1b3245beb6aec367ae535ac032fc5",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-3-v3",
+      "course": "trb",
+      "section": 3,
+      "assessmentVersion": "v3",
+      "current": true,
+      "formHash": "0ec83ec3bb415d2edd25b927fbe18178334c3fa36cbed64ce481a551e1104b0b",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "trb-3-v2",
+      "course": "trb",
+      "section": 3,
+      "assessmentVersion": "v2",
+      "current": false,
+      "formHash": "7f994158ba7ae356df3c7ca6cbe20f087e6096e272b5ce1a55f60a5a646a1e1e",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tme-1-v1",
+      "course": "tme",
+      "section": 1,
+      "assessmentVersion": "v1",
+      "current": true,
+      "formHash": "7090495080994f940fb9adb2cc55675aa146fc5095164b7c272a1b5dcecca47a",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tme-2-v1",
+      "course": "tme",
+      "section": 2,
+      "assessmentVersion": "v1",
+      "current": true,
+      "formHash": "45f897398a33317d2eb4f51c8c3abd6aa039c18bc1e89077bcc77ac71c2e40eb",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    },
+    {
+      "versionId": "tme-3-v1",
+      "course": "tme",
+      "section": 3,
+      "assessmentVersion": "v1",
+      "current": true,
+      "formHash": "50fdc3d8b719537196d523ccf74945daa316a5c021c1ce99fcd16a3431bab988",
+      "graderHash": "5bb37b3563b007763fa38669c2ec3f2f2b51ac5799616e20d0be59fd5a0ca13e"
+    }
+  ]
+}

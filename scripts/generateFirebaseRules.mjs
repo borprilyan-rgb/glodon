@@ -1,6 +1,11 @@
 import { writeFileSync } from 'node:fs'
 import { getLegacySectionExercise, getSectionExercise } from '../src/data/sectionExercises.js'
 
+import { employeeRules } from './employeeRules.mjs'
+
+if (process.argv.includes('--employee')) {
+  writeFileSync(new URL('../firestore.employee.rules', import.meta.url), employeeRules)
+} else {
 const officeFields = ['settings', 'rules', 'projectName', 'ground', 'ruleSet', 'attributes', 'height1', 'height2', 'grade', 'copy', 'drawing', 'length', 'verify', 'grid', 'alignmentCheck']
 const validations = []
 for (const course of ['tas', 'trb', 'tme']) for (const section of [1, 2, 3]) {
@@ -69,3 +74,5 @@ const indexes = []
 const equalityFields = ['employeeId', 'course', 'section']
 for (let mask = 1; mask < 8; mask++) indexes.push({ collectionGroup: 'testAttempts', queryScope: 'COLLECTION', fields: [...equalityFields.filter((_, index) => mask & (1 << index)).map(fieldPath => ({ fieldPath, order: 'ASCENDING' })), { fieldPath: 'submittedAt', order: 'DESCENDING' }] })
 writeFileSync(new URL('../firestore.indexes.json', import.meta.url), JSON.stringify({ indexes, fieldOverrides: [{ collectionGroup: 'testAttempts', fieldPath: 'answers', indexes: [] }] }, null, 2) + '\n')
+
+}

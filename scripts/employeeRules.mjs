@@ -1,0 +1,37 @@
+// Phase 1/2 candidate only. Existing production-oriented rules remain untouched.
+export const employeeRules = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function passwordUser() { return request.auth != null && request.auth.token.firebase.sign_in_provider == 'password'; }
+    function admin() {
+      return passwordUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.enabled == true;
+    }
+    function employee(uid) {
+      return passwordUser() && request.auth.uid == uid
+        && exists(/databases/$(database)/documents/employees/$(uid))
+        && get(/databases/$(database)/documents/employees/$(uid)).data.role == 'employee'
+        && get(/databases/$(database)/documents/employees/$(uid)).data.status == 'active'
+        && get(/databases/$(database)/documents/employees/$(uid)).data.employeeId is string
+        && get(/databases/$(database)/documents/employees/$(uid)).data.employeeId.matches('^[0-9]{6}$')
+        && get(/databases/$(database)/documents/employees/$(uid)).data.sessionValidAfter is int
+        && request.auth.token.auth_time > get(/databases/$(database)/documents/employees/$(uid)).data.sessionValidAfter;
+    }
+    match /admins/{uid} {
+      allow get: if passwordUser() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+    match /employees/{uid} {
+      allow get: if employee(uid) || admin();
+      allow list: if admin();
+      allow create, update, delete: if false;
+    }
+    match /testAttempts/{id} {
+      // Assessment integration is intentionally closed until Phase 4.
+      allow get, list: if admin();
+      allow create, update, delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
+`

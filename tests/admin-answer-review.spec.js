@@ -2,12 +2,12 @@ import { test, expect } from '@playwright/test'
 import { randomUUID } from 'node:crypto'
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing'
 import { doc, writeBatch, Timestamp, getDoc } from 'firebase/firestore'
-import { getSectionExercise } from '../src/data/sectionExercises.js'
+import { getHistoricalAssessment as getSectionExercise } from '../functions/src/assessments/registry.js'
 import { provisionAdmin, passwordSignIn } from './firebase/adminAuth.mjs'
 
 const origin = 'http://127.0.0.1:5173'
 
-for (const language of ['en', 'id']) test(`${language} admin answer review matches participant scoring for all nine assessments and safely handles old versions`, async ({ page, context }, testInfo) => {
+for (const language of ['en', 'id']) test(`${language} admin answer review matches archived scoring for all nine assessments and safely handles unknown versions`, async ({ page }, testInfo) => {
   test.setTimeout(60000)
   const mobile = language === 'id'
   await page.setViewportSize(mobile ? { width: 390, height: 844 } : { width: 1280, height: 800 })
@@ -30,7 +30,6 @@ for (const language of ['en', 'id']) test(`${language} admin answer review match
   }
   const old = { ...records[1], attemptId: randomUUID(), name: 'Unavailable', assessmentVersion: 'v1', answers: { q1: '0', slabThickness: '150' } }
   const environment = await initializeTestEnvironment({ projectId: 'demo-cubicost', firestore: { host: '127.0.0.1', port: 8080 } })
-  const participantPage = await context.newPage()
   try {
     await environment.withSecurityRulesDisabled(async testContext => {
       const database = testContext.firestore()
@@ -43,7 +42,6 @@ for (const language of ['en', 'id']) test(`${language} admin answer review match
     await page.locator('#admin-employeeId').fill(employeeId)
     await page.getByRole('button', { name: language === 'en' ? 'Apply Filters' : 'Terapkan Filter', exact: true }).click()
     await expect(page.locator('.admin-result-row')).toHaveCount(10)
-    await participantPage.goto(origin)
     for (const record of records) {
       const exercise = getSectionExercise(record.course, record.section)
       const definition = exercise.copy[language]
@@ -80,17 +78,6 @@ for (const language of ['en', 'id']) test(`${language} admin answer review match
         expect(bounds.x + bounds.width).toBeLessThanOrEqual(mobile ? 390 : 1280)
         await page.screenshot({ path: testInfo.outputPath(`${language}-expanded-answer-review.png`) })
       }
-      // Load the same saved responses through the actual participant result UI.
-      await participantPage.evaluate(({ exerciseKey, answers, language, employeeId }) => {
-        localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Review participant', jobTitle: 'Engineer', employeeId }))
-        localStorage.setItem('cubicost-tas-tutorial-language-v1', language)
-        localStorage.setItem(exerciseKey, JSON.stringify({ started: true, submitted: true, index: 0, answers }))
-      }, { exerciseKey: exercise.storageKey, answers: record.answers, language, employeeId })
-      await participantPage.goto(`${origin}${exercise.path}`)
-      await expect(participantPage.locator('.exercise-result-heading strong')).toHaveCount(exercise.points.length)
-      const participantScores = await participantPage.locator('.exercise-result-heading strong').allTextContents()
-      expect(participantScores).toEqual(scored.scores.map((points, index) => `${points} / ${exercise.points[index]}`))
-      await expect(participantPage.locator('.exercise-results article p')).toHaveText(definition.questions.map(question => question.explanation))
       await page.getByRole('button', { name: `${language === 'en' ? 'Details for' : 'Detail untuk'} ${record.name}`, exact: true }).click()
     }
     await page.getByRole('button', { name: `${language === 'en' ? 'Details for' : 'Detail untuk'} Unavailable`, exact: true }).click()
@@ -105,5 +92,5 @@ for (const language of ['en', 'id']) test(`${language} admin answer review match
         expect(saved).toEqual(record)
       }
     })
-  } finally { await participantPage.close(); await environment.cleanup() }
+  } finally { await environment.cleanup() }
 })

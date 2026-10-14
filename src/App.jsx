@@ -5,19 +5,20 @@ import { getTmeData } from './data/tme/index.js'
 import { uiText } from './data/uiText'
 import TutorialLayout from './components/TutorialLayout'
 import CourseHub from './components/CourseHub'
-import ExerciseHub from './components/ExerciseHub'
+
 import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import ContactPage from './components/ContactPage'
-import SectionExercise from './components/SectionExercise'
-import TestPage from './components/TestPage'
-import ParticipantEntry from './components/ParticipantEntry'
-import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
-import { readTestScores } from './data/testScores'
-import { getSectionExercise } from './data/sectionExercises'
+
+
+
+import EmployeeAuthentication from './components/EmployeeAuthentication'
+import useEmployeeSession from './auth/useEmployeeSession'
+
+
 import Presentation, { PresentationEntry } from './components/Presentation'
-import SubmissionQueue from './components/SubmissionQueue'
+
 
 const AdminResults = lazy(() => import('./components/AdminResults'))
 
@@ -31,7 +32,7 @@ const TRB_PROGRESS_KEY = 'cubicost:tutorial:trb:progress'
 const TRB_LAST_LESSON_KEY = 'cubicost:tutorial:trb:lastLesson'
 const TME_PROGRESS_KEY = 'cubicost:tutorial:tme:progress'
 const TME_LAST_LESSON_KEY = 'cubicost:tutorial:tme:lastLesson'
-const STUDENT_NAME_KEY = 'cubicost:student-name'
+
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
 const TAS_LESSON_IDS = new Set(getTasData('en').allSteps.map((step) => step.id))
 const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
@@ -48,6 +49,7 @@ function routeFromLocation() {
     if (path.includes('/exercise/')) window.history.replaceState({}, '', path.replace('/exercise/', '/tests/'))
     return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
   }
+  if (path === '/account') return { page: 'account' }
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
@@ -150,29 +152,8 @@ export default function App() {
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
-  const [testScores, setTestScores] = useState(readTestScores)
-  const [participant, setParticipant] = useState(loadParticipant)
-  const [participantEditUntil, setParticipantEditUntil] = useState(loadParticipantEditLockUntil)
-  const [editingParticipant, setEditingParticipant] = useState(false)
-  const [nameSaveFailed, setNameSaveFailed] = useState(false)
+  const session = useEmployeeSession()
   const [progressSaveFailed, setProgressSaveFailed] = useState({})
-  function saveParticipant(profile) {
-    if (!hasParticipant(profile) || (hasParticipant(participant) && (participantEditUntil > Date.now() || !canEditParticipant(participant)))) return
-    profile = { ...profile, updatedAt: Date.now() }
-    const editUntil = Date.now() + PARTICIPANT_EDIT_LOCK_MS
-    setParticipant(profile)
-    setParticipantEditUntil(editUntil)
-    try {
-      localStorage.setItem(PARTICIPANT_KEY, JSON.stringify(profile))
-      localStorage.setItem(PARTICIPANT_EDIT_LOCK_KEY, String(editUntil))
-      localStorage.setItem(STUDENT_NAME_KEY, profile.name)
-      setNameSaveFailed(false)
-    } catch { setNameSaveFailed(true) }
-  }
-  function beginParticipantEdit() {
-    if (participantEditUntil > Date.now() || !canEditParticipant(participant)) return
-    setEditingParticipant(true)
-  }
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
   const tme = getTmeData(language)
@@ -286,15 +267,16 @@ export default function App() {
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   if (route.page === 'admin') return <Suspense fallback={<p role="status">{language === 'en' ? 'Loading admin page…' : 'Memuat halaman admin…'}</p>}><AdminResults language={language} onLanguageChange={setLanguage} /></Suspense>
-  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
+  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t} headerActions={<a className="employee-account-link" href="/account">{session.status === 'active' ? (language === 'en' ? 'My account' : 'Akun saya') : (language === 'en' ? 'Employee sign in' : 'Masuk karyawan')}</a>}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
-    {nameSaveFailed && <p role="status">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
+    <p className="employee-phase-note">{language === 'en' ? 'Learning progress is stored on this browser only, shared on this device, and is not synchronized or linked to your employee account yet.' : 'Kemajuan belajar hanya tersimpan di browser ini, digunakan bersama pada perangkat ini, dan belum disinkronkan atau ditautkan ke akun karyawan Anda.'}</p>
     {(product ? progressSaveFailed[product] : Object.values(progressSaveFailed).some(Boolean)) && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
-    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={`${product}-${route.section}`} profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <SectionExercise profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} key={`${product}-${route.section}`} language={language} exercise={getSectionExercise(product, route.section)} />)}
-    {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={profile => { saveParticipant(profile); setEditingParticipant(false) }} /> : <TestPage product={product} parts={activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
+
+
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
-    {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
-    {['exercise', 'tests', 'exercises'].includes(route.page) && <SubmissionQueue language={language} course={product} />}
+
+    {['account', 'exercise', 'tests', 'exercises'].includes(route.page) && <EmployeeAuthentication language={language} session={session} />}
+    {['exercise', 'tests', 'exercises'].includes(route.page) && <section className="exercise-card employee-phase-note"><h2>{language === 'en' ? 'Employee assessments are not enabled yet' : 'Latihan karyawan belum diaktifkan'}</h2><p>{language === 'en' ? 'Registration and login are available. Assessment submissions and score cards will be connected in a later phase.' : 'Pendaftaran dan login tersedia. Pengiriman hasil latihan dan kartu nilai akan dihubungkan pada tahap berikutnya.'}</p></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}

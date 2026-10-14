@@ -12,7 +12,18 @@
     "test:unit": "node --test tests/firebase/submissions.test.mjs tests/firebase/assessmentReview.test.mjs",
     "test:rules": "node --test tests/firebase/rules.test.mjs",
     "test:firebase": "firebase emulators:exec --project demo-cubicost --only auth,firestore \"npm run test:rules && playwright test\"",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "firebase:employee-rules": "node scripts/generateFirebaseRules.mjs --employee",
+    "test:employee:unit": "node --test tests/firebase/employee-validation.test.mjs",
+    "test:employee:integration": "node --test tests/firebase/employee-foundation.test.mjs",
+    "test:employee:browser": "playwright test tests/employee-authentication.spec.js tests/admin-authentication.spec.js",
+    "test:employee": "firebase emulators:exec --config firebase.employee.json --project demo-cubicost --only auth,firestore,functions \"npm run test:employee:integration && npm run test:employee:browser\"",
+    "assessment:validate": "node scripts/validateAssessmentRelease.mjs",
+    "test:assessment:unit": "node --test tests/firebase/assessment-definitions.test.mjs tests/firebase/assessmentReview.test.mjs tests/firebase/submissions.test.mjs tests/firebase/employee-validation.test.mjs tests/assessment-release-security.test.mjs",
+    "test:assessment:bundle": "node --test tests/assessment-bundle-security.test.mjs",
+    "test:assessment:security": "node --test tests/firebase/assessment-security.test.mjs",
+    "test:assessment:browser": "playwright test tests/assessment-phase-a.spec.js tests/employee-authentication.spec.js tests/admin-authentication.spec.js tests/admin-answer-review.spec.js",
+    "test:assessment": "firebase emulators:exec --config firebase.employee.json --project demo-cubicost --only auth,firestore,functions \"npm run test:employee:integration && npm run test:assessment:security && npm run test:assessment:browser\""
   },
   "dependencies": {
     "firebase": "^13.0.0",

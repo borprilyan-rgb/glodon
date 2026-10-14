@@ -11,5 +11,5 @@ export default [
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },
     rules: { ...js.configs.recommended.rules, ...reactHooks.configs.recommended.rules, ...reactRefresh.configs.vite.rules },
   },
-  { files: ['scripts/*.mjs', 'tests/firebase/*.mjs', 'artifacts/**/*.mjs'], languageOptions: { globals: globals.node } },
+  { files: ['scripts/*.mjs', 'tests/firebase/*.mjs', 'artifacts/**/*.mjs', 'functions/src/**/*.js'], languageOptions: { globals: globals.node } },
 ]

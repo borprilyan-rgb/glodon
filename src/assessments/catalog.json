@@ -1,0 +1,56 @@
+[
+  {
+    "course": "tas",
+    "section": 1,
+    "assessmentVersion": "v3",
+    "versionId": "tas-1-v3"
+  },
+  {
+    "course": "tas",
+    "section": 2,
+    "assessmentVersion": "v3",
+    "versionId": "tas-2-v3"
+  },
+  {
+    "course": "tas",
+    "section": 3,
+    "assessmentVersion": "v3",
+    "versionId": "tas-3-v3"
+  },
+  {
+    "course": "trb",
+    "section": 1,
+    "assessmentVersion": "v3",
+    "versionId": "trb-1-v3"
+  },
+  {
+    "course": "trb",
+    "section": 2,
+    "assessmentVersion": "v3",
+    "versionId": "trb-2-v3"
+  },
+  {
+    "course": "trb",
+    "section": 3,
+    "assessmentVersion": "v3",
+    "versionId": "trb-3-v3"
+  },
+  {
+    "course": "tme",
+    "section": 1,
+    "assessmentVersion": "v1",
+    "versionId": "tme-1-v1"
+  },
+  {
+    "course": "tme",
+    "section": 2,
+    "assessmentVersion": "v1",
+    "versionId": "tme-2-v1"
+  },
+  {
+    "course": "tme",
+    "section": 3,
+    "assessmentVersion": "v1",
+    "versionId": "tme-3-v1"
+  }
+]

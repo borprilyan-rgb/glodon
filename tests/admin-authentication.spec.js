@@ -13,8 +13,8 @@ async function open(page, language = 'en') {
 async function identities(page) {
   return page.evaluate(async () => {
     const { getServices } = await import('/src/firebase/client.js')
-    await Promise.all([getServices('admin').auth.authStateReady(), getServices().auth.authStateReady()])
-    return { admin: getServices('admin').auth.currentUser?.uid || null, participant: getServices().auth.currentUser?.uid, anonymous: getServices().auth.currentUser?.isAnonymous }
+    await Promise.all([getServices('admin').auth.authStateReady(), getServices('employee').auth.authStateReady()])
+    return { admin: getServices('admin').auth.currentUser?.uid || null, employee: getServices('employee').auth.currentUser?.uid, anonymous: getServices('employee').auth.currentUser?.isAnonymous }
   })
 }
 
@@ -76,22 +76,22 @@ for (const language of ['en', 'id']) test(`${language} compact login supports ke
   await page.screenshot({ path: testInfo.outputPath(`${language}-admin-login.png`) })
 })
 
-test('password login, reset and logout preserve the provisioned admin UID and anonymous participant', async ({ page, request }) => {
+test('password login, reset and logout preserve the provisioned admin UID and independent employee', async ({ page, request }) => {
   await open(page)
   const email = `admin-${randomUUID()}@example.test`
   const password = `Aa1!${randomUUID()}`
   const uid = await provisionAdmin(page, { email, password })
-  const participant = await page.evaluate(async () => (await import('/src/firebase/client.js')).participantUid())
+  const participant = await page.evaluate(async () => { const { registerEmployee } = await import('/src/firebase/employeeAccounts.js'); await registerEmployee({ name: 'Admin Session Fixture', employeeId: String(Math.floor(Math.random() * 900000) + 100000), password: 'Fixture!123' }); return (await import('/src/firebase/client.js')).getServices('employee').auth.currentUser.uid })
   const original = { uid, participant }
   const environment = await initializeTestEnvironment({ projectId: 'demo-cubicost', firestore: { host: '127.0.0.1', port: 8080 } })
   try {
     await environment.withSecurityRulesDisabled(async context => { await setDoc(doc(context.firestore(), 'admins', original.uid), { enabled: true }) })
     await page.reload()
     await passwordSignIn(page, { email, password, uid })
-    expect(await identities(page)).toEqual({ admin: original.uid, participant: original.participant, anonymous: true })
+    expect(await identities(page)).toEqual({ admin: original.uid, employee: original.participant, anonymous: false })
     expect(await page.evaluate(async () => { const { getServices } = await import('/src/firebase/client.js'); return (await getServices('admin').auth.currentUser.getIdTokenResult()).claims.firebase.sign_in_provider })).toBe('password')
     await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
-    expect(await identities(page)).toEqual({ admin: null, participant: original.participant, anonymous: true })
+    expect(await identities(page)).toEqual({ admin: null, employee: original.participant, anonymous: false })
     await page.getByLabel('Email', { exact: true }).fill(email)
     await page.getByLabel('Password', { exact: true }).fill(`Wrong!${randomUUID()}`)
     await page.getByRole('button', { name: 'Sign In', exact: true }).click()
@@ -111,7 +111,7 @@ test('password login, reset and logout preserve the provisioned admin UID and an
     await page.getByLabel('Password', { exact: true }).fill(newPassword)
     await page.getByRole('button', { name: 'Sign In', exact: true }).click()
     await expect(page.getByRole('button', { name: 'Apply Filters', exact: true })).toBeVisible()
-    expect(await identities(page)).toEqual({ admin: original.uid, participant: original.participant, anonymous: true })
+    expect(await identities(page)).toEqual({ admin: original.uid, employee: original.participant, anonymous: false })
     expect(await page.evaluate(password => [localStorage, sessionStorage].every(storage => Object.keys(storage).every(key => !storage.getItem(key).includes(password))), newPassword)).toBe(true)
   } finally { await environment.cleanup() }
 })
@@ -121,11 +121,11 @@ test('unauthorized password accounts cannot load results or register through the
   const email = `denied-${randomUUID()}@example.test`
   const password = `Aa1!${randomUUID()}`
   const uid = await provisionAdmin(page, { email, password })
-  const participant = await page.evaluate(async () => (await import('/src/firebase/client.js')).participantUid())
+  const participant = await page.evaluate(async () => { const { registerEmployee } = await import('/src/firebase/employeeAccounts.js'); await registerEmployee({ name: 'Admin Session Fixture', employeeId: String(Math.floor(Math.random() * 900000) + 100000), password: 'Fixture!123' }); return (await import('/src/firebase/client.js')).getServices('employee').auth.currentUser.uid })
   await passwordSignIn(page, { email, password, uid, authorized: false })
   await expect(page.getByRole('button', { name: 'Apply Filters', exact: true })).toHaveCount(0)
   await expect(page.locator('.lesson-topbar .admin-label')).toHaveText('Admin')
   await expect(page.locator('.admin-table, .admin-results-toolbar')).toHaveCount(0)
   await expect(page.getByRole('button', { name: /google|register|sign up|link password/i })).toHaveCount(0)
-  expect(await identities(page)).toEqual({ admin: uid, participant, anonymous: true })
+  expect(await identities(page)).toEqual({ admin: uid, employee: participant, anonymous: false })
 })

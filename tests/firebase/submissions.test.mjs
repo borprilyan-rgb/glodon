@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { setImmediate as nextTurn } from 'node:timers/promises'
 import { createSubmissionStore, OUTBOX_PREFIX } from '../../src/firebase/submissionStore.js'
-import { getSectionExercise } from '../../src/data/sectionExercises.js'
+import { getCurrentAssessment as getSectionExercise } from '../../functions/src/assessments/registry.js'
 import { answersFor } from './fixtures.mjs'
 import { resultsCsv, jakartaDateRange } from '../../src/firebase/resultsCsv.js'
 

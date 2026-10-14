@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app'
-import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, connectAuthEmulator, signInAnonymously, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore, connectFirestoreEmulator, doc, runTransaction, serverTimestamp, getDocFromServer, collection, query, where, orderBy, limit, startAfter, getDocsFromServer, Timestamp } from 'firebase/firestore'
+import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, connectAuthEmulator, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth'
+import { getFirestore, connectFirestoreEmulator, doc, getDocFromServer, collection, query, where, orderBy, limit, startAfter, getDocsFromServer, Timestamp } from 'firebase/firestore'
 import { jakartaDateRange } from './resultsCsv.js'
 
 const config = {
@@ -12,7 +12,6 @@ const config = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 const services = new Map()
-let anonymousSignIn
 
 export function getServices(role = 'participant') {
   if (import.meta.env.VITE_FIREBASE_ENABLED === 'false' || !config.apiKey || !config.projectId || !config.appId || !config.authDomain) throw new Error('Firebase is not configured. Your result remains pending in this browser.')
@@ -28,46 +27,14 @@ export function getServices(role = 'participant') {
     connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true })
     connectFirestoreEmulator(db, '127.0.0.1', 8080)
   }
-  const result = { auth, db }
+  const result = { auth, db, app }
   services.set(role, result)
   return result
 }
 
-export async function participantUid() {
-  const { auth } = getServices()
-  await auth.authStateReady()
-  if (!auth.currentUser) {
-    anonymousSignIn ||= signInAnonymously(auth).finally(() => { anonymousSignIn = null })
-    await anonymousSignIn
-  }
-  if (!auth.currentUser.isAnonymous) throw new Error('Participant submissions require an anonymous session.')
-  return auth.currentUser.uid
-}
-
-function matchesRecord(actual, expected) {
-  return Object.keys(expected).every(key => key === 'answers'
-    ? Object.keys(expected.answers).length === Object.keys(actual.answers || {}).length && Object.entries(expected.answers).every(([field, value]) => actual.answers?.[field] === value)
-    : actual[key] === expected[key])
-}
-
-// Transactions read from the server and only create absent documents. Retried
-// requests confirm the same immutable payload rather than issuing an update.
-export async function sendAttempt(payload) {
-  const { db } = getServices()
-  if (await participantUid() !== payload.uid) throw new Error('The original anonymous sign-in is no longer available. This attempt is still pending; restore the original browser session before retrying.')
-  const reference = doc(db, 'testAttempts', payload.attemptId)
-  await runTransaction(db, async transaction => {
-    const existing = await transaction.get(reference)
-    if (existing.exists()) {
-      if (!matchesRecord(existing.data(), payload)) throw new Error('This attempt ID already belongs to different submitted data.')
-    } else {
-      transaction.set(reference, { ...payload, submittedAt: serverTimestamp() })
-    }
-  }, { maxAttempts: 3 })
-  const confirmation = await getDocFromServer(reference)
-  if (!confirmation.exists() || !matchesRecord(confirmation.data(), payload) || !confirmation.data().submittedAt) throw new Error('The server has not confirmed this attempt.')
-  return confirmation.data().submittedAt.toDate().toISOString()
-}
+// Phase 4 is not enabled. No anonymous or employee assessment writes are allowed.
+export async function participantUid() { throw new Error('Employee assessment submission is not enabled yet.') }
+export async function sendAttempt() { throw new Error('Employee assessment submission is not enabled yet.') }
 
 export const signInAdmin = (email, password) => signInWithEmailAndPassword(getServices('admin').auth, email.trim(), password)
 export const resetAdminPassword = email => sendPasswordResetEmail(getServices('admin').auth, email.trim())

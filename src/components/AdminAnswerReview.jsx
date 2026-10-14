@@ -1,4 +1,5 @@
-import { reviewAssessment } from '../data/assessmentReview.js'
+import { useEffect, useState } from 'react'
+import { fetchAdminAssessmentReview } from '../firebase/adminAssessmentReview.js'
 
 const copy = {
   en: { title: 'Answer review', expected: 'Expected answer', points: 'points', stored: 'Stored answers' },
@@ -11,7 +12,17 @@ function AnswerList({ items }) {
 
 export default function AdminAnswerReview({ record, language }) {
   const c = copy[language]
-  const review = reviewAssessment(record, language)
+  const [response, setResponse] = useState(null)
+  useEffect(() => {
+    let alive = true
+    fetchAdminAssessmentReview(record.attemptId, language)
+      .then(review => { if (alive) setResponse({ attemptId: record.attemptId, language, review }) })
+      .catch(() => { if (alive) setResponse({ attemptId: record.attemptId, language, error: true }) })
+    return () => { alive = false }
+  }, [record.attemptId, language])
+  if (!response || response.attemptId !== record.attemptId || response.language !== language) return <p role="status">{language === 'en' ? 'Loading answer review…' : 'Memuat tinjauan jawaban…'}</p>
+  if (response.error) return <p role="alert">{language === 'en' ? 'Unable to load answer review. Close and reopen the details to retry.' : 'Tinjauan jawaban belum dapat dimuat. Tutup dan buka kembali detail untuk mencoba lagi.'}</p>
+  const { review } = response
   return <section className="admin-answer-review" aria-label={c.title}>
     <h2>{c.title}</h2>
     {review.available ? <ol>{review.questions.map(question => <li key={question.id} className="admin-answer-question">
