@@ -13,10 +13,6 @@ import ContactPage from './components/ContactPage'
 
 
 
-import EmployeeAuthentication from './components/EmployeeAuthentication'
-import useEmployeeSession from './auth/useEmployeeSession'
-
-
 import Presentation, { PresentationEntry } from './components/Presentation'
 
 
@@ -49,7 +45,6 @@ function routeFromLocation() {
     if (path.includes('/exercise/')) window.history.replaceState({}, '', path.replace('/exercise/', '/tests/'))
     return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
   }
-  if (path === '/account') return { page: 'account' }
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
@@ -152,7 +147,6 @@ export default function App() {
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
-  const session = useEmployeeSession()
   const [progressSaveFailed, setProgressSaveFailed] = useState({})
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
@@ -267,16 +261,14 @@ export default function App() {
   const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   if (route.page === 'admin') return <Suspense fallback={<p role="status">{language === 'en' ? 'Loading admin page…' : 'Memuat halaman admin…'}</p>}><AdminResults language={language} onLanguageChange={setLanguage} /></Suspense>
-  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t} headerActions={<a className="employee-account-link" href="/account">{session.status === 'active' ? (language === 'en' ? 'My account' : 'Akun saya') : (language === 'en' ? 'Employee sign in' : 'Masuk karyawan')}</a>}>
+  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
-    <p className="employee-phase-note">{language === 'en' ? 'Learning progress is stored on this browser only, shared on this device, and is not synchronized or linked to your employee account yet.' : 'Kemajuan belajar hanya tersimpan di browser ini, digunakan bersama pada perangkat ini, dan belum disinkronkan atau ditautkan ke akun karyawan Anda.'}</p>
     {(product ? progressSaveFailed[product] : Object.values(progressSaveFailed).some(Boolean)) && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
 
 
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
 
-    {['account', 'exercise', 'tests', 'exercises'].includes(route.page) && <EmployeeAuthentication language={language} session={session} />}
-    {['exercise', 'tests', 'exercises'].includes(route.page) && <section className="exercise-card employee-phase-note"><h2>{language === 'en' ? 'Employee assessments are not enabled yet' : 'Latihan karyawan belum diaktifkan'}</h2><p>{language === 'en' ? 'Registration and login are available. Assessment submissions and score cards will be connected in a later phase.' : 'Pendaftaran dan login tersedia. Pengiriman hasil latihan dan kartu nilai akan dihubungkan pada tahap berikutnya.'}</p></section>}
+    {['exercise', 'tests', 'exercises'].includes(route.page) && <section className="exercise-card employee-phase-note"><h2>{language === 'en' ? 'Employee assessments are not enabled yet' : 'Latihan karyawan belum diaktifkan'}</h2><p>{language === 'en' ? 'Assessment submissions and score cards will be connected in a later phase.' : 'Pengiriman hasil latihan dan kartu nilai akan dihubungkan pada tahap berikutnya.'}</p></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
