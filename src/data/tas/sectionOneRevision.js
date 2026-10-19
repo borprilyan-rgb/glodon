@@ -1,4 +1,4 @@
-// Format Revisi TAS TRB 2.pdf, pages 1–23. PDF locations describe lesson
+// Format Revisi TAS TRB3.pdf, pages 1–23. PDF locations describe lesson
 // content; existing lesson IDs and course navigation remain stable.
 const selectLayer = ['Pilih "Select by layer/color".', 'Choose "Select by layer/color".']
 const pick = (command, targetId, targetEn) => [
