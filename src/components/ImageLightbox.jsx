@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import DrawingCanvas from './DrawingCanvas'
 import DrawingToolbar from './DrawingToolbar'
+import InstructionCaption from './InstructionCaption'
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
 
 export default function ImageLightbox({ items, index, onIndexChange, onClose, t, opener, drawing, language }) {
@@ -74,7 +75,7 @@ export default function ImageLightbox({ items, index, onIndexChange, onClose, t,
       <div className="lightbox__zoom" aria-label="Image zoom controls"><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.max(1, (current.index === index ? current.value : 1) - 0.5) }))} disabled={zoom === 1} aria-label="Zoom out"><ZoomOut size={17} /></button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.min(4, (current.index === index ? current.value : 1) + 0.5) }))} disabled={zoom === 4} aria-label="Zoom in"><ZoomIn size={17} /></button></div>
       <div className="lightbox__image-wrap" ref={imageWrapRef} onPointerDown={startPan} onPointerMove={pan} onPointerUp={stopPan} onPointerCancel={stopPan}>{drawing ? <div className="lightbox__annotated-image" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }} />}</div>
       {drawing && <div className="lightbox__drawing-tools"><DrawingToolbar drawing={drawing} language={language} /></div>}
-      <div className="lightbox__caption"><div>{item.label && <strong>{item.label}</strong>}<p>{item.caption}</p></div><span>{t.imageCount(index + 1, items.length)}</span></div>
+      <div className={`lightbox__caption${item.description ? ' lightbox__caption--instructions' : ''}`}><div>{item.label && <strong>{item.label}</strong>}{item.caption && <p>{item.caption}</p>}<InstructionCaption description={item.description} format={item.instructionFormat} /></div><span>{t.imageCount(index + 1, items.length)}</span></div>
       <button type="button" className="lightbox__arrow lightbox__arrow--previous" onClick={() => onIndexChange(index - 1)} disabled={index === 0} aria-label={t.previousImage}><ChevronLeft /></button>
       <button type="button" className="lightbox__arrow lightbox__arrow--next" onClick={() => onIndexChange(index + 1)} disabled={index === items.length - 1} aria-label={t.nextImage}><ChevronRight /></button>
     </div>

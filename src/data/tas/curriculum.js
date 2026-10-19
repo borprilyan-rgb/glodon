@@ -1,4 +1,5 @@
 import { getScreenshotCopy } from '../screenshotCopy.js'
+import { applySectionOneRevision } from './sectionOneRevision.js'
 
 const a = (titleId, descriptionId, titleEn, descriptionEn, file) => ({ titleId, descriptionId, titleEn, descriptionEn, file })
 
@@ -150,6 +151,9 @@ export function getTasData(language) {
   tutorialParts.forEach((part) => part.steps.forEach((step) => {
     step.actions = step.actions.map((action) => withScreenshotCopy(action, Number(action.image.match(/page-(\d+)/)?.[1]), language))
   }))
+  tutorialParts.forEach((part) => {
+    part.steps = part.steps.map((step) => applySectionOneRevision(step, language))
+  })
   const updatedSteps = tutorialParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
   return { tutorialParts, allSteps: updatedSteps }
 }

@@ -336,3 +336,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 @media (max-width: 600px) {
   .hub-course-card__actions .outline-nav-button { min-height: 36px; padding-block: 6px; }
 }
+
+.lightbox__caption--instructions { flex: 0 1 auto; min-height: 0; max-height: 40%; overflow-y: auto; align-items: flex-start; overscroll-behavior: contain; }
+.lightbox__caption--instructions > div { min-width: 0; overflow-wrap: anywhere; }
+.lightbox__caption--instructions .screenshot-media__instruction,
+.lightbox__caption--instructions .screenshot-media__instructions { margin: 8px 0 0; font-size: 14px; line-height: 1.6; }
+.lightbox__caption--instructions .screenshot-media__instructions { padding-left: 24px; }

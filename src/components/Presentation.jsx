@@ -44,6 +44,8 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const nextLesson = walkthrough ? lessons[lessonIndex + 1] : null
   const count = walkthrough ? lesson.actions.length : 1
   const action = walkthrough ? lesson.actions[index] : null
+  const image = action?.presenterImage || action?.image
+  const revisedLayout = walkthrough && lesson.showInstructionsBelowImage
   const drawing = usePresentationDrawing(walkthrough ? `${product}:${lesson.id}:${action.id}` : 'home')
   const currentPath = walkthrough ? `/present?${new URLSearchParams({ product, lesson: lesson.id, slide: String(index) })}` : '/present'
   function startCourse(id) {
@@ -82,6 +84,9 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   useEffect(() => {
     const keydown = (event) => {
       if (expandedImage) return
+      // Let the focused instructions use native scrolling keys. ArrowLeft and
+      // ArrowRight still navigate slides, and F still toggles fullscreen.
+      if (event.target.closest('.presentation-instructions') && ['PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) return
       if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, select, textarea, [contenteditable]') || (event.key === ' ' && event.target.closest('button, a, summary'))) return
       if (walkthrough && ['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
         event.preventDefault()
@@ -109,8 +114,16 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     </header>
     {walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="tools" />}
     <main className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
-      <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${lesson.title}` : c.home.label}</span><h1>{walkthrough ? action.title : c.home.title}</h1>{!walkthrough && <p>{c.home.text}</p>}</div>
-      {walkthrough ? <div className="presentation-action"><div className="presentation-image">{failedImage === action.image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image: action.image, alt: action.imageAlt || action.alt || action.title, caption: action.title, opener: event.currentTarget })}><img src={action.image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(action.image)} /></button>}{!expandedImage && failedImage !== action.image && <DrawingCanvas drawing={drawing} image={action.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}</div><div className="presentation-instructions"><p>{action.description || lesson.intro}</p></div></div> : <div className="presentation-products">{Object.keys(courses).map((id) => <button type="button" key={id} aria-label={getProductLabel(id)} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /><strong>{getProductLabel(id)}</strong></button>)}</div>}
+      <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}` : c.home.label}</span><h1>{walkthrough ? (revisedLayout ? lesson.title : action.title) : c.home.title}</h1>{!walkthrough && <p>{c.home.text}</p>}</div>
+      {walkthrough ? <div className={`presentation-action${revisedLayout ? ' presentation-action--revised' : ''}`}>
+        <div className="presentation-image">
+          {failedImage === image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image, alt: action.imageAlt || action.alt || action.title, caption: action.title, description: action.description, instructionFormat: action.instructionFormat, opener: event.currentTarget })}>
+            <img key={image} src={image} alt={action.imageAlt || action.alt || action.title} onError={() => setFailedImage(image)} />
+          </button>}
+          {!expandedImage && failedImage !== image && <DrawingCanvas drawing={drawing} image={image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}
+        </div>
+        <div key={`${product}:${lesson.id}:${action.id}`} className="presentation-instructions" role="region" aria-label={language === 'en' ? 'Slide instructions' : 'Instruksi slide'} tabIndex={0}><p>{action.description || lesson.intro}</p></div>
+      </div> : <div className="presentation-products">{Object.keys(courses).map((id) => <button type="button" key={id} aria-label={getProductLabel(id)} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /><strong>{getProductLabel(id)}</strong></button>)}</div>}
     </main>
     {walkthrough && <><footer className="presentation-controls">
       <div className="presentation-navigation"><button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button><span aria-live="polite">{walkthrough && <>{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; </>}{c.slide} {index + 1} / {count}</span><button type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button></div>

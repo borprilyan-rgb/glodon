@@ -76,3 +76,13 @@
 .presentation-stage--home { display: flex; flex-direction: column; justify-content: center; }
 .presentation-products > button { justify-content: flex-start; text-align: left; border: 0; border-bottom: 4px solid #168bc1; transition: background .15s, box-shadow .15s; }
 .presentation-products > button:hover { background: #e4f2ff; box-shadow: 0 8px 24px rgba(22,52,83,.12); }
+
+.presentation-action--revised { grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr); gap: 28px; }
+.presentation-action--revised .presentation-image { min-height: 0; }
+.presentation-action--revised .presentation-image img { height: min(52vh, 650px); padding: 12px; box-sizing: border-box; }
+.presentation-instructions { min-height: 0; max-height: min(52vh, 650px); overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; padding: 0 12px 0 2px; }
+@media (max-width: 900px) {
+  .presentation-action--revised { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .presentation-action--revised .presentation-image img { height: auto; max-height: 55vh; }
+  .presentation-instructions { max-height: min(45dvh, 400px); }
+}
