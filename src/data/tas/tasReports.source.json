@@ -276,7 +276,85 @@
         }
       ],
       "cellCount": 112,
-      "image": "/tutorial/tas/report/elements/beam.png"
+      "image": "/tutorial/tas/report/elements/beam.png",
+      "segments": [
+        {
+          "id": "volume",
+          "titleEn": "Concrete Volume",
+          "titleId": "Volume Beton",
+          "quantityColumns": [
+            {
+              "letter": "F",
+              "header": "Volume(m3)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/beam-volume.png"
+        },
+        {
+          "id": "formwork",
+          "titleEn": "Formwork",
+          "titleId": "Bekisting",
+          "quantityColumns": [
+            {
+              "letter": "G",
+              "header": "Area of formwork(m2)"
+            },
+            {
+              "letter": "H",
+              "header": "Area of formwork to side of beam(m2)"
+            },
+            {
+              "letter": "I",
+              "header": "Area of formwork to soffit of beam(m2)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/beam-formwork.png"
+        },
+        {
+          "id": "section-length",
+          "titleEn": "Section & Net Length",
+          "titleId": "Penampang dan Panjang Bersih",
+          "quantityColumns": [
+            {
+              "letter": "J",
+              "header": "Girth of section(m)"
+            },
+            {
+              "letter": "K",
+              "header": "Net length(m)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/beam-section-length.png"
+        },
+        {
+          "id": "rebar-count",
+          "titleEn": "Rebar & Count",
+          "titleId": "Tulangan dan Jumlah",
+          "quantityColumns": [
+            {
+              "letter": "L",
+              "header": "Weight of rebar(kg)"
+            },
+            {
+              "letter": "M",
+              "header": "Number(pc)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/beam-rebar-count.png"
+        },
+        {
+          "id": "axis-length",
+          "titleEn": "Axis Length",
+          "titleId": "Panjang Axis",
+          "quantityColumns": [
+            {
+              "letter": "N",
+              "header": "Length of axis(m)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/beam-axis-length.png"
+        }
+      ]
     },
     "in-situ-slab": {
       "title": "In-Situ Slab",

@@ -94,14 +94,23 @@ with ZipFile(args.workbook) as archive:
         clip = fitz.Rect(table.x0 - 6, marker_y - 14, table.x1 + 6, table.y1 + 6) & page.rect
         page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False).save(out / f'{slug}.png')
         reports[slug] = {'title': title, 'sheet': sheet_name, 'page': page_index + 1, 'range': root.find('s:dimension', ns).get('ref'), 'quantityColumns': quantities, 'cellCount': len(cells), 'image': f'/tutorial/tas/report/elements/{slug}.png'}
-        if slug == 'staircase':
-            sections = [
+        sections = {
+            'beam': [
+                ('volume', 'Concrete Volume', 'Volume Beton', 0, 1),
+                ('formwork', 'Formwork', 'Bekisting', 1, 4),
+                ('section-length', 'Section & Net Length', 'Penampang dan Panjang Bersih', 4, 6),
+                ('rebar-count', 'Rebar & Count', 'Tulangan dan Jumlah', 6, 8),
+                ('axis-length', 'Axis Length', 'Panjang Axis', 8, 9),
+            ],
+            'staircase': [
                 ('area-volume', 'Area & Volume', 'Luas dan Volume', 0, 2),
                 ('concrete', 'Concrete Volume', 'Volume Beton', 2, 5),
                 ('formwork', 'Formwork', 'Bekisting', 5, 9),
                 ('surfaces', 'Surface Areas', 'Luas Permukaan', 9, 12),
                 ('length-rebar-count', 'Length, Rebar & Count', 'Panjang, Tulangan, dan Jumlah', 12, 16),
-            ]
+            ],
+        }.get(slug)
+        if sections:
             first_quantity_index = next(i for i, header in enumerate(headers) if header[0] == quantities[0]['letter'])
             context_right = columns[first_quantity_index].x0
             context_width = context_right - table.x0

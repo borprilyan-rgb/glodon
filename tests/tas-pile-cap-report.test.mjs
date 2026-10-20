@@ -137,10 +137,13 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
   } finally { await server.close() }
 })
 
-test('eight ordered report steps split only Staircase into five complete column groups', async () => {
-  assert.deepEqual(reportLessons.map(step => step.actions.length), [2, 2, 1, 1, 2, 3, 5, 6])
+test('eight ordered report steps split Beam and Staircase into five complete column groups', async () => {
+  assert.deepEqual(reportLessons.map(step => step.actions.length), [2, 2, 5, 1, 2, 3, 5, 6])
   assert.deepEqual(reportLessons.map(step => step.actions.map(action => action.title)), [
-    ['Pile Cap', 'Pile'], ['In-Situ Slab', 'Slab Opening'], ['Beam'], ['Column'],
+    ['Pile Cap', 'Pile'], ['In-Situ Slab', 'Slab Opening'], [
+      'Beam – Volume Beton', 'Beam – Bekisting', 'Beam – Penampang dan Panjang Bersih',
+      'Beam – Tulangan dan Jumlah', 'Beam – Panjang Axis',
+    ], ['Column'],
     ['Wall', 'Curtain Wall'], ['Door', 'Window', 'Door Window'], [
       'Staircase – Luas dan Volume', 'Staircase – Volume Beton', 'Staircase – Bekisting',
       'Staircase – Luas Permukaan', 'Staircase – Panjang, Tulangan, dan Jumlah',
@@ -153,7 +156,7 @@ test('eight ordered report steps split only Staircase into five complete column 
     assert.equal(step.partStepCount, 8)
     for (const [actionIndex, action] of step.actions.entries()) {
       assert.equal(action.number, actionIndex + 1)
-      if (step.id !== 'staircase-report') assert(!seen.has(action.sourceSheet))
+      if (!['staircase-report', 'beam-report'].includes(step.id)) assert(!seen.has(action.sourceSheet))
       seen.add(action.sourceSheet)
       const source = Object.values(reportSource.reports).find(report => report.sheet === action.sourceSheet)
       const section = source.segments?.[actionIndex] || source
@@ -171,6 +174,9 @@ test('eight ordered report steps split only Staircase into five complete column 
   const staircase = reportSource.reports.staircase
   assert.deepEqual(staircase.segments.map(segment => segment.quantityColumns.length), [2, 3, 4, 3, 4])
   assert.deepEqual(staircase.segments.flatMap(segment => segment.quantityColumns), staircase.quantityColumns)
+  const beam = reportSource.reports.beam
+  assert.deepEqual(beam.segments.map(segment => segment.quantityColumns.length), [1, 3, 2, 2, 1])
+  assert.deepEqual(beam.segments.flatMap(segment => segment.quantityColumns), beam.quantityColumns)
 })
 
 test('report completion is isolated and sanitized for each of the eight steps', () => {
