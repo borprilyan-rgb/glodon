@@ -1,0 +1,28 @@
+import { test, expect } from '@playwright/test'
+
+test('lesson header has Contact and Learning Map; brand still returns home', async ({ page }) => {
+  await page.goto('http://127.0.0.1:5173/tas/lesson/pile-cap-report')
+  const tools = page.locator('.lesson-topbar__tools')
+  await expect(tools.locator('a')).toHaveCount(2)
+  await expect(tools.locator('a[href="/contact"]')).toBeVisible()
+  await expect(tools.locator('a[href="/tas/course"]')).toBeVisible()
+  await tools.locator('a[href="/tas/course"]').click()
+  await expect(page).toHaveURL('http://127.0.0.1:5173/tas/course')
+  await expect(tools.locator('a')).toHaveCount(2)
+  await expect(tools.locator('a[href="/tas/tests"]')).toBeVisible()
+  await expect(tools.locator('a[href="/"]')).toBeVisible()
+  await page.locator('.lesson-topbar > .lesson-brand').click()
+  await expect(page).toHaveURL('http://127.0.0.1:5173/')
+})
+
+test('mobile menu keeps other destinations and keyboard dismissal returns focus', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('http://127.0.0.1:5173/tas/lesson/pile-cap-report')
+  const menu = page.locator('.mobile-header-row button[aria-expanded]')
+  await menu.click()
+  const drawer = page.getByRole('dialog')
+  for (const path of ['/', '/tas/course', '/contact', '/present', '/tas/tests']) await expect(drawer.locator(`nav a[href="${path}"]`)).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(drawer).toBeHidden()
+  await expect(menu).toBeFocused()
+})

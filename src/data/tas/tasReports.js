@@ -150,18 +150,21 @@ export function getReportLessons(language = 'id') {
   id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: 8,
   hideIntro: true, showInstructionsBelowImage: true, duration: `${elements.length * 5} ${isEn ? 'min' : 'menit'}`,
   checks: isEn ? ['I can identify the Quantity columns in the report', 'I can read column names and their units', 'I can explain what each Quantity column is used for'] : ['Dapat mengenali kolom Quantity pada report', 'Dapat membaca nama kolom dan satuannya', 'Dapat menjelaskan kegunaan kolom Quantity'],
-  actions: elements.map((slug, actionIndex) => {
+  actions: elements.flatMap(slug => {
     const report = source.reports[slug]
-    const description = report.quantityColumns.map(({ header }, columnIndex) => {
+    return (report.segments || [report]).map(segment => {
+    const actionTitle = segment.id ? `${report.title} – ${isEn ? segment.titleEn : segment.titleId}` : report.title
+    const description = segment.quantityColumns.map(({ header }, columnIndex) => {
       let usage = descriptions[header]
       if (!usage) throw new Error(`Missing Quantity explanation: ${report.sheet} / ${header}`)
       if (header === 'Volume(m3)' && ['pile-cap', 'pile', 'in-situ-slab', 'beam', 'column'].includes(slug)) usage = isEn ? 'Used for concrete volume.' : 'Digunakan untuk volume beton.'
       if (header === 'Number(pc)') usage = isEn ? `Used for the number of ${report.title} elements.` : `Digunakan untuk jumlah ${report.title}.`
       return `${columnIndex + 1}. ${header}: ${usage}`
     }).join('\n')
-    return { id: `${id}-${slug}`, number: actionIndex + 1, title: report.title, description, image: report.image,
-      alt: isEn ? `${report.title} report with numbered callouts on the Quantity columns` : `Report ${report.title} dengan callout bernomor pada kolom Quantity`, caption: '', pending: false, instructionFormat: 'verbatim', sourceSheet: report.sheet }
-  }),
+    return { id: `${id}-${slug}${segment.id ? `-${segment.id}` : ''}`, title: actionTitle, description, image: segment.image,
+      alt: isEn ? `${actionTitle} report with numbered callouts on the Quantity columns` : `Report ${actionTitle} dengan callout bernomor pada kolom Quantity`, caption: '', pending: false, instructionFormat: 'verbatim', sourceSheet: report.sheet }
+    })
+  }).map((action, index) => ({ ...action, number: index + 1 })),
 }))
 }
 

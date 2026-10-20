@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('workbook', type=Path)
 parser.add_argument('pdf', type=Path)
 parser.add_argument('--null-label', help='Explicit label replacing [Null] in the supplied PDF export')
+parser.add_argument('--only', help='Render only the named report slug and retain other report metadata')
 args = parser.parse_args()
 ns = {'s': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 names = {
@@ -28,7 +29,8 @@ names = {
     'Sus-Ceiling-def': ('suspended-ceiling', 'Suspended Ceiling'),
 }
 document = fitz.open(args.pdf)
-reports = {}
+metadata_path = Path('src/data/tas/tasReports.source.json')
+reports = json.loads(metadata_path.read_text(encoding='utf-8'))['reports'] if args.only else {}
 out = Path('public/tutorial/tas/report/elements')
 out.mkdir(parents=True, exist_ok=True)
 with ZipFile(args.workbook) as archive:
@@ -42,6 +44,8 @@ with ZipFile(args.workbook) as archive:
     for sheet in workbook.find('s:sheets', ns):
         sheet_name = sheet.get('name')
         slug, title = names[sheet_name]
+        if args.only and slug != args.only:
+            continue
         relation_id = sheet.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
         root = ET.fromstring(archive.read(posixpath.normpath(posixpath.join('xl', relations[relation_id]))))
         cells = {}
@@ -90,8 +94,55 @@ with ZipFile(args.workbook) as archive:
         clip = fitz.Rect(table.x0 - 6, marker_y - 14, table.x1 + 6, table.y1 + 6) & page.rect
         page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False).save(out / f'{slug}.png')
         reports[slug] = {'title': title, 'sheet': sheet_name, 'page': page_index + 1, 'range': root.find('s:dimension', ns).get('ref'), 'quantityColumns': quantities, 'cellCount': len(cells), 'image': f'/tutorial/tas/report/elements/{slug}.png'}
+        if slug == 'staircase':
+            sections = [
+                ('area-volume', 'Area & Volume', 'Luas dan Volume', 0, 2),
+                ('concrete', 'Concrete Volume', 'Volume Beton', 2, 5),
+                ('formwork', 'Formwork', 'Bekisting', 5, 9),
+                ('surfaces', 'Surface Areas', 'Luas Permukaan', 9, 12),
+                ('length-rebar-count', 'Length, Rebar & Count', 'Panjang, Tulangan, dan Jumlah', 12, 16),
+            ]
+            first_quantity_index = next(i for i, header in enumerate(headers) if header[0] == quantities[0]['letter'])
+            context_right = columns[first_quantity_index].x0
+            context_width = context_right - table.x0
+            group_height = row2_top - table.y0
+            quantity_label = page.search_for('Quantity')[0]
+            segments = []
+            for segment_id, title_en, title_id, start, end in sections:
+                selected = quantities[start:end]
+                indices = [next(i for i, header in enumerate(headers) if header[0] == quantity['letter']) for quantity in selected]
+                quantity_left = columns[indices[0]].x0
+                quantity_right = columns[indices[-1]].x1
+                quantity_width = quantity_right - quantity_left
+                margin, top = 6, 36
+                screenshot = fitz.open()
+                canvas = screenshot.new_page(width=context_width + quantity_width + margin * 2, height=table.height + top + margin)
+                # Copy the identifying cells and selected Quantity cells directly
+                # from the original PDF, preserving every row, value and unit.
+                canvas.show_pdf_page(fitz.Rect(margin, top, margin + context_width, top + table.height), document, page_index,
+                                     clip=fitz.Rect(table.x0, table.y0, context_right, table.y1))
+                canvas.show_pdf_page(fitz.Rect(margin + context_width, top + group_height, margin + context_width + quantity_width, top + table.height), document, page_index,
+                                     clip=fitz.Rect(quantity_left, row2_top, quantity_right, table.y1))
+                group_rect = fitz.Rect(margin + context_width, top, margin + context_width + quantity_width, top + group_height)
+                canvas.draw_rect(group_rect, color=(0, 0, 0), width=.6)
+                label_x = group_rect.x0 + (group_rect.width - quantity_label.width) / 2
+                label_y = group_rect.y0 + (group_rect.height - quantity_label.height) / 2
+                canvas.show_pdf_page(fitz.Rect(label_x, label_y, label_x + quantity_label.width, label_y + quantity_label.height), document, page_index, clip=quantity_label)
+                for marker_index, column_index in enumerate(indices):
+                    rect = columns[column_index]
+                    x = margin + context_width + (rect.x0 + rect.x1) / 2 - quantity_left
+                    label = str(marker_index + 1)
+                    radius = min(9, rect.width * .32)
+                    canvas.draw_circle(fitz.Point(x, top - 18), radius, color=None, fill=(.57, .81, .28))
+                    width = fitz.get_text_length(label, fontname='hebo', fontsize=10)
+                    canvas.insert_text(fitz.Point(x - width / 2, top - 14.5), label, fontname='hebo', fontsize=10, color=(.05, .12, .02))
+                filename = f'{slug}-{segment_id}.png'
+                canvas.get_pixmap(matrix=fitz.Matrix(6, 6), alpha=False).save(out / filename)
+                screenshot.close()
+                segments.append({'id': segment_id, 'titleEn': title_en, 'titleId': title_id, 'quantityColumns': selected, 'image': f'/tutorial/tas/report/elements/{filename}'})
+            reports[slug]['segments'] = segments
         print(f'{sheet_name}: verified {len(cells)} cells; rendered {len(quantities)} Quantity callouts')
 metadata = {'workbook': args.workbook.name, 'workbookSha256': hashlib.sha256(args.workbook.read_bytes()).hexdigest(), 'pdf': args.pdf.name, 'pdfSha256': hashlib.sha256(args.pdf.read_bytes()).hexdigest(), 'reports': reports}
 if args.null_label:
     metadata['pdfDisplayReplacements'] = {'[Null]': args.null_label}
-Path('src/data/tas/tasReports.source.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

@@ -4,6 +4,7 @@ import { presentationCopy } from '../data/presentation'
 import LanguageSwitcher from './LanguageSwitcher'
 import ProgressBar from './ProgressBar'
 import { getProductLabel } from '../data/productConfig'
+import { getHeaderNavigation } from '../data/headerNavigation'
 
 export default function LessonHeader({ page, product, activeStep, completed, total, showProgress, language, onLanguageChange, t, headerActions }) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -31,11 +32,18 @@ export default function LessonHeader({ page, product, activeStep, completed, tot
   }, [menuOpen])
   const productLabel = product ? getProductLabel(product) : null
   const title = page === 'exercises' ? (language === 'en' ? 'Exercise' : 'Latihan') : page === 'contact' ? t.contact : activeStep?.title || (product ? `Cubicost ${productLabel}` : t.hubBrand)
+  const navigation = getHeaderNavigation({ page, product, activeStep })
+  const navigationLabels = { contact: t.contact, home: t.home, exercises: language === 'en' ? 'Exercises' : 'Latihan', learningMap: t.courseMapLabel }
+  const navigationIcons = { contact: Mail, home: Home, exercises: ClipboardCheck, learningMap: ArrowLeft }
+  const navigationClasses = { contact: 'contact-nav-button', home: 'all-courses-button', exercises: 'all-courses-button', learningMap: 'course-map-button' }
   return <>
     <header className={`lesson-topbar${page === 'admin' ? ' lesson-topbar--admin' : ''}`}>
       <a className="lesson-brand" href="/"><span className="brand__mark"><img src="/branding/company-logo.png" alt="Glodon company logo" /></span><span><strong>{product ? `Cubicost ${productLabel}` : t.hubBrand}</strong><small>{t.tutorialSubtitle}</small></span>{product && <span className="header-product-mark">{productLabel}</span>}</a>
       {activeStep && <div className="lesson-topbar__context"><small>{t.part} {activeStep.partNumber}</small><strong>{activeStep.title}</strong></div>}
-      <div className="lesson-topbar__tools">{showProgress && <ProgressBar completed={completed.size} total={total} t={t} compact />}<LanguageSwitcher language={language} onChange={onLanguageChange} t={t} />{page !== 'contact' && <a className="contact-nav-button" href="/contact"><Mail size={16} /><span>{t.contact}</span></a>}{!['exercises', 'tests', 'exercise', 'admin'].includes(page) && <a className="all-courses-button" href={product ? '/' + product + '/tests' : '/exercises'}><ClipboardCheck size={16} /><span>{language === 'en' ? 'Exercises' : 'Latihan'}</span></a>}{(product || page === 'contact' || page === 'exercises' || page === 'admin') && <a className="all-courses-button" href="/" aria-label={t.home}><Home size={16} /><span>{t.home}</span></a>}{activeStep && <a className="course-map-button" href={`/${product}/course`} aria-label={t.backToCourseMap}><ArrowLeft size={16} /><span>{t.courseMapLabel}</span></a>}</div>
+      <div className="lesson-topbar__tools">{showProgress && <ProgressBar completed={completed.size} total={total} t={t} compact />}<LanguageSwitcher language={language} onChange={onLanguageChange} t={t} />{navigation.map(link => {
+        const Icon = navigationIcons[link.id]
+        return <a key={link.id} className={navigationClasses[link.id]} href={link.href} aria-label={link.id === 'learningMap' ? t.backToCourseMap : navigationLabels[link.id]}><Icon size={16} /><span>{navigationLabels[link.id]}</span></a>
+      })}</div>
       <div className="mobile-header-row">{product && <a className="mobile-header__back" href={activeStep ? `/${product}/course` : '/'} aria-label={activeStep ? t.backToCourseMap : t.home}><ArrowLeft size={20} /></a>}<a className="mobile-header__logo" href="/" aria-label={t.home}><img src="/branding/company-logo.png" alt="" /></a><strong>{title}</strong><button className="mobile-header-language" type="button" onClick={() => onLanguageChange(language === 'id' ? 'en' : 'id')} aria-label={`${t.language}: ${language.toUpperCase()}`}>{language.toUpperCase()}</button><button ref={menuButtonRef} type="button" onClick={() => setMenuOpen(true)} aria-label={t.lessons} aria-expanded={menuOpen}><Menu size={21} /></button></div>
       {headerActions && <div className="lesson-topbar__actions">{headerActions}</div>}
     </header>

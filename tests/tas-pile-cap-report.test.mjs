@@ -44,7 +44,7 @@ test('PileCap-def preserves source headers, grouping, merged ranges and blank va
 })
 
 test('prototype reuses the unchanged lesson interface and never renders an interactive table', async () => {
-  const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' })
+  const server = await createServer({ server: { middlewareMode: true, hmr: false }, appType: 'custom' })
   try {
     const { default: Lesson } = await server.ssrLoadModule('/src/components/PileCapReportLesson.jsx')
     const { default: ScreenshotViewer } = await server.ssrLoadModule('/src/components/ScreenshotViewer.jsx')
@@ -137,11 +137,14 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
   } finally { await server.close() }
 })
 
-test('eight ordered report steps contain exactly one action per worksheet', async () => {
-  assert.deepEqual(reportLessons.map(step => step.actions.length), [2, 2, 1, 1, 2, 3, 1, 6])
+test('eight ordered report steps split only Staircase into five complete column groups', async () => {
+  assert.deepEqual(reportLessons.map(step => step.actions.length), [2, 2, 1, 1, 2, 3, 5, 6])
   assert.deepEqual(reportLessons.map(step => step.actions.map(action => action.title)), [
     ['Pile Cap', 'Pile'], ['In-Situ Slab', 'Slab Opening'], ['Beam'], ['Column'],
-    ['Wall', 'Curtain Wall'], ['Door', 'Window', 'Door Window'], ['Staircase'],
+    ['Wall', 'Curtain Wall'], ['Door', 'Window', 'Door Window'], [
+      'Staircase – Luas dan Volume', 'Staircase – Volume Beton', 'Staircase – Bekisting',
+      'Staircase – Luas Permukaan', 'Staircase – Panjang, Tulangan, dan Jumlah',
+    ],
     ['Room', 'Floor Finish', 'Waterproof', 'Skirting', 'Wall Finish', 'Suspended Ceiling'],
   ])
   const seen = new Set()
@@ -150,13 +153,14 @@ test('eight ordered report steps contain exactly one action per worksheet', asyn
     assert.equal(step.partStepCount, 8)
     for (const [actionIndex, action] of step.actions.entries()) {
       assert.equal(action.number, actionIndex + 1)
-      assert(!seen.has(action.sourceSheet))
+      if (step.id !== 'staircase-report') assert(!seen.has(action.sourceSheet))
       seen.add(action.sourceSheet)
       const source = Object.values(reportSource.reports).find(report => report.sheet === action.sourceSheet)
-      assert.equal(action.image, source.image)
+      const section = source.segments?.[actionIndex] || source
+      assert.equal(action.image, section.image)
       const lines = action.description.split('\n')
-      assert.equal(lines.length, source.quantityColumns.length)
-      source.quantityColumns.forEach((column, index) => assert(lines[index].startsWith(`${index + 1}. ${column.header}: `)))
+      assert.equal(lines.length, section.quantityColumns.length)
+      section.quantityColumns.forEach((column, index) => assert(lines[index].startsWith(`${index + 1}. ${column.header}: `)))
       assert(!action.description.includes('Classification Condition'))
       assert.equal(action.caption, '')
       const png = await readFile(`public${action.image}`)
@@ -164,6 +168,9 @@ test('eight ordered report steps contain exactly one action per worksheet', asyn
     }
   }
   assert.equal(seen.size, 18)
+  const staircase = reportSource.reports.staircase
+  assert.deepEqual(staircase.segments.map(segment => segment.quantityColumns.length), [2, 3, 4, 3, 4])
+  assert.deepEqual(staircase.segments.flatMap(segment => segment.quantityColumns), staircase.quantityColumns)
 })
 
 test('report completion is isolated and sanitized for each of the eight steps', () => {

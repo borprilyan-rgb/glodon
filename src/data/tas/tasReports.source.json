@@ -410,7 +410,113 @@
         }
       ],
       "cellCount": 171,
-      "image": "/tutorial/tas/report/elements/staircase.png"
+      "image": "/tutorial/tas/report/elements/staircase.png",
+      "segments": [
+        {
+          "id": "area-volume",
+          "titleEn": "Area & Volume",
+          "titleId": "Luas dan Volume",
+          "quantityColumns": [
+            {
+              "letter": "D",
+              "header": "Projected area(m2)"
+            },
+            {
+              "letter": "E",
+              "header": "Volume(m3)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/staircase-area-volume.png"
+        },
+        {
+          "id": "concrete",
+          "titleEn": "Concrete Volume",
+          "titleId": "Volume Beton",
+          "quantityColumns": [
+            {
+              "letter": "F",
+              "header": "Volume of concrete of flight(m3)"
+            },
+            {
+              "letter": "G",
+              "header": "Volume of concrete of landing beam(m3)"
+            },
+            {
+              "letter": "H",
+              "header": "Volume of concrete of landing slab(m3)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/staircase-concrete.png"
+        },
+        {
+          "id": "formwork",
+          "titleEn": "Formwork",
+          "titleId": "Bekisting",
+          "quantityColumns": [
+            {
+              "letter": "I",
+              "header": "Area of formwork(m2)"
+            },
+            {
+              "letter": "J",
+              "header": "Area of formwork to flight(m2)"
+            },
+            {
+              "letter": "K",
+              "header": "Area of formwork to landing beam(m2)"
+            },
+            {
+              "letter": "L",
+              "header": "Area of formwork to landing slab(m2)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/staircase-formwork.png"
+        },
+        {
+          "id": "surfaces",
+          "titleEn": "Surface Areas",
+          "titleId": "Luas Permukaan",
+          "quantityColumns": [
+            {
+              "letter": "M",
+              "header": "Area of open string(m2)"
+            },
+            {
+              "letter": "N",
+              "header": "Area of riser(m2)"
+            },
+            {
+              "letter": "O",
+              "header": "Area of tread(m2)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/staircase-surfaces.png"
+        },
+        {
+          "id": "length-rebar-count",
+          "titleEn": "Length, Rebar & Count",
+          "titleId": "Panjang, Tulangan, dan Jumlah",
+          "quantityColumns": [
+            {
+              "letter": "P",
+              "header": "Length of nosing(m)"
+            },
+            {
+              "letter": "Q",
+              "header": "Length of handrail(m)"
+            },
+            {
+              "letter": "R",
+              "header": "Weight of rebar(kg)"
+            },
+            {
+              "letter": "S",
+              "header": "Number(pc)"
+            }
+          ],
+          "image": "/tutorial/tas/report/elements/staircase-length-rebar-count.png"
+        }
+      ]
     },
     "room": {
       "title": "Room",

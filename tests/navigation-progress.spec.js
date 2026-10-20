@@ -25,7 +25,7 @@ for (const [product, getCourse] of Object.entries({ tas: getTasData, trb: getTrb
     await page.goBack()
     await expect(page).toHaveURL(path)
     await expect(page.locator('.completion-success')).toBeVisible()
-    await page.locator('.lesson-topbar__tools a[href="/"]').click()
+    await page.locator('.lesson-topbar > .lesson-brand').click()
     await expect(page).toHaveURL(`${origin}/`)
     await page.goBack()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(step.title)
