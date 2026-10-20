@@ -1,0 +1,12 @@
+{
+  "pdf": "WPS_All_Sheets_Landscape_One_Page.pdf",
+  "page": 17,
+  "sheet": "PileCap-def",
+  "range": "A1:J11",
+  "sha256": "369c17dae897a95ac0b33124a80de66e0a7cf3f899f4d89ce2418df4f71fa885",
+  "images": [
+    "report-structure.png",
+    "report-columns.png"
+  ],
+  "annotations": "Green callout 1 for Quantity; callouts 1-7 for quantity columns D-J above the unchanged original PDF table"
+}

@@ -9,6 +9,8 @@ import CourseHub from './components/CourseHub'
 import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
+import PileCapReportLesson from './components/PileCapReportLesson'
+import { getReportLessons, getReportLesson, emptyReportProgress, loadReportProgress, reportProgressKey } from './data/tas/tasReports'
 import ContactPage from './components/ContactPage'
 
 
@@ -143,7 +145,9 @@ export default function App() {
   const [language, setLanguage] = useState(() => {
     try { return localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'id' } catch { return 'id' }
   })
-  const [tasProgress, setTasProgress] = useState(() => loadTasProgress(initialRoute.product === 'tas' ? initialRoute.stepId : null))
+  const reportLessons = getReportLessons(language)
+  const [tasProgress, setTasProgress] = useState(() => loadTasProgress(initialRoute.product === 'tas' && !getReportLesson(initialRoute.stepId) ? initialRoute.stepId : null))
+  const [reportProgress, setReportProgress] = useState(loadReportProgress)
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
@@ -158,7 +162,7 @@ export default function App() {
     const onLocationChange = () => {
       const nextRoute = routeFromLocation()
       setRoute(nextRoute)
-      if (nextRoute.product === 'tas' && nextRoute.stepId) setTasProgress((current) => {
+      if (nextRoute.product === 'tas' && nextRoute.stepId && !getReportLesson(nextRoute.stepId)) setTasProgress((current) => {
         const started = new Set(current.started)
         started.add(nextRoute.stepId)
         return { ...current, started, lastLesson: nextRoute.stepId }
@@ -204,13 +208,22 @@ export default function App() {
 
   const activeData = route.product === 'trb' ? trb : route.product === 'tme' ? tme : { tutorialParts, allSteps }
   const activeIndex = activeData.allSteps.findIndex((step) => step.id === route.stepId && (!route.partId || step.partId === route.partId))
-  const activeStep = activeIndex >= 0 ? { ...activeData.allSteps[activeIndex], partStepCount: activeData.tutorialParts.find((part) => part.id === activeData.allSteps[activeIndex].partId).steps.length } : null
+  const activeReport = route.product === 'tas' && route.page === 'lesson' ? getReportLesson(route.stepId, language) : null
+  const isReportPrototype = Boolean(activeReport)
+  const activeStep = activeReport || (activeIndex >= 0 ? { ...activeData.allSteps[activeIndex], partStepCount: activeData.tutorialParts.find((part) => part.id === activeData.allSteps[activeIndex].partId).steps.length } : null)
+  useEffect(() => {
+    try { localStorage.setItem(reportProgressKey, JSON.stringify(reportProgress)) } catch { /* Keep the lesson usable without browser storage. */ }
+  }, [reportProgress])
   const term = query.trim().toLocaleLowerCase(language)
-  const filteredParts = tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
+  const tasCourseSteps = [...allSteps.filter(step => step.partId !== 'part-3'), ...reportLessons]
+  const tasCourseParts = tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', shortTitle: 'Report', summary: language === 'en' ? 'Read Quantity columns for each report type.' : 'Mengenal kolom Quantity untuk setiap jenis report.', steps: reportLessons } : part)
+  const tasCourseCompleted = new Set([...tasProgress.completed, ...reportLessons.filter(step => reportProgress[step.id].completed).map(step => step.id)].filter(id => tasCourseSteps.some(step => step.id === id)))
+  const tasCourseStarted = new Set([...tasProgress.started, ...reportLessons.filter(step => reportProgress[step.id].completed || reportProgress[step.id].checks.length).map(step => step.id)])
+  const filteredParts = tasCourseParts.map(part => ({ ...part, steps: term ? part.steps.filter(step => `${step.title} ${step.intro || ''} ${(step.instructions || step.actions.map(action => action.title)).join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter(part => part.steps.length)
   const filteredTrbParts = trb.tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
   const filteredTmeParts = tme.tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
-  const lastIncomplete = tasProgress.lastLesson && !completed.has(tasProgress.lastLesson) ? allSteps.find((step) => step.id === tasProgress.lastLesson) : null
-  const continueStep = lastIncomplete || allSteps.find((step) => !completed.has(step.id)) || allSteps[0]
+  const lastIncomplete = tasProgress.lastLesson && !tasCourseCompleted.has(tasProgress.lastLesson) ? tasCourseSteps.find(step => step.id === tasProgress.lastLesson) : null
+  const continueStep = lastIncomplete || tasCourseSteps.find(step => !tasCourseCompleted.has(step.id)) || tasCourseSteps[0]
   const trbLastIncomplete = trbProgress.lastLesson && !trbProgress.completed.has(trbProgress.lastLesson) ? trb.allSteps.find((step) => step.id === trbProgress.lastLesson) : null
   const continueTrbStep = trbLastIncomplete || trb.allSteps.find((step) => !trbProgress.completed.has(step.id)) || trb.allSteps[0]
   const tmeLastIncomplete = tmeProgress.lastLesson && !tmeProgress.completed.has(tmeProgress.lastLesson) ? tme.allSteps.find((step) => step.id === tmeProgress.lastLesson) : null
@@ -228,7 +241,7 @@ export default function App() {
     nextCompleted.has(activeStep.id) ? nextCompleted.delete(activeStep.id) : nextCompleted.add(activeStep.id)
     return { ...current, completed: nextCompleted }
   })
-  const reset = () => { if (window.confirm(t.resetConfirm)) setTasProgress({ completed: new Set(), checklists: {}, started: new Set(), lastLesson: null }) }
+  const reset = () => { if (window.confirm(t.resetConfirm)) { setTasProgress({ completed: new Set(), checklists: {}, started: new Set(), lastLesson: null }); setReportProgress(emptyReportProgress()) } }
   const resetTrb = () => { if (window.confirm(t.resetConfirm)) setTrbProgress({ completed: new Set(), checklists: {}, started: new Set(), lastLesson: null }) }
   const updateTrbCheck = (checkIndex) => setTrbProgress((current) => {
     const selected = new Set(current.completed.has(activeStep.id) ? activeStep.checks.map((_, index) => index) : current.checklists[activeStep.id] || [])
@@ -257,9 +270,13 @@ export default function App() {
   })
 
   const product = route.product || null
-  const visibleProgress = product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
-  const visibleTotal = product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
-  if (route.page === 'presentation') return <Presentation courses={{ tas: { tutorialParts, allSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+  const visibleProgress = product === 'tas' && route.page === 'course' ? { completed: tasCourseCompleted } : isReportPrototype ? { completed: new Set(reportLessons.filter(step => reportProgress[step.id].completed).map(step => step.id)) } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
+  const visibleTotal = product === 'tas' && route.page === 'course' ? tasCourseSteps.length : isReportPrototype ? 8 : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
+  if (route.page === 'presentation') {
+    const legacyLesson = new URLSearchParams(window.location.search).get('lesson')
+    const legacy = allSteps.some(step => step.partId === 'part-3' && step.id === legacyLesson)
+    return <Presentation courses={{ tas: legacy ? { tutorialParts, allSteps } : { tutorialParts: tasCourseParts, allSteps: tasCourseSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+  }
   if (route.page === 'admin') return <Suspense fallback={<p role="status">{language === 'en' ? 'Loading admin page…' : 'Memuat halaman admin…'}</p>}><AdminResults language={language} onLanguageChange={setLanguage} /></Suspense>
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
@@ -271,8 +288,9 @@ export default function App() {
     {['exercise', 'tests', 'exercises'].includes(route.page) && <section className="exercise-card employee-phase-note"><h2>{language === 'en' ? 'Employee assessments are not enabled yet' : 'Latihan karyawan belum diaktifkan'}</h2><p>{language === 'en' ? 'Assessment submissions and score cards will be connected in a later phase.' : 'Pengiriman hasil latihan dan kartu nilai akan dihubungkan pada tahap berikutnya.'}</p></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
-    {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={allSteps} completed={completed} started={tasProgress.started} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
-    {product === 'tas' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
+    {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
+    {activeReport && <PileCapReportLesson key={activeReport.id} step={activeReport} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
+    {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'apply-finishes' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
     {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
     {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} language={language} t={t} />}
     {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" language={language} t={t} />}

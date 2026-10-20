@@ -1,0 +1,643 @@
+{
+  "workbook": "2026-10-20-13-41-04.xlsx",
+  "workbookSha256": "65cef96e12fcb8f72e92d4d2f0c961ba2aecde76b91ea3c07bb34e8a33f565d1",
+  "pdf": "WPS_All_Sheets_Landscape_One_Page.pdf",
+  "pdfSha256": "e9fa31ff657ac95da4cdf2b7d7673a40bb84077fdc36f27f5e46d566050f1101",
+  "reports": {
+    "column": {
+      "title": "Column",
+      "sheet": "Column-def",
+      "page": 1,
+      "range": "A1:J8",
+      "quantityColumns": [
+        {
+          "letter": "F",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of formwork(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "I",
+          "header": "Weight of rebar(kg)"
+        },
+        {
+          "letter": "J",
+          "header": "Girth(m)"
+        }
+      ],
+      "cellCount": 80,
+      "image": "/tutorial/tas/report/elements/column.png"
+    },
+    "wall": {
+      "title": "Wall",
+      "sheet": "Wall-def",
+      "page": 2,
+      "range": "A1:N19",
+      "quantityColumns": [
+        {
+          "letter": "H",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "I",
+          "header": "Area(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "K",
+          "header": "Net length of wall(m)"
+        },
+        {
+          "letter": "L",
+          "header": "Original thickness of wall(m)"
+        },
+        {
+          "letter": "M",
+          "header": "Original height of wall(m)"
+        },
+        {
+          "letter": "N",
+          "header": "Original length of wall(m)"
+        }
+      ],
+      "cellCount": 266,
+      "image": "/tutorial/tas/report/elements/wall.png"
+    },
+    "curtain-wall": {
+      "title": "Curtain Wall",
+      "sheet": "CurtainWall-def",
+      "page": 3,
+      "range": "A1:D22",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area(m2)"
+        }
+      ],
+      "cellCount": 88,
+      "image": "/tutorial/tas/report/elements/curtain-wall.png"
+    },
+    "door": {
+      "title": "Door",
+      "sheet": "Door-def",
+      "page": 4,
+      "range": "A1:K11",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area of opening(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of frame(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Width of opening(m)"
+        },
+        {
+          "letter": "H",
+          "header": "Height of opening(m)"
+        },
+        {
+          "letter": "I",
+          "header": "Girth of opening(m)"
+        },
+        {
+          "letter": "J",
+          "header": "Length of edge and break of opening(m)"
+        },
+        {
+          "letter": "K",
+          "header": "Area of smallest enclosing rectangle for opening(m2)"
+        }
+      ],
+      "cellCount": 121,
+      "image": "/tutorial/tas/report/elements/door.png"
+    },
+    "window": {
+      "title": "Window",
+      "sheet": "Window-def",
+      "page": 5,
+      "range": "A1:J9",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area of opening(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of frame(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Width of opening(m)"
+        },
+        {
+          "letter": "H",
+          "header": "Height of opening(m)"
+        },
+        {
+          "letter": "I",
+          "header": "Girth of opening(m)"
+        },
+        {
+          "letter": "J",
+          "header": "Length of edge and break of opening(m)"
+        }
+      ],
+      "cellCount": 90,
+      "image": "/tutorial/tas/report/elements/window.png"
+    },
+    "door-window": {
+      "title": "Door Window",
+      "sheet": "DoorWin-def",
+      "page": 6,
+      "range": "A1:Q7",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area of opening(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of door opening(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of window opening(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Width of opening(m)"
+        },
+        {
+          "letter": "I",
+          "header": "Height of opening(m)"
+        },
+        {
+          "letter": "J",
+          "header": "Width of door opening(m)"
+        },
+        {
+          "letter": "K",
+          "header": "Width of window opening(m)"
+        },
+        {
+          "letter": "L",
+          "header": "Height of door opening(m)"
+        },
+        {
+          "letter": "M",
+          "header": "Height of window opening(m)"
+        },
+        {
+          "letter": "N",
+          "header": "Length of edge and break of opening(m)"
+        },
+        {
+          "letter": "O",
+          "header": "Area of frame(m2)"
+        },
+        {
+          "letter": "P",
+          "header": "Area of door frame(m2)"
+        },
+        {
+          "letter": "Q",
+          "header": "Area of window frame(m2)"
+        }
+      ],
+      "cellCount": 119,
+      "image": "/tutorial/tas/report/elements/door-window.png"
+    },
+    "beam": {
+      "title": "Beam",
+      "sheet": "Beam-def",
+      "page": 7,
+      "range": "A1:N8",
+      "quantityColumns": [
+        {
+          "letter": "F",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of formwork(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of formwork to side of beam(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Area of formwork to soffit of beam(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Girth of section(m)"
+        },
+        {
+          "letter": "K",
+          "header": "Net length(m)"
+        },
+        {
+          "letter": "L",
+          "header": "Weight of rebar(kg)"
+        },
+        {
+          "letter": "M",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "N",
+          "header": "Length of axis(m)"
+        }
+      ],
+      "cellCount": 112,
+      "image": "/tutorial/tas/report/elements/beam.png"
+    },
+    "in-situ-slab": {
+      "title": "In-Situ Slab",
+      "sheet": "In-situSlab-def",
+      "page": 8,
+      "range": "A1:L9",
+      "quantityColumns": [
+        {
+          "letter": "F",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "G",
+          "header": "Area(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of formwork to soffit(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Area of formwork to edge and break of slab(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Projected area(m2)"
+        },
+        {
+          "letter": "K",
+          "header": "Weight of rebar(kg)"
+        },
+        {
+          "letter": "L",
+          "header": "Number(pc)"
+        }
+      ],
+      "cellCount": 108,
+      "image": "/tutorial/tas/report/elements/in-situ-slab.png"
+    },
+    "slab-opening": {
+      "title": "Slab Opening",
+      "sheet": "SlabOpening-def",
+      "page": 9,
+      "range": "A1:F6",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "F",
+          "header": "Girth(m)"
+        }
+      ],
+      "cellCount": 36,
+      "image": "/tutorial/tas/report/elements/slab-opening.png"
+    },
+    "staircase": {
+      "title": "Staircase",
+      "sheet": "Staircase-def",
+      "page": 10,
+      "range": "A1:S9",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Projected area(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "F",
+          "header": "Volume of concrete of flight(m3)"
+        },
+        {
+          "letter": "G",
+          "header": "Volume of concrete of landing beam(m3)"
+        },
+        {
+          "letter": "H",
+          "header": "Volume of concrete of landing slab(m3)"
+        },
+        {
+          "letter": "I",
+          "header": "Area of formwork(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Area of formwork to flight(m2)"
+        },
+        {
+          "letter": "K",
+          "header": "Area of formwork to landing beam(m2)"
+        },
+        {
+          "letter": "L",
+          "header": "Area of formwork to landing slab(m2)"
+        },
+        {
+          "letter": "M",
+          "header": "Area of open string(m2)"
+        },
+        {
+          "letter": "N",
+          "header": "Area of riser(m2)"
+        },
+        {
+          "letter": "O",
+          "header": "Area of tread(m2)"
+        },
+        {
+          "letter": "P",
+          "header": "Length of nosing(m)"
+        },
+        {
+          "letter": "Q",
+          "header": "Length of handrail(m)"
+        },
+        {
+          "letter": "R",
+          "header": "Weight of rebar(kg)"
+        },
+        {
+          "letter": "S",
+          "header": "Number(pc)"
+        }
+      ],
+      "cellCount": 171,
+      "image": "/tutorial/tas/report/elements/staircase.png"
+    },
+    "room": {
+      "title": "Room",
+      "sheet": "Room-def",
+      "page": 11,
+      "range": "A1:K17",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Area of finish to floor finish(m2)"
+        },
+        {
+          "letter": "E",
+          "header": "Length of finish to skirting(m)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of finish to skirting(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of finish to wall finish(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of custom finish to wall finish(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Area of suspended ceiling(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Area of waterproof to flat surface(m2)"
+        },
+        {
+          "letter": "K",
+          "header": "Area of waterproof to vertical surface(m2)"
+        }
+      ],
+      "cellCount": 187,
+      "image": "/tutorial/tas/report/elements/room.png"
+    },
+    "floor-finish": {
+      "title": "Floor Finish",
+      "sheet": "FloorFinish-def",
+      "page": 12,
+      "range": "A1:G18",
+      "quantityColumns": [
+        {
+          "letter": "E",
+          "header": "Area of finish to floor finish(m2)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of finish to vertical surface of floor finish(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Girth(m)"
+        }
+      ],
+      "cellCount": 126,
+      "image": "/tutorial/tas/report/elements/floor-finish.png"
+    },
+    "waterproof": {
+      "title": "Waterproof",
+      "sheet": "Waterproof-def",
+      "page": 13,
+      "range": "A1:F14",
+      "quantityColumns": [
+        {
+          "letter": "E",
+          "header": "Area of waterproof to flat surface(m2)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of waterproof to vertical surface(m2)"
+        }
+      ],
+      "cellCount": 84,
+      "image": "/tutorial/tas/report/elements/waterproof.png"
+    },
+    "skirting": {
+      "title": "Skirting",
+      "sheet": "Skirting-def",
+      "page": 14,
+      "range": "A1:E12",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Length of finish to skirting(m)"
+        },
+        {
+          "letter": "E",
+          "header": "Area of finish to skirting(m2)"
+        }
+      ],
+      "cellCount": 60,
+      "image": "/tutorial/tas/report/elements/skirting.png"
+    },
+    "wall-finish": {
+      "title": "Wall Finish",
+      "sheet": "WallFinish-def",
+      "page": 15,
+      "range": "A1:J22",
+      "quantityColumns": [
+        {
+          "letter": "E",
+          "header": "Area of finish to wall finish(m2)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of custom finish to wall finish(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of finish to brick surface(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of custom finish to brick surface(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Area of finish to concrete surface(m2)"
+        },
+        {
+          "letter": "J",
+          "header": "Area of custom finish to concrete surface(m2)"
+        }
+      ],
+      "cellCount": 220,
+      "image": "/tutorial/tas/report/elements/wall-finish.png"
+    },
+    "suspended-ceiling": {
+      "title": "Suspended Ceiling",
+      "sheet": "Sus-Ceiling-def",
+      "page": 16,
+      "range": "A1:F15",
+      "quantityColumns": [
+        {
+          "letter": "E",
+          "header": "Area of suspended ceiling(m2)"
+        },
+        {
+          "letter": "F",
+          "header": "Girth(m)"
+        }
+      ],
+      "cellCount": 90,
+      "image": "/tutorial/tas/report/elements/suspended-ceiling.png"
+    },
+    "pile-cap": {
+      "title": "Pile Cap",
+      "sheet": "PileCap-def",
+      "page": 17,
+      "range": "A1:J11",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "E",
+          "header": "Area of formwork(m2)"
+        },
+        {
+          "letter": "F",
+          "header": "Area of soffit(m2)"
+        },
+        {
+          "letter": "G",
+          "header": "Area of side(m2)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of top(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "J",
+          "header": "Weight of rebar(kg)"
+        }
+      ],
+      "cellCount": 110,
+      "image": "/tutorial/tas/report/elements/pile-cap.png"
+    },
+    "pile": {
+      "title": "Pile",
+      "sheet": "Pile-def",
+      "page": 18,
+      "range": "A1:I4",
+      "quantityColumns": [
+        {
+          "letter": "D",
+          "header": "Volume(m3)"
+        },
+        {
+          "letter": "E",
+          "header": "Volume of excavating(m3)"
+        },
+        {
+          "letter": "F",
+          "header": "Number(pc)"
+        },
+        {
+          "letter": "G",
+          "header": "Length(m)"
+        },
+        {
+          "letter": "H",
+          "header": "Area of section(m2)"
+        },
+        {
+          "letter": "I",
+          "header": "Weight of rebar(kg)"
+        }
+      ],
+      "cellCount": 36,
+      "image": "/tutorial/tas/report/elements/pile.png"
+    }
+  },
+  "pdfDisplayReplacements": {
+    "[Null]": "Zone 1"
+  }
+}

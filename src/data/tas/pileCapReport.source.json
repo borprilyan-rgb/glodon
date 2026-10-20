@@ -1,0 +1,785 @@
+{
+  "file": "2026-10-20-13-41-04.xlsx",
+  "sheet": "PileCap-def",
+  "range": "A1:J11",
+  "sha256": "65cef96e12fcb8f72e92d4d2f0c961ba2aecde76b91ea3c07bb34e8a33f565d1",
+  "merges": [
+    "A1:C1",
+    "D1:J1",
+    "A11:C11",
+    "A3:A10",
+    "B3:B10"
+  ],
+  "cells": {
+    "A1": {
+      "raw": "Classification Condition",
+      "display": "Classification Condition",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B1": {
+      "raw": "Classification Condition",
+      "display": "Classification Condition",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C1": {
+      "raw": "Classification Condition",
+      "display": "Classification Condition",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "E1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "F1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "G1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "H1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "I1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "J1": {
+      "raw": "Quantity",
+      "display": "Quantity",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "A2": {
+      "raw": "Construction Zone",
+      "display": "Construction Zone",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B2": {
+      "raw": "Floor",
+      "display": "Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C2": {
+      "raw": "Name",
+      "display": "Name",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D2": {
+      "raw": "Volume(m3)",
+      "display": "Volume(m3)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "E2": {
+      "raw": "Area of formwork(m2)",
+      "display": "Area of formwork(m2)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "F2": {
+      "raw": "Area of soffit(m2)",
+      "display": "Area of soffit(m2)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "G2": {
+      "raw": "Area of side(m2)",
+      "display": "Area of side(m2)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "H2": {
+      "raw": "Area of top(m2)",
+      "display": "Area of top(m2)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "I2": {
+      "raw": "Number(pc)",
+      "display": "Number(pc)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "J2": {
+      "raw": "Weight of rebar(kg)",
+      "display": "Weight of rebar(kg)",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "A3": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B3": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C3": {
+      "raw": "PS.1",
+      "display": "PS.1",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D3": {
+      "raw": "1.584",
+      "display": "1.584",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E3": {
+      "raw": "8.26",
+      "display": "8.260",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F3": {
+      "raw": "2.315",
+      "display": "2.315",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G3": {
+      "raw": "8.26",
+      "display": "8.260",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H3": {
+      "raw": "0.14",
+      "display": "0.140",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "I3": {
+      "raw": "8",
+      "display": "8",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J3": {
+      "raw": "79.2",
+      "display": "79.200",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A4": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B4": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C4": {
+      "raw": "PS.2",
+      "display": "PS.2",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D4": {
+      "raw": "14.85",
+      "display": "14.850",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E4": {
+      "raw": "59.604",
+      "display": "59.604",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F4": {
+      "raw": "16.69",
+      "display": "16.690",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G4": {
+      "raw": "59.604",
+      "display": "59.604",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H4": {
+      "raw": "2.5",
+      "display": "2.500",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "I4": {
+      "raw": "22",
+      "display": "22",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J4": {
+      "raw": "742.5",
+      "display": "742.500",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A5": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B5": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C5": {
+      "raw": "PS.3",
+      "display": "PS.3",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D5": {
+      "raw": "5.157",
+      "display": "5.157",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E5": {
+      "raw": "13.449",
+      "display": "13.449",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F5": {
+      "raw": "6.028",
+      "display": "6.028",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G5": {
+      "raw": "13.449",
+      "display": "13.449",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H5": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I5": {
+      "raw": "4",
+      "display": "4",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J5": {
+      "raw": "257.85",
+      "display": "257.850",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A6": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B6": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C6": {
+      "raw": "PS.3A",
+      "display": "PS.3A",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D6": {
+      "raw": "2.592",
+      "display": "2.592",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E6": {
+      "raw": "10.2",
+      "display": "10.200",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F6": {
+      "raw": "2.456",
+      "display": "2.456",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G6": {
+      "raw": "10.2",
+      "display": "10.200",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H6": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I6": {
+      "raw": "2",
+      "display": "2",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J6": {
+      "raw": "129.6",
+      "display": "129.600",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A7": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B7": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C7": {
+      "raw": "PS.4",
+      "display": "PS.4",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D7": {
+      "raw": "34.2",
+      "display": "34.200",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E7": {
+      "raw": "81.953",
+      "display": "81.953",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F7": {
+      "raw": "37.378",
+      "display": "37.378",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G7": {
+      "raw": "81.953",
+      "display": "81.953",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H7": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I7": {
+      "raw": "19",
+      "display": "19",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J7": {
+      "raw": "1710",
+      "display": "1710.000",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A8": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B8": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C8": {
+      "raw": "PS.5",
+      "display": "PS.5",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D8": {
+      "raw": "30.383",
+      "display": "30.383",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E8": {
+      "raw": "63.198",
+      "display": "63.198",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F8": {
+      "raw": "29.871",
+      "display": "29.871",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G8": {
+      "raw": "63.198",
+      "display": "63.198",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H8": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I8": {
+      "raw": "11",
+      "display": "11",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J8": {
+      "raw": "1519.155",
+      "display": "1519.155",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A9": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B9": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C9": {
+      "raw": "PS.6",
+      "display": "PS.6",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D9": {
+      "raw": "17.1",
+      "display": "17.100",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E9": {
+      "raw": "34.237",
+      "display": "34.237",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F9": {
+      "raw": "15.879",
+      "display": "15.879",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G9": {
+      "raw": "34.237",
+      "display": "34.237",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H9": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I9": {
+      "raw": "5",
+      "display": "5",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J9": {
+      "raw": "855",
+      "display": "855.000",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A10": {
+      "raw": "[Null]",
+      "display": "[Null]",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B10": {
+      "raw": "Foundation Floor",
+      "display": "Foundation Floor",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C10": {
+      "raw": "PS.7",
+      "display": "PS.7",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D10": {
+      "raw": "4.706",
+      "display": "4.706",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E10": {
+      "raw": "7.618",
+      "display": "7.618",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F10": {
+      "raw": "3.987",
+      "display": "3.987",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G10": {
+      "raw": "7.618",
+      "display": "7.618",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H10": {
+      "raw": "",
+      "display": "",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "I10": {
+      "raw": "1",
+      "display": "1",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J10": {
+      "raw": "235.305",
+      "display": "235.305",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "A11": {
+      "raw": "Total",
+      "display": "Total",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "B11": {
+      "raw": "Total",
+      "display": "Total",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "C11": {
+      "raw": "Total",
+      "display": "Total",
+      "type": "s",
+      "numberFormat": "General",
+      "formula": null
+    },
+    "D11": {
+      "raw": "110.572",
+      "display": "110.572",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "E11": {
+      "raw": "278.519",
+      "display": "278.519",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "F11": {
+      "raw": "114.604",
+      "display": "114.604",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "G11": {
+      "raw": "278.519",
+      "display": "278.519",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "H11": {
+      "raw": "2.64",
+      "display": "2.640",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    },
+    "I11": {
+      "raw": "72",
+      "display": "72",
+      "type": "n",
+      "numberFormat": "0",
+      "formula": null
+    },
+    "J11": {
+      "raw": "5528.61",
+      "display": "5528.610",
+      "type": "n",
+      "numberFormat": "0.000",
+      "formula": null
+    }
+  }
+}
