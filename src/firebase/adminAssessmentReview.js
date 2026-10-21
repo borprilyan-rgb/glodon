@@ -1,9 +1,11 @@
 import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions'
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
 import { getServices } from './client'
+import { firebaseConnectionsEnabled } from '../data/backendMode.js'
 
 let functions
 export async function fetchAdminAssessmentReview(attemptId, language) {
+  if (!firebaseConnectionsEnabled) throw new Error('Firebase connections are temporarily disabled.')
   if (!functions) {
     const { app } = getServices('admin')
     if (import.meta.env.VITE_FIREBASE_USE_EMULATORS !== 'true') {

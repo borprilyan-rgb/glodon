@@ -2,6 +2,7 @@ import { initializeApp, getApps } from 'firebase/app'
 import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, connectAuthEmulator, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator, doc, getDocFromServer, collection, query, where, orderBy, limit, startAfter, getDocsFromServer, Timestamp } from 'firebase/firestore'
 import { jakartaDateRange } from './resultsCsv.js'
+import { firebaseConnectionsEnabled } from '../data/backendMode.js'
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +15,7 @@ const config = {
 const services = new Map()
 
 export function getServices(role = 'participant') {
+  if (!firebaseConnectionsEnabled) throw new Error('Firebase connections are temporarily disabled. Assessments are saved in this browser only.')
   if (import.meta.env.VITE_FIREBASE_ENABLED === 'false' || !config.apiKey || !config.projectId || !config.appId || !config.authDomain) throw new Error('Firebase is not configured. Your result remains pending in this browser.')
   if (services.has(role)) return services.get(role)
   const name = `cubicost-${role}`
@@ -41,6 +43,7 @@ export const resetAdminPassword = email => sendPasswordResetEmail(getServices('a
 export const signOutAdmin = () => signOut(getServices('admin').auth)
 export const observeAdmin = callback => onAuthStateChanged(getServices('admin').auth, callback)
 export async function isAuthorizedAdmin(user) {
+  if (!firebaseConnectionsEnabled) return false
   if (!user || user.isAnonymous || (await user.getIdTokenResult()).signInProvider !== 'password') return false
   const record = await getDocFromServer(doc(getServices('admin').db, 'admins', user.uid))
   return record.exists() && record.data().enabled === true

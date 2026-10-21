@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getTasData } from './data/tas/index.js'
 import { getTrbData } from './data/trb/index.js'
 import { getTmeData } from './data/tme/index.js'
@@ -12,13 +12,19 @@ import TutorialStep from './components/TutorialStep'
 import PileCapReportLesson from './components/PileCapReportLesson'
 import { getReportLessons, getReportLesson, emptyReportProgress, loadReportProgress, reportProgressKey } from './data/tas/tasReports'
 import ContactPage from './components/ContactPage'
+import ExerciseHub from './components/ExerciseHub'
+import SectionExercise from './components/SectionExercise'
+import TestPage from './components/TestPage'
+import ParticipantEntry from './components/ParticipantEntry'
+import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
+import { readTestScores } from './data/testScores'
+import { getSectionExercise } from './data/sectionExercises'
 
 
 
 import Presentation, { PresentationEntry } from './components/Presentation'
 
 
-const AdminResults = lazy(() => import('./components/AdminResults'))
 
 const LEGACY_TAS_KEY = 'cubicost-tas-tutorial-progress-v1'
 const TAS_PROGRESS_KEY = 'cubicost:tutorial:tas:progress'
@@ -32,7 +38,7 @@ const TME_PROGRESS_KEY = 'cubicost:tutorial:tme:progress'
 const TME_LAST_LESSON_KEY = 'cubicost:tutorial:tme:lastLesson'
 
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
-const TAS_LESSON_IDS = new Set(getTasData('en').allSteps.map((step) => step.id))
+const TAS_LESSON_IDS = new Set([...getTasData('en').allSteps, ...getReportLessons('en')].map((step) => step.id))
 const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
 const TME_LESSON_IDS = new Set(getTmeData('en').allSteps.map((step) => step.id))
 const TAS_LAST_LESSON_MAP = { 'floor-settings': 'floor-grade-settings', 'import-drawing': 'import-split-drawing', 'set-scale': 'scale-relocate-drawing', 'verify-scale': 'scale-relocate-drawing', 'view-expression': 'measurement-rules', 'filter-deduction': 'measurement-rules', 'change-rule': 'measurement-rules', recalculate: 'calculate-verify-quantity', 'verify-deduction': 'calculate-verify-quantity', 'quantity-category': 'quantity-reports', 'configure-report': 'quantity-reports' }
@@ -65,6 +71,7 @@ function routeFromLocation() {
   if (!['tas', 'trb', 'tme'].includes(product)) return { page: 'hub' }
   if (view === 'tests') return { product, page: 'tests' }
   if (view === 'course') return { product, page: 'course' }
+  if (product === 'tas' && view === 'lesson' && stepId === 'staircase-report') return { product, page: 'course' }
   if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId: product === 'tas' ? mapTasLessonId(stepId) || stepId : stepId }
   return { product, page: 'welcome' }
 }
@@ -146,11 +153,16 @@ export default function App() {
     try { return localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'id' } catch { return 'id' }
   })
   const reportLessons = getReportLessons(language)
-  const [tasProgress, setTasProgress] = useState(() => loadTasProgress(initialRoute.product === 'tas' && !getReportLesson(initialRoute.stepId) ? initialRoute.stepId : null))
+  const [tasProgress, setTasProgress] = useState(() => loadTasProgress(initialRoute.product === 'tas' ? initialRoute.stepId : null))
   const [reportProgress, setReportProgress] = useState(loadReportProgress)
   const [trbProgress, setTrbProgress] = useState(() => loadTrbProgress(initialRoute.product === 'trb' ? initialRoute.stepId : null))
   const [tmeProgress, setTmeProgress] = useState(() => loadTmeProgress(initialRoute.product === 'tme' ? initialRoute.stepId : null))
   const [query, setQuery] = useState('')
+  const [testScores, setTestScores] = useState(readTestScores)
+  const [participant, setParticipant] = useState(loadParticipant)
+  const [participantEditUntil, setParticipantEditUntil] = useState(loadParticipantEditLockUntil)
+  const [editingParticipant, setEditingParticipant] = useState(false)
+  const [participantSaveFailed, setParticipantSaveFailed] = useState(false)
   const [progressSaveFailed, setProgressSaveFailed] = useState({})
   const { tutorialParts, allSteps } = getTasData(language)
   const trb = getTrbData(language)
@@ -158,11 +170,31 @@ export default function App() {
   const t = uiText[language]
   const completed = tasProgress.completed
 
+  function saveParticipant(profile) {
+    if (!hasParticipant(profile) || (hasParticipant(participant) && (participantEditUntil > Date.now() || !canEditParticipant(participant)))) return
+    const saved = { ...profile, updatedAt: Date.now() }
+    const editUntil = Date.now() + PARTICIPANT_EDIT_LOCK_MS
+    setParticipant(saved)
+    setParticipantEditUntil(editUntil)
+    setEditingParticipant(false)
+    try {
+      localStorage.setItem(PARTICIPANT_KEY, JSON.stringify(saved))
+      localStorage.setItem(PARTICIPANT_EDIT_LOCK_KEY, String(editUntil))
+      localStorage.setItem('cubicost:student-name', saved.name)
+      setParticipantSaveFailed(false)
+    } catch { setParticipantSaveFailed(true) }
+  }
+
+  function beginParticipantEdit() {
+    if (participantEditUntil > Date.now() || !canEditParticipant(participant)) return
+    setEditingParticipant(true)
+  }
+
   useEffect(() => {
     const onLocationChange = () => {
       const nextRoute = routeFromLocation()
       setRoute(nextRoute)
-      if (nextRoute.product === 'tas' && nextRoute.stepId && !getReportLesson(nextRoute.stepId)) setTasProgress((current) => {
+      if (nextRoute.product === 'tas' && nextRoute.stepId) setTasProgress((current) => {
         const started = new Set(current.started)
         started.add(nextRoute.stepId)
         return { ...current, started, lastLesson: nextRoute.stepId }
@@ -218,7 +250,7 @@ export default function App() {
   const tasCourseSteps = [...allSteps.filter(step => step.partId !== 'part-3'), ...reportLessons]
   const tasCourseParts = tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', shortTitle: 'Report', summary: language === 'en' ? 'Read Quantity columns for each report type.' : 'Mengenal kolom Quantity untuk setiap jenis report.', steps: reportLessons } : part)
   const tasCourseCompleted = new Set([...tasProgress.completed, ...reportLessons.filter(step => reportProgress[step.id].completed).map(step => step.id)].filter(id => tasCourseSteps.some(step => step.id === id)))
-  const tasCourseStarted = new Set([...tasProgress.started, ...reportLessons.filter(step => reportProgress[step.id].completed || reportProgress[step.id].checks.length).map(step => step.id)])
+  const tasCourseStarted = new Set([...tasProgress.started, ...reportLessons.filter(step => reportProgress[step.id].completed || reportProgress[step.id].checks.length).map(step => step.id)].filter(id => tasCourseSteps.some(step => step.id === id)))
   const filteredParts = tasCourseParts.map(part => ({ ...part, steps: term ? part.steps.filter(step => `${step.title} ${step.intro || ''} ${(step.instructions || step.actions.map(action => action.title)).join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter(part => part.steps.length)
   const filteredTrbParts = trb.tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
   const filteredTmeParts = tme.tutorialParts.map((part) => ({ ...part, steps: term ? part.steps.filter((step) => `${step.title} ${step.intro} ${step.instructions.join(' ')}`.toLocaleLowerCase(language).includes(term)) : part.steps })).filter((part) => part.steps.length)
@@ -270,27 +302,31 @@ export default function App() {
   })
 
   const product = route.product || null
-  const visibleProgress = product === 'tas' && route.page === 'course' ? { completed: tasCourseCompleted } : isReportPrototype ? { completed: new Set(reportLessons.filter(step => reportProgress[step.id].completed).map(step => step.id)) } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
-  const visibleTotal = product === 'tas' && route.page === 'course' ? tasCourseSteps.length : isReportPrototype ? 8 : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
+  const visibleProgress = product === 'tas' ? { completed: tasCourseCompleted } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
+  const visibleTotal = product === 'tas' ? tasCourseSteps.length : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') {
     const legacyLesson = new URLSearchParams(window.location.search).get('lesson')
     const legacy = allSteps.some(step => step.partId === 'part-3' && step.id === legacyLesson)
     return <Presentation courses={{ tas: legacy ? { tutorialParts, allSteps } : { tutorialParts: tasCourseParts, allSteps: tasCourseSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
-  if (route.page === 'admin') return <Suspense fallback={<p role="status">{language === 'en' ? 'Loading admin page…' : 'Memuat halaman admin…'}</p>}><AdminResults language={language} onLanguageChange={setLanguage} /></Suspense>
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
     {(product ? progressSaveFailed[product] : Object.values(progressSaveFailed).some(Boolean)) && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
 
 
-    {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps, progress: tasProgress, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
+    {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps: tasCourseSteps, progress: { completed: tasCourseCompleted, started: tasCourseStarted }, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
 
-    {['exercise', 'tests', 'exercises'].includes(route.page) && <section className="exercise-card employee-phase-note"><h2>{language === 'en' ? 'Employee assessments are not enabled yet' : 'Latihan karyawan belum diaktifkan'}</h2><p>{language === 'en' ? 'Assessment submissions and score cards will be connected in a later phase.' : 'Pengiriman hasil latihan dan kartu nilai akan dihubungkan pada tahap berikutnya.'}</p></section>}
+    {['exercise', 'tests', 'exercises'].includes(route.page) && <p className="employee-phase-note" role="status">{language === 'en' ? 'Results are saved only in this browser. Firebase sync is temporarily disabled; clearing browser data will remove local results.' : 'Hasil hanya disimpan di browser ini. Sinkronisasi Firebase sementara dinonaktifkan; menghapus data browser akan menghapus hasil lokal.'}</p>}
+    {participantSaveFailed && ['exercise', 'tests'].includes(route.page) && <p role="alert">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
+    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
+    {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <TestPage product={product} parts={product === 'tas' ? tasCourseParts : activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
+    {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
+    {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the exercises page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman latihan.'}</p><a className="primary-button" href="/exercises">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
-    {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={allSteps} completed={completed} started={tasProgress.started} continueStep={continueStep} product="tas" language={language} t={t} />}
+    {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
-    {activeReport && <PileCapReportLesson key={activeReport.id} step={activeReport} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
-    {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={allSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'apply-finishes' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
+    {activeReport && <PileCapReportLesson key={activeReport.id} step={activeReport} index={tasCourseSteps.findIndex(step => step.id === activeReport.id)} total={tasCourseSteps.length} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
+    {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={activeStep.partId === 'part-3' ? allSteps.length : tasCourseSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'apply-finishes' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
     {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
     {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} language={language} t={t} />}
     {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" language={language} t={t} />}

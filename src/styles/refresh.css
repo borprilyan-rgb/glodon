@@ -8,8 +8,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .lesson-brand strong { color: var(--navy); font-size: 15px; letter-spacing: -.025em; }
 .lesson-brand small { color: var(--muted); font-size: 11px; margin-top: 5px; }
 .lesson-brand .brand__mark { background: white; border: 1px solid var(--line); border-radius: 12px; width: 46px; height: 46px; flex-basis: 46px; }
-.lesson-topbar__tools .language-switcher { background: #f0f3f9; color: var(--muted); border-color: var(--line); border-radius: 8px; padding: 7px 9px; }
-.lesson-topbar__tools .language-switcher button { color: #5c6b82; padding: 4px 5px; }
+.lesson-topbar__tools .language-switcher { background: #f0f3f9; color: var(--muted); border-color: var(--line); border-radius: 6px; padding: 3px; gap: 2px; }
+.lesson-topbar__tools .language-switcher button { min-width: 32px; min-height: 28px; color: #5c6b82; padding: 4px 6px; }
 .lesson-topbar__tools .language-switcher button.is-active { color: #fff; background: var(--navy); border-radius: 4px; }
 .lesson-topbar .all-courses-button, .lesson-topbar .contact-nav-button, .lesson-topbar .course-map-button { color: var(--navy); border-color: var(--line); border-radius: 8px; min-height: 38px; font-size: 12px; }
 .lesson-topbar .all-courses-button:hover, .lesson-topbar .contact-nav-button:hover, .lesson-topbar .course-map-button:hover { background: #edf2fa; }

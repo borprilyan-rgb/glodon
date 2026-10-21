@@ -3,6 +3,7 @@ import forms from '../assessments/forms.json'
 import { getTasData } from './tas/index.js'
 import { getTrbData } from './trb/index.js'
 import { getTmeData } from './tme/index.js'
+import { localAssessment } from './localAssessment.js'
 
 function freeze(value) { if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value) } return value }
 freeze(forms)
@@ -10,7 +11,12 @@ freeze(catalog)
 export function resolvePublicAssessment(product, section, version) {
   return forms.find(form => form.product === product && form.section === section && form.assessmentVersion === version) || null
 }
-export function getSectionExercise(product, section) { return resolvePublicAssessment(product, section, catalog.find(entry => entry.course === product && entry.section === section)?.assessmentVersion) }
+const localDefinitions = new Map()
+export function getSectionExercise(product, section) {
+  const key = `${product}-${section}`
+  if (!localDefinitions.has(key)) localDefinitions.set(key, localAssessment(resolvePublicAssessment(product, section, catalog.find(entry => entry.course === product && entry.section === section)?.assessmentVersion)))
+  return localDefinitions.get(key)
+}
 export function getLegacySectionExercise(product, section) {
   return resolvePublicAssessment(product, section, product === 'tas' && section === 1 ? 'v1' : product === 'tme' ? 'v1' : 'v2')
 }

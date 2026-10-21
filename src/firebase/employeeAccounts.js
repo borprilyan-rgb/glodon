@@ -3,10 +3,11 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebas
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
 import { doc, getDocFromServer } from 'firebase/firestore'
 import { getServices } from './client'
+import { firebaseConnectionsEnabled } from '../data/backendMode.js'
 
 let functions
 const registrationRecovery = new Map()
-export const employeeAuthEnabled = import.meta.env.VITE_EMPLOYEE_AUTH_ENABLED === 'true'
+export const employeeAuthEnabled = firebaseConnectionsEnabled && import.meta.env.VITE_EMPLOYEE_AUTH_ENABLED === 'true'
 function backend() {
   if (!employeeAuthEnabled) throw new Error('Employee account services are not enabled in this environment.')
   if (!functions) {
@@ -29,6 +30,7 @@ export function validEmployeeProfile(profile) {
     && typeof profile.jobTitle === 'string' && Number.isInteger(profile.sessionValidAfter)
 }
 export async function loadEmployeeProfile(user) {
+  if (!firebaseConnectionsEnabled) throw new Error('Firebase connections are temporarily disabled.')
   if (!user || user.isAnonymous) throw new Error('An active employee account is required.')
   const token = await user.getIdTokenResult()
   if (token.signInProvider !== 'password') throw new Error('An active employee account is required.')

@@ -26,9 +26,9 @@ test('PileCap-def preserves source headers, grouping, merged ranges and blank va
     assert.equal(column.example, report.source.cells[column.exampleCell].display)
     assert(column.definition && column.interpretation)
   }
-  assert.equal(reportPrototype.actions.length, 2)
+  assert.equal(reportPrototype.actions.length, 1)
   assert.equal(reportPrototype.stepNumber, 1)
-  assert.equal(reportPrototype.partStepCount, 8)
+  assert.equal(reportPrototype.partStepCount, 7)
   assert.equal(reportPrototype.hideIntro, true)
   assert.equal(reportPrototype.showInstructionsBelowImage, true)
   assert(reportPrototype.actions.every(action => action.pending === false))
@@ -56,14 +56,14 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
     const html = renderToStaticMarkup(React.createElement(Lesson, props))
     for (const className of ['tutorial-step', 'step-header', 'step-position', 'action-viewer', 'action-viewer__list', 'action-viewer__media', 'screenshot-viewer', 'screenshot-navigation', 'completion-card', 'step-navigation']) assert(html.includes(`class="${className}`), className)
     assert(html.includes('role="list"'))
-    assert(html.includes('/report/elements/pile-cap.png'))
+    assert(html.includes('/report/elements/pile-cap-revised.png'))
     assert(!html.includes('WPS_All_Sheets_Landscape_One_Page.pdf'))
     assert(!html.includes('2026-10-20-13-41-04.xlsx'))
     const heading = html.match(/<header class="step-header">[\s\S]*?<\/header>/)[0]
     assert(!heading.includes('<p>'), 'No text below the step title')
     const actionList = html.slice(html.indexOf('class="action-viewer__list"'), html.indexOf('class="action-viewer__media"'))
     assert(!actionList.includes('<p>'), 'No descriptions beneath action names')
-    assert(html.indexOf('src="/tutorial/tas/report/elements/pile-cap.png"') < html.indexOf('class="screenshot-media__instruction"'), 'Explanation follows the image')
+    assert(html.indexOf('src="/tutorial/tas/report/elements/pile-cap-revised.png"') < html.indexOf('class="screenshot-media__instruction"'), 'Explanation follows the image')
     for (const action of reportPrototype.actions) {
       const png = await readFile(`public${action.image}`)
       assert.deepEqual([...png.slice(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10])
@@ -106,11 +106,11 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
         assert(reportHtml.includes(step.actions[0].image))
         assert.equal((reportHtml.match(/role="listitem"/g) || []).length, step.actions.length)
         if (index > 0) assert(reportHtml.includes(`/tas/lesson/${reportLessons[index - 1].id}`))
-        if (index < 7) assert(reportHtml.includes(`/tas/lesson/${reportLessons[index + 1].id}`))
+        if (index < reportLessons.length - 1) assert(reportHtml.includes(`/tas/lesson/${reportLessons[index + 1].id}`))
       }
       globalThis.window.location = { pathname: '/tas/course', hash: '', search: '' }
       const mapHtml = renderToStaticMarkup(React.createElement(App))
-      assert.equal((mapHtml.match(/class="course-lesson /g) || []).length, 24)
+      assert.equal((mapHtml.match(/class="course-lesson /g) || []).length, 23)
       for (const step of reportLessons) assert(mapHtml.includes(`/tas/lesson/${step.id}`))
       assert(!mapHtml.includes('/tas/lesson/calculate-verify-quantity'))
       const previousDocument = globalThis.document
@@ -125,7 +125,7 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
       } finally { globalThis.document = previousDocument }
       globalThis.window.location = { pathname: '/tas/lesson/create-project', hash: '', search: '' }
       const existing = renderToStaticMarkup(React.createElement(App))
-      assert(!existing.includes('/report/elements/pile-cap.png'))
+      assert(!existing.includes('/report/elements/pile-cap-revised.png'))
       assert(existing.includes('class="completion-card"'))
       values.set('cubicost-tas-tutorial-language-v1', 'en')
       globalThis.window.location = { pathname: '/tas/lesson/pile-cap-report', hash: '', search: '' }
@@ -137,30 +137,41 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
   } finally { await server.close() }
 })
 
-test('eight ordered report steps split Beam and Staircase into five complete column groups', async () => {
-  assert.deepEqual(reportLessons.map(step => step.actions.length), [2, 2, 5, 1, 2, 3, 5, 6])
+test('seven report steps contain only the retained sections and columns', async () => {
+  assert.deepEqual(reportLessons.map(step => step.actions.length), [1, 1, 3, 1, 1, 2, 6])
   assert.deepEqual(reportLessons.map(step => step.actions.map(action => action.title)), [
-    ['Pile Cap', 'Pile'], ['In-Situ Slab', 'Slab Opening'], [
-      'Beam – Volume Beton', 'Beam – Bekisting', 'Beam – Penampang dan Panjang Bersih',
-      'Beam – Tulangan dan Jumlah', 'Beam – Panjang Axis',
-    ], ['Column'],
-    ['Wall', 'Curtain Wall'], ['Door', 'Window', 'Door Window'], [
-      'Staircase – Luas dan Volume', 'Staircase – Volume Beton', 'Staircase – Bekisting',
-      'Staircase – Luas Permukaan', 'Staircase – Panjang, Tulangan, dan Jumlah',
-    ],
+    ['Pile Cap'], ['In-Situ Slab'], ['Beam – Volume Beton', 'Beam – Bekisting', 'Beam – Tulangan'],
+    ['Column'], ['Wall'], ['Door', 'Window'],
     ['Room', 'Floor Finish', 'Waterproof', 'Skirting', 'Wall Finish', 'Suspended Ceiling'],
   ])
+  const expected = {
+    'in-situ-slab': ['Volume(m3)', 'Area(m2)', 'Area of formwork to soffit(m2)', 'Area of formwork to edge and break of slab(m2)', 'Weight of rebar(kg)'],
+    beam: ['Volume(m3)', 'Area of formwork(m2)', 'Area of formwork to side of beam(m2)', 'Area of formwork to soffit of beam(m2)', 'Weight of rebar(kg)'],
+    wall: ['Area(m2)', 'Net length of wall(m)'],
+    door: ['Area of opening(m2)', 'Number(pc)', 'Area of frame(m2)'],
+    window: ['Area of opening(m2)', 'Number(pc)', 'Area of frame(m2)'],
+  }
+  for (const [slug, headers] of Object.entries(expected)) {
+    const source = reportSource.reports[slug]
+    const displays = source.segments || [source.display]
+    assert.deepEqual(displays.flatMap(section => section.quantityColumns.map(column => column.header)), headers)
+  }
+  for (const removed of ['pile', 'slab-opening', 'curtain-wall', 'door-window', 'staircase']) {
+    assert(!reportSource.reports[removed])
+  }
   const seen = new Set()
   for (const [stepIndex, step] of reportLessons.entries()) {
     assert.equal(step.stepNumber, stepIndex + 1)
-    assert.equal(step.partStepCount, 8)
+    assert.equal(step.partStepCount, 7)
     for (const [actionIndex, action] of step.actions.entries()) {
       assert.equal(action.number, actionIndex + 1)
-      if (!['staircase-report', 'beam-report'].includes(step.id)) assert(!seen.has(action.sourceSheet))
+      if (step.id !== 'beam-report') assert(!seen.has(action.sourceSheet))
       seen.add(action.sourceSheet)
       const source = Object.values(reportSource.reports).find(report => report.sheet === action.sourceSheet)
-      const section = source.segments?.[actionIndex] || source
+      const section = source.segments?.[actionIndex] || source.display
       assert.equal(action.image, section.image)
+      assert(section.classificationColumns.every(column => !['Entity Type', 'Material'].includes(column.header)))
+      if (step.id === 'wall-report') assert(!section.classificationColumns.some(column => column.header === 'Concrete Grade'))
       const lines = action.description.split('\n')
       assert.equal(lines.length, section.quantityColumns.length)
       section.quantityColumns.forEach((column, index) => assert(lines[index].startsWith(`${index + 1}. ${column.header}: `)))
@@ -170,24 +181,20 @@ test('eight ordered report steps split Beam and Staircase into five complete col
       assert.deepEqual([...png.slice(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10])
     }
   }
-  assert.equal(seen.size, 18)
-  const staircase = reportSource.reports.staircase
-  assert.deepEqual(staircase.segments.map(segment => segment.quantityColumns.length), [2, 3, 4, 3, 4])
-  assert.deepEqual(staircase.segments.flatMap(segment => segment.quantityColumns), staircase.quantityColumns)
-  const beam = reportSource.reports.beam
-  assert.deepEqual(beam.segments.map(segment => segment.quantityColumns.length), [1, 3, 2, 2, 1])
-  assert.deepEqual(beam.segments.flatMap(segment => segment.quantityColumns), beam.quantityColumns)
+  assert.equal(seen.size, 13)
 })
 
-test('report completion is isolated and sanitized for each of the eight steps', () => {
+test('report completion is isolated and sanitized for each of the seven steps', () => {
   const previous = globalThis.localStorage
   try {
     globalThis.localStorage = { getItem: key => key === reportProgressKey ? JSON.stringify({
       'pile-cap-report': { completed: true, checks: [0, 0, 1, 2, 9, -1] },
       'slab-report': { completed: false, checks: [1] },
+      'staircase-report': { completed: true, checks: [0, 1, 2] },
     }) : null }
     const progress = loadReportProgress()
-    assert.equal(Object.keys(progress).length, 8)
+    assert.equal(Object.keys(progress).length, 7)
+    assert(!progress['staircase-report'])
     assert.deepEqual(progress['pile-cap-report'], { completed: true, checks: [0, 1, 2] })
     assert.deepEqual(progress['slab-report'], { completed: false, checks: [1] })
     assert.deepEqual(progress['finishes-report'], { completed: false, checks: [] })

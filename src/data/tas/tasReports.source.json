@@ -32,7 +32,46 @@
         }
       ],
       "cellCount": 80,
-      "image": "/tutorial/tas/report/elements/column.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "D",
+            "header": "Concrete Grade"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "F",
+            "header": "Volume(m3)"
+          },
+          {
+            "letter": "G",
+            "header": "Area of formwork(m2)"
+          },
+          {
+            "letter": "H",
+            "header": "Number(pc)"
+          },
+          {
+            "letter": "I",
+            "header": "Weight of rebar(kg)"
+          },
+          {
+            "letter": "J",
+            "header": "Girth(m)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/column-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/column-revised.png"
     },
     "wall": {
       "title": "Wall",
@@ -70,21 +109,38 @@
         }
       ],
       "cellCount": 266,
-      "image": "/tutorial/tas/report/elements/wall.png"
-    },
-    "curtain-wall": {
-      "title": "Curtain Wall",
-      "sheet": "CurtainWall-def",
-      "page": 3,
-      "range": "A1:D22",
-      "quantityColumns": [
-        {
-          "letter": "D",
-          "header": "Area(m2)"
-        }
-      ],
-      "cellCount": 88,
-      "image": "/tutorial/tas/report/elements/curtain-wall.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "F",
+            "header": "Thickness"
+          },
+          {
+            "letter": "G",
+            "header": "Name"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "I",
+            "header": "Area(m2)"
+          },
+          {
+            "letter": "K",
+            "header": "Net length of wall(m)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/wall-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/wall-revised.png"
     },
     "door": {
       "title": "Door",
@@ -126,7 +182,38 @@
         }
       ],
       "cellCount": 121,
-      "image": "/tutorial/tas/report/elements/door.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "D",
+            "header": "Area of opening(m2)"
+          },
+          {
+            "letter": "E",
+            "header": "Number(pc)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of frame(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/door-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/door-revised.png"
     },
     "window": {
       "title": "Window",
@@ -164,73 +251,38 @@
         }
       ],
       "cellCount": 90,
-      "image": "/tutorial/tas/report/elements/window.png"
-    },
-    "door-window": {
-      "title": "Door Window",
-      "sheet": "DoorWin-def",
-      "page": 6,
-      "range": "A1:Q7",
-      "quantityColumns": [
-        {
-          "letter": "D",
-          "header": "Area of opening(m2)"
-        },
-        {
-          "letter": "E",
-          "header": "Number(pc)"
-        },
-        {
-          "letter": "F",
-          "header": "Area of door opening(m2)"
-        },
-        {
-          "letter": "G",
-          "header": "Area of window opening(m2)"
-        },
-        {
-          "letter": "H",
-          "header": "Width of opening(m)"
-        },
-        {
-          "letter": "I",
-          "header": "Height of opening(m)"
-        },
-        {
-          "letter": "J",
-          "header": "Width of door opening(m)"
-        },
-        {
-          "letter": "K",
-          "header": "Width of window opening(m)"
-        },
-        {
-          "letter": "L",
-          "header": "Height of door opening(m)"
-        },
-        {
-          "letter": "M",
-          "header": "Height of window opening(m)"
-        },
-        {
-          "letter": "N",
-          "header": "Length of edge and break of opening(m)"
-        },
-        {
-          "letter": "O",
-          "header": "Area of frame(m2)"
-        },
-        {
-          "letter": "P",
-          "header": "Area of door frame(m2)"
-        },
-        {
-          "letter": "Q",
-          "header": "Area of window frame(m2)"
-        }
-      ],
-      "cellCount": 119,
-      "image": "/tutorial/tas/report/elements/door-window.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "D",
+            "header": "Area of opening(m2)"
+          },
+          {
+            "letter": "E",
+            "header": "Number(pc)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of frame(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/window-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/window-revised.png"
     },
     "beam": {
       "title": "Beam",
@@ -276,24 +328,48 @@
         }
       ],
       "cellCount": 112,
-      "image": "/tutorial/tas/report/elements/beam.png",
       "segments": [
         {
-          "id": "volume",
-          "titleEn": "Concrete Volume",
-          "titleId": "Volume Beton",
+          "classificationColumns": [
+            {
+              "letter": "A",
+              "header": "Construction Zone"
+            },
+            {
+              "letter": "B",
+              "header": "Floor"
+            },
+            {
+              "letter": "D",
+              "header": "Concrete Grade"
+            }
+          ],
           "quantityColumns": [
             {
               "letter": "F",
               "header": "Volume(m3)"
             }
           ],
-          "image": "/tutorial/tas/report/elements/beam-volume.png"
+          "image": "/tutorial/tas/report/elements/beam-volume-revised.png",
+          "id": "volume",
+          "titleEn": "Concrete Volume",
+          "titleId": "Volume Beton"
         },
         {
-          "id": "formwork",
-          "titleEn": "Formwork",
-          "titleId": "Bekisting",
+          "classificationColumns": [
+            {
+              "letter": "A",
+              "header": "Construction Zone"
+            },
+            {
+              "letter": "B",
+              "header": "Floor"
+            },
+            {
+              "letter": "D",
+              "header": "Concrete Grade"
+            }
+          ],
           "quantityColumns": [
             {
               "letter": "G",
@@ -308,53 +384,39 @@
               "header": "Area of formwork to soffit of beam(m2)"
             }
           ],
-          "image": "/tutorial/tas/report/elements/beam-formwork.png"
+          "image": "/tutorial/tas/report/elements/beam-formwork-revised.png",
+          "id": "formwork",
+          "titleEn": "Formwork",
+          "titleId": "Bekisting"
         },
         {
-          "id": "section-length",
-          "titleEn": "Section & Net Length",
-          "titleId": "Penampang dan Panjang Bersih",
-          "quantityColumns": [
+          "classificationColumns": [
             {
-              "letter": "J",
-              "header": "Girth of section(m)"
+              "letter": "A",
+              "header": "Construction Zone"
             },
             {
-              "letter": "K",
-              "header": "Net length(m)"
+              "letter": "B",
+              "header": "Floor"
+            },
+            {
+              "letter": "D",
+              "header": "Concrete Grade"
             }
           ],
-          "image": "/tutorial/tas/report/elements/beam-section-length.png"
-        },
-        {
-          "id": "rebar-count",
-          "titleEn": "Rebar & Count",
-          "titleId": "Tulangan dan Jumlah",
           "quantityColumns": [
             {
               "letter": "L",
               "header": "Weight of rebar(kg)"
-            },
-            {
-              "letter": "M",
-              "header": "Number(pc)"
             }
           ],
-          "image": "/tutorial/tas/report/elements/beam-rebar-count.png"
-        },
-        {
-          "id": "axis-length",
-          "titleEn": "Axis Length",
-          "titleId": "Panjang Axis",
-          "quantityColumns": [
-            {
-              "letter": "N",
-              "header": "Length of axis(m)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/beam-axis-length.png"
+          "image": "/tutorial/tas/report/elements/beam-rebar-count-revised.png",
+          "id": "rebar-count",
+          "titleEn": "Rebar",
+          "titleId": "Tulangan"
         }
-      ]
+      ],
+      "image": "/tutorial/tas/report/elements/beam-volume-revised.png"
     },
     "in-situ-slab": {
       "title": "In-Situ Slab",
@@ -392,209 +454,50 @@
         }
       ],
       "cellCount": 108,
-      "image": "/tutorial/tas/report/elements/in-situ-slab.png"
-    },
-    "slab-opening": {
-      "title": "Slab Opening",
-      "sheet": "SlabOpening-def",
-      "page": 9,
-      "range": "A1:F6",
-      "quantityColumns": [
-        {
-          "letter": "D",
-          "header": "Area(m2)"
-        },
-        {
-          "letter": "E",
-          "header": "Number(pc)"
-        },
-        {
-          "letter": "F",
-          "header": "Girth(m)"
-        }
-      ],
-      "cellCount": 36,
-      "image": "/tutorial/tas/report/elements/slab-opening.png"
-    },
-    "staircase": {
-      "title": "Staircase",
-      "sheet": "Staircase-def",
-      "page": 10,
-      "range": "A1:S9",
-      "quantityColumns": [
-        {
-          "letter": "D",
-          "header": "Projected area(m2)"
-        },
-        {
-          "letter": "E",
-          "header": "Volume(m3)"
-        },
-        {
-          "letter": "F",
-          "header": "Volume of concrete of flight(m3)"
-        },
-        {
-          "letter": "G",
-          "header": "Volume of concrete of landing beam(m3)"
-        },
-        {
-          "letter": "H",
-          "header": "Volume of concrete of landing slab(m3)"
-        },
-        {
-          "letter": "I",
-          "header": "Area of formwork(m2)"
-        },
-        {
-          "letter": "J",
-          "header": "Area of formwork to flight(m2)"
-        },
-        {
-          "letter": "K",
-          "header": "Area of formwork to landing beam(m2)"
-        },
-        {
-          "letter": "L",
-          "header": "Area of formwork to landing slab(m2)"
-        },
-        {
-          "letter": "M",
-          "header": "Area of open string(m2)"
-        },
-        {
-          "letter": "N",
-          "header": "Area of riser(m2)"
-        },
-        {
-          "letter": "O",
-          "header": "Area of tread(m2)"
-        },
-        {
-          "letter": "P",
-          "header": "Length of nosing(m)"
-        },
-        {
-          "letter": "Q",
-          "header": "Length of handrail(m)"
-        },
-        {
-          "letter": "R",
-          "header": "Weight of rebar(kg)"
-        },
-        {
-          "letter": "S",
-          "header": "Number(pc)"
-        }
-      ],
-      "cellCount": 171,
-      "image": "/tutorial/tas/report/elements/staircase.png",
-      "segments": [
-        {
-          "id": "area-volume",
-          "titleEn": "Area & Volume",
-          "titleId": "Luas dan Volume",
-          "quantityColumns": [
-            {
-              "letter": "D",
-              "header": "Projected area(m2)"
-            },
-            {
-              "letter": "E",
-              "header": "Volume(m3)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/staircase-area-volume.png"
-        },
-        {
-          "id": "concrete",
-          "titleEn": "Concrete Volume",
-          "titleId": "Volume Beton",
-          "quantityColumns": [
-            {
-              "letter": "F",
-              "header": "Volume of concrete of flight(m3)"
-            },
-            {
-              "letter": "G",
-              "header": "Volume of concrete of landing beam(m3)"
-            },
-            {
-              "letter": "H",
-              "header": "Volume of concrete of landing slab(m3)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/staircase-concrete.png"
-        },
-        {
-          "id": "formwork",
-          "titleEn": "Formwork",
-          "titleId": "Bekisting",
-          "quantityColumns": [
-            {
-              "letter": "I",
-              "header": "Area of formwork(m2)"
-            },
-            {
-              "letter": "J",
-              "header": "Area of formwork to flight(m2)"
-            },
-            {
-              "letter": "K",
-              "header": "Area of formwork to landing beam(m2)"
-            },
-            {
-              "letter": "L",
-              "header": "Area of formwork to landing slab(m2)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/staircase-formwork.png"
-        },
-        {
-          "id": "surfaces",
-          "titleEn": "Surface Areas",
-          "titleId": "Luas Permukaan",
-          "quantityColumns": [
-            {
-              "letter": "M",
-              "header": "Area of open string(m2)"
-            },
-            {
-              "letter": "N",
-              "header": "Area of riser(m2)"
-            },
-            {
-              "letter": "O",
-              "header": "Area of tread(m2)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/staircase-surfaces.png"
-        },
-        {
-          "id": "length-rebar-count",
-          "titleEn": "Length, Rebar & Count",
-          "titleId": "Panjang, Tulangan, dan Jumlah",
-          "quantityColumns": [
-            {
-              "letter": "P",
-              "header": "Length of nosing(m)"
-            },
-            {
-              "letter": "Q",
-              "header": "Length of handrail(m)"
-            },
-            {
-              "letter": "R",
-              "header": "Weight of rebar(kg)"
-            },
-            {
-              "letter": "S",
-              "header": "Number(pc)"
-            }
-          ],
-          "image": "/tutorial/tas/report/elements/staircase-length-rebar-count.png"
-        }
-      ]
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Concrete Grade"
+          },
+          {
+            "letter": "E",
+            "header": "Thickness"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "F",
+            "header": "Volume(m3)"
+          },
+          {
+            "letter": "G",
+            "header": "Area(m2)"
+          },
+          {
+            "letter": "H",
+            "header": "Area of formwork to soffit(m2)"
+          },
+          {
+            "letter": "I",
+            "header": "Area of formwork to edge and break of slab(m2)"
+          },
+          {
+            "letter": "K",
+            "header": "Weight of rebar(kg)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/in-situ-slab-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/in-situ-slab-revised.png"
     },
     "room": {
       "title": "Room",
@@ -636,7 +539,58 @@
         }
       ],
       "cellCount": 187,
-      "image": "/tutorial/tas/report/elements/room.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "D",
+            "header": "Area of finish to floor finish(m2)"
+          },
+          {
+            "letter": "E",
+            "header": "Length of finish to skirting(m)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of finish to skirting(m2)"
+          },
+          {
+            "letter": "G",
+            "header": "Area of finish to wall finish(m2)"
+          },
+          {
+            "letter": "H",
+            "header": "Area of custom finish to wall finish(m2)"
+          },
+          {
+            "letter": "I",
+            "header": "Area of suspended ceiling(m2)"
+          },
+          {
+            "letter": "J",
+            "header": "Area of waterproof to flat surface(m2)"
+          },
+          {
+            "letter": "K",
+            "header": "Area of waterproof to vertical surface(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/room-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/room-revised.png"
     },
     "floor-finish": {
       "title": "Floor Finish",
@@ -658,7 +612,42 @@
         }
       ],
       "cellCount": 126,
-      "image": "/tutorial/tas/report/elements/floor-finish.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          },
+          {
+            "letter": "D",
+            "header": "Associated Room"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "E",
+            "header": "Area of finish to floor finish(m2)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of finish to vertical surface of floor finish(m2)"
+          },
+          {
+            "letter": "G",
+            "header": "Girth(m)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/floor-finish-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/floor-finish-revised.png"
     },
     "waterproof": {
       "title": "Waterproof",
@@ -676,7 +665,38 @@
         }
       ],
       "cellCount": 84,
-      "image": "/tutorial/tas/report/elements/waterproof.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          },
+          {
+            "letter": "D",
+            "header": "Associated Room"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "E",
+            "header": "Area of waterproof to flat surface(m2)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of waterproof to vertical surface(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/waterproof-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/waterproof-revised.png"
     },
     "skirting": {
       "title": "Skirting",
@@ -694,7 +714,34 @@
         }
       ],
       "cellCount": 60,
-      "image": "/tutorial/tas/report/elements/skirting.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Floor"
+          },
+          {
+            "letter": "B",
+            "header": "Name"
+          },
+          {
+            "letter": "C",
+            "header": "Associated Room"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "D",
+            "header": "Length of finish to skirting(m)"
+          },
+          {
+            "letter": "E",
+            "header": "Area of finish to skirting(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/skirting-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/skirting-revised.png"
     },
     "wall-finish": {
       "title": "Wall Finish",
@@ -728,7 +775,54 @@
         }
       ],
       "cellCount": 220,
-      "image": "/tutorial/tas/report/elements/wall-finish.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          },
+          {
+            "letter": "D",
+            "header": "Associated Room"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "E",
+            "header": "Area of finish to wall finish(m2)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of custom finish to wall finish(m2)"
+          },
+          {
+            "letter": "G",
+            "header": "Area of finish to brick surface(m2)"
+          },
+          {
+            "letter": "H",
+            "header": "Area of custom finish to brick surface(m2)"
+          },
+          {
+            "letter": "I",
+            "header": "Area of finish to concrete surface(m2)"
+          },
+          {
+            "letter": "J",
+            "header": "Area of custom finish to concrete surface(m2)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/wall-finish-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/wall-finish-revised.png"
     },
     "suspended-ceiling": {
       "title": "Suspended Ceiling",
@@ -746,7 +840,38 @@
         }
       ],
       "cellCount": 90,
-      "image": "/tutorial/tas/report/elements/suspended-ceiling.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          },
+          {
+            "letter": "D",
+            "header": "Associated Room"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "E",
+            "header": "Area of suspended ceiling(m2)"
+          },
+          {
+            "letter": "F",
+            "header": "Girth(m)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/suspended-ceiling-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/suspended-ceiling-revised.png"
     },
     "pile-cap": {
       "title": "Pile Cap",
@@ -784,41 +909,54 @@
         }
       ],
       "cellCount": 110,
-      "image": "/tutorial/tas/report/elements/pile-cap.png"
-    },
-    "pile": {
-      "title": "Pile",
-      "sheet": "Pile-def",
-      "page": 18,
-      "range": "A1:I4",
-      "quantityColumns": [
-        {
-          "letter": "D",
-          "header": "Volume(m3)"
-        },
-        {
-          "letter": "E",
-          "header": "Volume of excavating(m3)"
-        },
-        {
-          "letter": "F",
-          "header": "Number(pc)"
-        },
-        {
-          "letter": "G",
-          "header": "Length(m)"
-        },
-        {
-          "letter": "H",
-          "header": "Area of section(m2)"
-        },
-        {
-          "letter": "I",
-          "header": "Weight of rebar(kg)"
-        }
-      ],
-      "cellCount": 36,
-      "image": "/tutorial/tas/report/elements/pile.png"
+      "display": {
+        "classificationColumns": [
+          {
+            "letter": "A",
+            "header": "Construction Zone"
+          },
+          {
+            "letter": "B",
+            "header": "Floor"
+          },
+          {
+            "letter": "C",
+            "header": "Name"
+          }
+        ],
+        "quantityColumns": [
+          {
+            "letter": "D",
+            "header": "Volume(m3)"
+          },
+          {
+            "letter": "E",
+            "header": "Area of formwork(m2)"
+          },
+          {
+            "letter": "F",
+            "header": "Area of soffit(m2)"
+          },
+          {
+            "letter": "G",
+            "header": "Area of side(m2)"
+          },
+          {
+            "letter": "H",
+            "header": "Area of top(m2)"
+          },
+          {
+            "letter": "I",
+            "header": "Number(pc)"
+          },
+          {
+            "letter": "J",
+            "header": "Weight of rebar(kg)"
+          }
+        ],
+        "image": "/tutorial/tas/report/elements/pile-cap-revised.png"
+      },
+      "image": "/tutorial/tas/report/elements/pile-cap-revised.png"
     }
   },
   "pdfDisplayReplacements": {

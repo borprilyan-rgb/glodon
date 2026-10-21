@@ -67,13 +67,12 @@ const uses = {
 }
 
 const groups = [
-  ['pile-cap-report', 'Pile Cap – Pile', ['pile-cap', 'pile']],
-  ['slab-report', 'In-Situ Slab – Slab Opening', ['in-situ-slab', 'slab-opening']],
+  ['pile-cap-report', 'Pile Cap', ['pile-cap']],
+  ['slab-report', 'In-Situ Slab', ['in-situ-slab']],
   ['beam-report', 'Beam', ['beam']],
   ['column-report', 'Column', ['column']],
-  ['wall-report', 'Wall – Curtain Wall', ['wall', 'curtain-wall']],
-  ['openings-report', 'Door – Window – Door Window', ['door', 'window', 'door-window']],
-  ['staircase-report', 'Staircase', ['staircase']],
+  ['wall-report', 'Wall', ['wall']],
+  ['openings-report', 'Door – Window', ['door', 'window']],
   ['finishes-report', 'Room – Floor Finish – Waterproof – Skirting – Wall Finish – Suspended Ceiling', ['room', 'floor-finish', 'waterproof', 'skirting', 'wall-finish', 'suspended-ceiling']],
 ]
 
@@ -147,12 +146,12 @@ export function getReportLessons(language = 'id') {
   const isEn = language === 'en'
   const descriptions = isEn ? usesEn : uses
   return groups.map(([id, title, elements], stepIndex) => ({
-  id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: 8,
+  id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: groups.length,
   hideIntro: true, showInstructionsBelowImage: true, duration: `${elements.length * 5} ${isEn ? 'min' : 'menit'}`,
   checks: isEn ? ['I can identify the Quantity columns in the report', 'I can read column names and their units', 'I can explain what each Quantity column is used for'] : ['Dapat mengenali kolom Quantity pada report', 'Dapat membaca nama kolom dan satuannya', 'Dapat menjelaskan kegunaan kolom Quantity'],
   actions: elements.flatMap(slug => {
     const report = source.reports[slug]
-    return (report.segments || [report]).map(segment => {
+    return (report.segments || [report.display || report]).map(segment => {
     const actionTitle = segment.id ? `${report.title} – ${isEn ? segment.titleEn : segment.titleId}` : report.title
     const description = segment.quantityColumns.map(({ header }, columnIndex) => {
       let usage = descriptions[header]

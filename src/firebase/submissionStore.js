@@ -1,3 +1,5 @@
+import { firebaseConnectionsEnabled } from '../data/backendMode.js'
+
 export const OUTBOX_PREFIX = 'cubicost:firebase:attempt:'
 
 function validStoredPayload(payload) {
@@ -125,6 +127,12 @@ export function createSubmissionStore({ storage = () => localStorage, uuid = () 
 
 const client = () => import('./client.js')
 export const submissionStore = createSubmissionStore({
-  authenticate: async () => (await client()).participantUid(),
-  send: async payload => (await client()).sendAttempt(payload),
+  authenticate: async () => {
+    if (!firebaseConnectionsEnabled) throw new Error('Firebase connections are temporarily disabled.')
+    return (await client()).participantUid()
+  },
+  send: async payload => {
+    if (!firebaseConnectionsEnabled) throw new Error('Firebase connections are temporarily disabled.')
+    return (await client()).sendAttempt(payload)
+  },
 })
