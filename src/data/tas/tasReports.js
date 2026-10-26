@@ -170,6 +170,13 @@ export function getReportLessons(language = 'id') {
 export const reportLessons = getReportLessons('id')
 
 export const reportProgressKey = 'cubicost:tas:reports:progress:v3'
+export function saveReportProgress(progress, storage) {
+  try {
+    const target = storage || localStorage
+    target.setItem(reportProgressKey, JSON.stringify(progress))
+    return true
+  } catch { return false }
+}
 export const reportLessonAliases = { 'column-report': 'beam-report' }
 export const getReportLesson = (id, language = 'id') => getReportLessons(language).find(lesson => lesson.id === id)
 export const emptyReportProgress = () => Object.fromEntries(reportLessons.map(lesson => [lesson.id, { completed: false, checks: [] }]))

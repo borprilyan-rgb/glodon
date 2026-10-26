@@ -33,7 +33,9 @@ test('all nine local assessments preserve grading, drafts, results and routes wi
     for (const product of ['tas', 'trb', 'tme']) for (const section of [1, 2, 3]) {
       const exercise = getSectionExercise(product, section)
       const backend = getCurrentAssessment(product, section)
-      assert.deepEqual(exercise.copy.en.questions.map(q => q.title), backend.copy.en.questions.map(q => q.title))
+      // Display translations may differ; the question identities and answer values cannot.
+      assert.deepEqual(exercise.copy.en.questions.map(q => [q.id, q.type, q.options.map(([value]) => value)]), backend.copy.en.questions.map(q => [q.id, q.type, q.options.map(([value]) => value)]))
+      assert.deepEqual(exercise.copy.id.questions.map(q => q.title), backend.copy.id.questions.map(q => q.title))
       assert.equal(exercise.storageKey, backend.storageKey)
       const correct = backend.expectedAnswers
       // Exhaust all 3^5 answer combinations, covering every score and pass boundary.

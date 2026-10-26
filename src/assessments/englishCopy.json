@@ -1,0 +1,44 @@
+{
+  "tas-1-v3": {
+    "q1": { "title": "What is the main purpose of Floor Settings in TAS?", "options": [["A", "Set the colours of CAD drawing lines"], ["B", "Set the project report type"], ["C", "Set floor elevations and project material grades"]] },
+    "q2": { "title": "If a project contains several buildings, how should the building areas be separated?", "options": [["A", "No settings are needed; the output will be detected automatically"], ["B", "Use Zone in Floor Settings"], ["C", "Use Separator Line to separate the buildings"]] },
+    "q3": { "title": "Which drawing format is most recommended for modelling in TAS?", "options": [["A", "Scanned PDF"], ["B", "DWG"], ["C", "JPEG"]] },
+    "q4": { "title": "What is the purpose of Measurement Rules in TAS?", "options": [["A", "Set calculation principles according to the SMM and specifications used"], ["B", "Convert DWG drawings to PDF"], ["C", "Set reinforcement diameters"]] },
+    "q5": { "title": "What should you do after using Add Drawing?", "options": [["A", "Calculate and View Expression"], ["B", "Split Drawing and Relocate"], ["C", "Rebar Data Check"]] }
+  },
+  "tas-2-v3": {
+    "q1": { "title": "If a pile cap is 1 metre below the current floor elevation, which Top Elevation setting is correct?", "options": [["A", "Floor_Bottom_Elevation + 1"], ["B", "Floor_Bottom_Elevation - 1"], ["C", "Floor_Top_Elevation - 1"]] },
+    "q2": { "title": "What is the correct sequence for Auto Identify of a slab?", "options": [["A", "Pick Sideline → Pick Label → Auto Identify"], ["B", "Auto Identify → Pick Label → Pick Sideline"], ["C", "Pick Label → Auto Identify→ Pick Sideline"]] },
+    "q3": { "title": "If Auto Identify fails for some beams, which method can be used?", "options": [["A", "Delete all reference drawings"], ["B", "Use manual modelling"], ["C", "Run Calculate again"]] },
+    "q4": { "title": "After changing a finish in Room Finish, what should you do?", "options": [["A", "Regenerate Room Finish"], ["B", "Auto Identify"], ["C", "Room Finish updates automatically"]] },
+    "q5": { "title": "How do you change the appearance of an already modelled Floor Finish?", "options": [["A", "Select Measurement Rules for Floor Finish"], ["B", "Select View Expression"], ["C", "Select Material Texture or Fill Color in the Attribute Editor"]] }
+  },
+  "tas-3-v3": {
+    "q1": { "title": "If the quantities remain unchanged after a modelling revision, what should you do?", "options": [["A", "Run Calculate again"], ["B", "Export the results immediately"], ["C", "The quantities will update automatically"]] },
+    "q2": { "title": "How can you check that the slab has been deducted from the beam formwork quantity?", "options": [["A", "Use View Expression"], ["B", "Use Measurement Rules"], ["C", "Use Rebar Data Check"]] },
+    "q3": { "title": "When reporting slab volume by slab thickness, what should you do if Thickness is missing from the report?", "options": [["A", "Select Calculate"], ["B", "Select Measurement Rules"], ["C", "Select Set Classification and Quantity and check “Thickness”"]] },
+    "q4": { "title": "Can reinforcement quantities be obtained in TAS?", "options": [["A", "No"], ["B", "Yes, but only using a kg/m3 ratio"], ["C", "Yes, with reinforcement quantities matching the detailed drawings"]] },
+    "q5": { "title": "What are the steps to export a TAS model for later use in TRB?", "options": [["A", "BIM Model → Export IFC File → Select Folder → Save"], ["B", "BIM Model → Export IFC Quantity → Select Folder → Save"], ["C", "BIM Model → Export Model → Select Folder → Save"]] }
+  },
+  "trb-1-v3": {
+    "q1": { "title": "If structural modelling starts in TAS and reinforcement modelling will continue in TRB, which process should be used?", "options": [["A", "BIM Model → Import Model → Select File → Open"], ["B", "BIM Model → Export Model → Select File → Open"], ["C", "BIM Model → Export to PDF → Select File → Open"]] },
+    "q2": { "title": "What is the file format of a TAS model to be used in TRB?", "options": [["A", "DWG"], ["B", "IFC"], ["C", "Cubic"]] },
+    "q3": { "title": "What is the purpose of Calculation Rules in TRB?", "options": [["A", "Set detailed calculation rules and reinforcement configurations for different elements"], ["B", "Set only the working drawing format"], ["C", "Set the display colours of elements"]] },
+    "q4": { "title": "Can you model directly in TRB without starting in TAS?", "options": [["A", "No, modelling must start in TAS"], ["B", "Yes, but the quantities obtained are still limited to reinforcement"], ["C", "Yes, all quantities are obtained, including concrete, formwork, and reinforcement"]] },
+    "q5": { "title": "To simplify modelling in TRB, which format should be used for column and beam reinforcement schedules?", "options": [["A", "PDF"], ["B", "DWG"], ["C", "Excel"]] }
+  },
+  "trb-2-v3": {
+    "q1": { "title": "Which of the following elements cannot yet be modelled in TRB?", "options": [["A", "Staircase"], ["B", "Concrete wall"], ["C", "Ramp"]] },
+    "q2": { "title": "Which of the following elements CANNOT be reinforced using a schedule in TRB?", "options": [["A", "Beam"], ["B", "Slab"], ["C", "Column"]] },
+    "q3": { "title": "How do you enter pile cap concrete cover when the bottom, side, and top cover thicknesses differ?\nFor example: bottom cover 100 mm\nside cover 50 mm\ntop cover 20 mm", "options": [["A", "Change the pile cap setting in Calculation Rules to 100/50/20."], ["B", "Change “Cover” in the Attribute Editor to 100/50/20."], ["C", "Change the setting in Floor Settings to 100/50/20."]] },
+    "q4": { "title": "In the Links column, what does (5×8) mean in the format “D13-100(5×8)”?", "options": [["A", "5 and 8 links"], ["B", "Spacing of 5 and 8 cm"], ["C", "5 vertical legs and 8 horizontal legs"]] },
+    "q5": { "title": "After entering slab reinforcement in Parametric Arrangement, what should you do to apply it to the entity?", "options": [["A", "Generate Rebar and Rebar Content"], ["B", "Calculate"], ["C", "View Quantity"]] }
+  },
+  "trb-3-v3": {
+    "q1": { "title": "What is the main purpose of Rebar Data Check?", "options": [["A", "Change reinforcement diameters automatically"], ["B", "Create a new structural model"], ["C", "Check whether all reinforcement has been entered"]] },
+    "q2": { "title": "Which command shows the installed reinforcement positions, including laps, anchorage, and support and span zones?", "options": [["A", "Edit Rebar"], ["B", "Rebar Layout"], ["C", "Rebar Data Check"]] },
+    "q3": { "title": "After a small modelling change, what is the correct sequence to calculate only selected entities?", "options": [["A", "Select Element → Select Entity → View Quantity"], ["B", "Select Element → Select Entity → Calculate"], ["C", "Select Element → Select Entity → Calculate Selected Entity"]] },
+    "q4": { "title": "What is the correct sequence to view the quantities of only selected entities within an element?", "options": [["A", "Select Element → Select Entity → View Quantity"], ["B", "Select Element → Select Entity → Calculate"], ["C", "Select Element → Select Entity → Calculate Selected Entity"]] },
+    "q5": { "title": "In which format is the quantity summary report for the model provided?", "options": [["A", "Excel"], ["B", "PDF"], ["C", "JPEG"]] }
+  }
+}

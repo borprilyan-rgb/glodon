@@ -1,5 +1,7 @@
 ﻿export const uiText = {
   id: {
+    lessonNotFound: 'Materi tidak ditemukan', lessonNotFoundDescription: 'Tautan materi ini tidak tersedia. Kembali ke peta belajar untuk memilih materi.',
+    imageZoomControls: 'Kontrol perbesaran gambar', zoomIn: 'Perbesar', zoomOut: 'Perkecil',
     language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Pembelajaran TAS, TRB & TME-C',
     progress: 'Progres tutorial', stepsProgress: (done, total) => `${done} dari ${total} langkah`, search: 'Cari materi', searchAria: 'Cari materi tutorial',
     noResults: (query) => `Materi tidak ditemukan untuk “${query}”.`, reset: 'Reset Progres', resetConfirm: 'Reset seluruh progres tutorial? Tindakan ini tidak dapat dibatalkan.',
@@ -33,6 +35,8 @@
     productPreviewAlt: (product) => `Pratinjau antarmuka ${product} yang digunakan dalam tutorial`, productPreviewCaption: (product) => `Selamat datang di tutorial ${product}.`, enlargeProductPreview: (product) => `Perbesar pratinjau ${product}`,
   },
   en: {
+    lessonNotFound: 'Lesson not found', lessonNotFoundDescription: 'This lesson link is unavailable. Return to the learning map to choose a lesson.',
+    imageZoomControls: 'Image zoom controls', zoomIn: 'Zoom in', zoomOut: 'Zoom out',
     language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'TAS, TRB & TME-C Learning Resource',
     progress: 'Tutorial progress', stepsProgress: (done, total) => `${done} of ${total} steps`, search: 'Search tutorial', searchAria: 'Search tutorial steps',
     noResults: (query) => `No results for “${query}”.`, reset: 'Reset Progress', resetConfirm: 'Reset all tutorial progress? This cannot be undone.',

@@ -20,7 +20,7 @@ for (const [product, getCourse] of Object.entries({ tas: getTasData, trb: getTrb
     expect(await page.evaluate(product => JSON.parse(localStorage.getItem(`cubicost:tutorial:${product}:progress`)).completed, product)).toContain(step.id)
     expect(await page.evaluate(product => localStorage.getItem(`cubicost:tutorial:${product}:lastLesson`), product)).toBe(step.id)
     await page.locator('.course-map-button').click()
-    await expect(page).toHaveURL(`${origin}/${product}/course`)
+    await expect(page).toHaveURL(`${origin}/${product}/`)
     await expect(page.locator(`.course-lesson[href="/${product}/lesson/${step.id}"]`)).toHaveClass(/is-completed/)
     await page.goBack()
     await expect(page).toHaveURL(path)

@@ -1,5 +1,6 @@
 import catalog from '../assessments/catalog.json'
 import forms from '../assessments/forms.json'
+import englishCopy from '../assessments/englishCopy.json'
 import { getTasData } from './tas/index.js'
 import { getTrbData } from './trb/index.js'
 import { getTmeData } from './tme/index.js'
@@ -8,8 +9,19 @@ import { localAssessment } from './localAssessment.js'
 function freeze(value) { if (value && typeof value === 'object') { Object.values(value).forEach(freeze); Object.freeze(value) } return value }
 freeze(forms)
 freeze(catalog)
+freeze(englishCopy)
+// Correct display copy without rewriting immutable forms or their stored versions.
+function localizeForm(form) {
+  const translations = englishCopy[form?.versionId]
+  if (!translations) return form
+  return freeze({ ...form, copy: { ...form.copy, en: { ...form.copy.en, questions: form.copy.en.questions.map(question => ({
+    ...question,
+    title: translations[question.id].title,
+    options: question.options.map(([value]) => [value, translations[question.id].options.find(([key]) => key === value)[1]]),
+  })) } } })
+}
 export function resolvePublicAssessment(product, section, version) {
-  return forms.find(form => form.product === product && form.section === section && form.assessmentVersion === version) || null
+  return localizeForm(forms.find(form => form.product === product && form.section === section && form.assessmentVersion === version) || null)
 }
 const localDefinitions = new Map()
 export function getSectionExercise(product, section) {
