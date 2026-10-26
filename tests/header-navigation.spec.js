@@ -1,5 +1,16 @@
 import { test, expect } from '@playwright/test'
 
+test('new visitors start in Indonesian and an explicit English choice survives navigation', async ({ page }) => {
+  await page.goto('http://127.0.0.1:5173/')
+  await expect(page.locator('html')).toHaveAttribute('lang', 'id')
+  await expect(page.getByRole('button', { name: 'Bahasa Indonesia', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await page.getByRole('button', { name: 'English', exact: true }).click()
+  await page.goto('http://127.0.0.1:5173/present')
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+})
+
 test('lesson header has Contact and Learning Map; brand still returns home', async ({ page }) => {
   await page.goto('http://127.0.0.1:5173/tas/lesson/pile-cap-report')
   const tools = page.locator('.lesson-topbar__tools')
