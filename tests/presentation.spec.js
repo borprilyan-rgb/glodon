@@ -55,15 +55,17 @@ async function openEnglish(page, path = '/present') {
 
 test('presentation home cards open courses and support fullscreen and lesson return', async ({ page }) => {
   await openEnglish(page)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('One place to build Cubicost skills')
+  await expect(page.locator('.presentation-heading')).toHaveCount(0)
+  await expect(page.locator('.presentation-products')).toBeVisible()
   await expect(page.locator('.presentation-products button')).toHaveCount(3)
   await expect(page.locator('.presentation-course-nav')).toHaveCount(0)
   await expect(page.locator('.presentation-controls')).toHaveCount(0)
-  await page.getByRole('heading', { level: 1 }).click()
+  await page.locator('.presentation-stage').focus()
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveURL(`${origin}/present`)
   await page.getByRole('button', { name: 'Switch to Indonesian' }).click()
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Satu tempat untuk mengembangkan keterampilan Cubicost')
+  await expect(page.locator('.presentation-heading')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Ganti ke bahasa Inggris' })).toBeVisible()
   await page.getByRole('button', { name: 'Ganti ke bahasa Inggris' }).click()
   await page.getByRole('button', { name: 'Fullscreen', exact: true }).click()
   await page.getByRole('button', { name: 'TME-C', exact: true }).click()
@@ -116,13 +118,14 @@ test('walkthrough survives refresh and lesson pages hide the presentation entry'
 
 test('slides fit desktop and mobile widths and recover from invalid parameters', async ({ page }) => {
   await openEnglish(page, '/present?product=invalid&lesson=missing&slide=999')
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('One place to build Cubicost skills')
+  await expect(page.locator('.presentation-heading')).toHaveCount(0)
+  await expect(page.locator('.presentation-products')).toBeVisible()
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 })
     for (let slide = 0; slide < 5; slide++) {
       await page.goto(`${origin}/present?slide=${slide}`)
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await expect(page.locator('.presentation-products')).toBeVisible()
     }
   }
   await page.screenshot({ path: 'test-results/presentation-mobile.png', fullPage: true })

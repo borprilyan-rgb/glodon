@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AlertCircle, Clipboard, Mail, MessageCircle, ShieldCheck } from 'lucide-react'
+import { AlertCircle, Clipboard, Mail, MessageCircle } from 'lucide-react'
 import { contactConfig } from '../config/contact'
 import { buildContactLinks, isValidEmail, isValidWhatsapp } from '../data/contactLinks'
 
@@ -37,8 +37,6 @@ export default function ContactPage({ t }) {
     <header className="contact-intro">
       <span className="eyebrow">{t.contact}</span>
       <h1>{t.contactTitle}</h1>
-      <p>{t.contactIntro}</p>
-      <p className="contact-guidance">{t.contactGuidance}</p>
       {!configured && <div className="contact-unconfigured" role="status"><AlertCircle size={17} aria-hidden="true" />{t.contactNotConfigured}</div>}
     </header>
     <section className="contact-grid" aria-label={t.contactMethods}>
@@ -55,6 +53,5 @@ export default function ContactPage({ t }) {
         <div className="contact-card__actions"><ContactAction href={whatsappHref} external><MessageCircle size={17} aria-hidden="true" />{t.openWhatsApp}</ContactAction><CopyButton value={contactConfig.whatsappDisplay} valid={whatsappIsValid} label={t.copyNumber} t={t} /></div>
       </article>
     </section>
-    <aside className="contact-privacy"><ShieldCheck size={18} aria-hidden="true" /><p>{t.privacyReminder}</p></aside>
   </div>
 }

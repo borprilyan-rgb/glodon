@@ -101,3 +101,6 @@
   .presentation-action--revised .presentation-image img { height: auto; max-height: 55vh; }
   .presentation-instructions { max-height: min(45dvh, 400px); }
 }
+
+.presentation-selection-title { font-size: clamp(24px, 2.4vw, 36px); line-height: 1.2; margin: 0 0 16px; }
+.presentation-stage--home .presentation-products { margin-top: 16px; }

@@ -110,11 +110,10 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     return () => window.removeEventListener('keydown', keydown)
   }, [count, c.fullscreenError, navigate, expandedImage, walkthrough])
 
-  const exitPath = walkthrough ? `/${product}/lesson/${lesson.id}` : '/'
   return <div className="presentation" ref={root}>
     <div className="presentation-content" inert={expandedImage ? true : undefined} aria-hidden={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
-      <a href={exitPath} className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
+      <a href="/" className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
       <div><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
     </header>
     <div hidden={!mapOpen}><PresentationMap key={product} courses={courses} product={product} lessonId={lesson.id} index={index} walkthrough={walkthrough} language={language} onClose={() => {
@@ -130,7 +129,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     }} /></div>
     {walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="tools" />}
     <main tabIndex={-1} className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
-      <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}` : c.home.label}</span><h1>{walkthrough ? (revisedLayout ? lesson.title : action.title) : c.home.title}</h1>{!walkthrough && <p>{c.home.text}</p>}</div>
+      {walkthrough ? <div className="presentation-heading"><span className="presentation-eyebrow">{`${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}`}</span><h1>{revisedLayout ? lesson.title : action.title}</h1></div> : <h1 className="presentation-selection-title">{c.home.title}</h1>}
       {walkthrough ? <div className={`presentation-action${revisedLayout ? ' presentation-action--revised' : ''}`}>
         <div className="presentation-image">
           {failedImage === image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image, alt: action.imageAlt || action.alt || action.title, caption: action.title, description: action.description, instructionFormat: action.instructionFormat, opener: event.currentTarget })}>

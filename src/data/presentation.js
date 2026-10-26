@@ -21,7 +21,7 @@ export const presentationCopy = {
     "missing": "Screenshot unavailable",
     "home": {
       "label": "Cubicost Learning Centre",
-      "title": "One place to build Cubicost skills",
+      "title": "Choose an application",
       "text": "Guided learning for quantity surveyors, estimators, and project teams."
     }
   },
@@ -47,7 +47,7 @@ export const presentationCopy = {
     "missing": "Gambar tidak tersedia",
     "home": {
       "label": "Cubicost Learning Centre",
-      "title": "Satu tempat untuk mengembangkan keterampilan Cubicost",
+      "title": "Pilih aplikasi",
       "text": "Pembelajaran terpandu untuk quantity surveyor, estimator, dan tim proyek."
     }
   }
