@@ -68,3 +68,6 @@
 .participant-field-hint { color: var(--muted); font-size: 12px; font-weight: 400; }
 @media (max-width: 760px) { .exercise-layout, .exercise-results { grid-template-columns: 1fr; }.exercise-card, .exercise-brief { padding: 20px; }.exercise-navigation button { flex: 1; justify-content: center; font-size: 13px; }.exercise-question h2 { font-size: 21px; }.exercise-grid-point { width: 40px; height: 40px; }.exercise-result-heading { align-items: start; } }
 
+
+.test-page .test-list { margin-top: 24px; gap: 0; }
+.test-page .test-list__section + .test-list__section { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }

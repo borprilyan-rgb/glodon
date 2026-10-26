@@ -24,7 +24,8 @@ test('header uses the two contextual destinations for each page and product', ()
   }
   assert.deepEqual(getHeaderNavigation({ page: 'hub' }).map(link => link.href), ['/contact'])
   assert.deepEqual(getHeaderNavigation({ page: 'contact' }).map(link => link.href), ['/', '/exercises'])
-  assert.deepEqual(getHeaderNavigation({ page: 'exercises' }).map(link => link.href), ['/contact', '/'])
+  assert.deepEqual(getHeaderNavigation({ page: 'exercises' }).map(link => link.href), ['/contact', '/exercises/score'])
+  assert.deepEqual(getHeaderNavigation({ page: 'scores' }).map(link => link.href), ['/exercises', '/'])
   assert.deepEqual(getHeaderNavigation({ page: 'admin' }).map(link => link.href), ['/contact', '/'])
 })
 
@@ -35,7 +36,7 @@ test('rendered headers retain language, progress, mobile controls and admin acti
     const { uiText } = await server.ssrLoadModule('/src/data/uiText.js')
     for (const language of ['id', 'en']) {
       for (const product of ['tas', 'trb', 'tme', undefined]) {
-        for (const page of ['hub', 'lesson', 'course', 'welcome', 'tests', 'exercise', 'exercises', 'contact', 'admin']) {
+        for (const page of ['hub', 'lesson', 'course', 'welcome', 'tests', 'exercise', 'exercises', 'scores', 'contact', 'admin']) {
           const activeStep = page === 'lesson' && product ? { id: 'example', title: 'Example lesson', partNumber: '01' } : null
           const html = renderToStaticMarkup(React.createElement(LessonHeader, {
             page, product, activeStep, completed: new Set(['example']), total: 8,

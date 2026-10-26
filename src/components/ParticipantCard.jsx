@@ -33,10 +33,8 @@ export default function ParticipantCard({ profile, language, editUntil, onEdit }
       </button>
     </div>
     <ParticipantDetails profile={profile} language={language} />
-    <p className="participant-profile-card__timer" aria-live="off">
-      {remaining > 0
-        ? (en ? `Details can be changed again in ${formatCountdown(remaining)}.` : `Data diri dapat diubah kembali dalam ${formatCountdown(remaining)}.`)
-        : (en ? 'Details are available to edit.' : 'Data diri dapat diubah.')}
-    </p>
+    {remaining > 0 && <p className="participant-profile-card__timer" aria-live="off">
+      {en ? `Details can be changed again in ${formatCountdown(remaining)}.` : `Data diri dapat diubah kembali dalam ${formatCountdown(remaining)}.`}
+    </p>}
   </section>
 }

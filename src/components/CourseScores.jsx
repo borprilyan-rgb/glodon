@@ -39,7 +39,7 @@ export default function CourseScores({ product, scores, language, profile }) {
         const result = scores.find(score => score.exercise.path === exercise.path)?.result
         return <li key={exercise.path}>
           <div className="course-scores__row"><a href={exercise.path}>{en ? 'Section' : 'Bagian'} {exercise.section}: {sectionTitle(exercise)}</a><strong>{result?.total ?? 0}/100</strong></div>
-        <span className={!result ? 'course-scores__pending' : result.passed ? 'course-scores__passed' : 'course-scores__review'}>{scoreStatus(result, language)}</span>
+        {result && <span className={result.passed ? 'course-scores__passed' : 'course-scores__review'}>{scoreStatus(result, language)}</span>}
         {result && !result.criticalPassed && <p>{exercise.copy[language].critical}</p>}
       </li>
       })}</ul>

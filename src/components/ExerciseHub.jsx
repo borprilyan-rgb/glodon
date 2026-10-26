@@ -1,12 +1,15 @@
 import { ArrowLeft, ArrowRight, ClipboardCheck } from 'lucide-react'
-import CourseScores from './CourseScores'
+import ParticipantCard from './ParticipantCard'
+import ParticipantEntry from './ParticipantEntry'
+import { hasParticipant } from '../data/participant'
 
-export default function ExerciseHub({ language, profile, scores }) {
+export default function ExerciseHub({ language, profile, scores, editingParticipant, participantEditUntil, onEditParticipant, onSaveParticipant }) {
   const en = language === 'en'
   const products = ['tas', 'trb', 'tme']
   const label = product => product === 'tme' ? 'TME-C' : product.toUpperCase()
   return <div className="course-hub exercise-hub">
-    <header className="course-hub__intro"><span className="eyebrow">{en ? 'Assessment' : 'Evaluasi'}</span><h1>{en ? 'Cubicost Exercises' : 'Latihan Cubicost'}</h1><a className="outline-nav-button exercise-score-shortcut" href="#test-score-overview">{en ? 'View scores' : 'Lihat nilai'}<ArrowRight size={16} aria-hidden="true" /></a></header>
+    <header className="course-hub__intro"><span className="eyebrow">{en ? 'Assessment' : 'Evaluasi'}</span><h1>{en ? 'Cubicost Exercises' : 'Latihan Cubicost'}</h1></header>
+    {hasParticipant(profile) && !editingParticipant ? <ParticipantCard profile={profile} language={language} editUntil={participantEditUntil} onEdit={onEditParticipant} /> : <ParticipantEntry profile={profile} language={language} onContinue={onSaveParticipant} />}
     <section className="hub-course-grid" aria-label={en ? 'Choose an exercise' : 'Pilih latihan'}>{products.map(product => {
       const completed = scores.filter(score => score.exercise.product === product).length
       return <article className={`hub-course-card exercise-hub__card hub-course-card--${product}`} key={product}>
@@ -16,9 +19,6 @@ export default function ExerciseHub({ language, profile, scores }) {
         <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{en ? 'Open Exercises' : 'Buka Latihan'}<ArrowRight size={16} aria-hidden="true" /></a>
       </article>
     })}</section>
-    <section className="exercise-hub__scores" aria-labelledby="test-score-overview"><h2 id="test-score-overview">{en ? 'Exercise score overview' : 'Ringkasan nilai latihan'}</h2>
-      <div className="hub-course-grid">{products.map(product => <div key={product}><h3>Cubicost {label(product)}</h3><CourseScores product={product} language={language} profile={profile} scores={scores.filter(score => score.exercise.product === product)} /></div>)}</div>
-    </section>
     <a className="outline-nav-button" href="/"><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back To Learning' : 'Kembali Ke Pembelajaran'}</a>
   </div>
 }

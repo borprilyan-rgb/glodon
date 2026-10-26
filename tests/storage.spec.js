@@ -41,7 +41,8 @@ test('malformed progress and score records do not crash lessons or test pages', 
   }
   await page.goto(`${origin}/tas/tests`)
   await expect(page.locator('.test-list > article')).toHaveCount(3)
-  await expect(page.locator('.course-scores__pending')).toHaveCount(3)
+  await expect(page.locator('.course-scores__pending')).toHaveCount(0)
+  await expect(page.locator('.course-scores__row strong').filter({ hasText: /^0\/100$/ })).toHaveCount(3)
   await expect(page.getByRole('button', { name: 'Unduh kartu nilai' })).toBeDisabled()
   expect(errors).toEqual([])
 })

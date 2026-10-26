@@ -15,6 +15,7 @@ import { getReportLessons, getReportLesson, emptyReportProgress, loadReportProgr
 import { getCourseCompletion } from './data/courseCompletion'
 import ContactPage from './components/ContactPage'
 import ExerciseHub from './components/ExerciseHub'
+import ExerciseScoresPage from './components/ExerciseScoresPage'
 import SectionExercise from './components/SectionExercise'
 import TestPage from './components/TestPage'
 import ParticipantEntry from './components/ParticipantEntry'
@@ -58,6 +59,7 @@ function routeFromLocation() {
     if (path.includes('/exercise/')) window.history.replaceState({}, '', path.replace('/exercise/', '/tests/'))
     return { product: exerciseMatch[1], page: 'exercise', section: Number(exerciseMatch[2]) }
   }
+  if (path === '/exercises/score') return { page: 'scores' }
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
@@ -327,19 +329,19 @@ export default function App() {
     return <Presentation courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
-    {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
+    {!['exercise', 'tests', 'exercises', 'scores'].includes(route.page) && <PresentationEntry language={language} />}
     {progressCannotSave && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'lesson' && !activeStep && <section className="tutorial-step"><header className="step-header"><h1>{t.lessonNotFound}</h1><p>{t.lessonNotFoundDescription}</p></header><a className="primary-button" href={`/${product}/`}>{t.backToCourseMap}</a></section>}
 
 
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps: tasCourseSteps, progress: { completed: tasCourseCompleted, started: tasCourseStarted }, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
 
-    {['exercise', 'tests'].includes(route.page) && <p className="employee-phase-note" role="status">{language === 'en' ? 'Results are saved only in this browser. Firebase sync is temporarily disabled; clearing browser data will remove local results.' : 'Hasil hanya disimpan di browser ini. Sinkronisasi Firebase sementara dinonaktifkan; menghapus data browser akan menghapus hasil lokal.'}</p>}
-    {participantSaveFailed && ['exercise', 'tests'].includes(route.page) && <p role="alert">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
+    {participantSaveFailed && ['exercise', 'tests', 'exercises'].includes(route.page) && <p role="alert">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <TestPage product={product} parts={product === 'tas' ? tasCourseParts : activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
-    {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
-    {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the exercises page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman latihan.'}</p><a className="primary-button" href="/exercises">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
+    {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
+    {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} />}
+    {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}
     {activeReport && <PileCapReportLesson completion={completion} key={activeReport.id} step={activeReport} index={tasCourseSteps.findIndex(step => step.id === activeReport.id)} total={tasCourseSteps.length} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
