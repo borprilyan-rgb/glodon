@@ -30,7 +30,8 @@ test('TAS home, overview, map and lesson progress use the same 22 current lesson
       }
       const card = html => html.match(/<article class="hub-course-card hub-course-card--tas">[\s\S]*?<\/article>/)[0]
       const emptyHome = render('/')
-      assert(card(emptyHome).includes(`22 ${language === 'en' ? 'lessons' : 'pelajaran'}`))
+      assert(card(emptyHome).includes(language === 'en' ? '0 of 22 steps' : '0 dari 22 langkah'))
+      assert(!emptyHome.includes('hub-course-card__lesson-count'))
       assert(!emptyHome.includes('hub-overall-progress'))
       assert(!emptyHome.includes('hub-section-heading'))
       assert(render('/tas').includes(`${language === 'en' ? '3 parts' : '3 bagian'} · 22`))

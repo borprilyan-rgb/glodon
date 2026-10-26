@@ -48,7 +48,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .hub-overall-progress strong > span { color: var(--muted); font-weight: 400; font-size: 15px; }
 .hub-overall-progress small { color: var(--muted); font-size: 11px; }
 .course-hub--learning .hub-course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.course-hub--learning .hub-course-card { --home-card-padding: 26px; --course-accent: #285523; --course-tint: #eef5e9; min-height: 398px; padding: var(--home-card-padding); border: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 16px; color: var(--navy); background: white; box-shadow: 0 4px 14px #172b4d03; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.course-hub--learning .hub-course-card { --home-card-padding: 26px; --course-accent: #285523; --course-tint: #eef5e9; min-height: 0; padding: var(--home-card-padding); border: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 16px; color: var(--navy); background: white; box-shadow: 0 4px 14px #172b4d03; transition: transform .2s, box-shadow .2s, border-color .2s; }
 .course-hub--learning .hub-course-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px #172b4d0d; border-color: #bdcbe2; }
 .course-hub--learning .hub-course-card--trb { --course-accent: #234b7d; --course-tint: #edf3fc; }
 .course-hub--learning .hub-course-card--tme { --course-accent: #533674; --course-tint: #f3eef9; }
@@ -61,7 +61,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .course-hub--learning .hub-course-card > p { color: var(--muted); font-size: 13px; line-height: 1.75; margin-bottom: 18px; }
 .hub-course-card__lesson-count { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: var(--muted); font-size: 10px; margin-bottom: 20px; }
 .hub-course-card__lesson-count svg { color: var(--course-accent); }
-.course-hub--learning .hub-course-card__progress { padding-top: 16px; border-top: 1px solid #e8ecf3; }
+.course-hub--learning .hub-course-card__progress { margin-top: 0; padding-top: 4px; border-top: 0; }
 .course-hub--learning .progress__meta { font-size: 10px; margin-bottom: 10px; }
 .course-hub--learning .progress__track span { background: var(--course-accent); }
 .course-hub--learning .hub-course-card__actions { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 20px; }
