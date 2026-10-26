@@ -17,7 +17,6 @@ import ContactPage from './components/ContactPage'
 import ExerciseHub from './components/ExerciseHub'
 import ExerciseScoresPage from './components/ExerciseScoresPage'
 import SectionExercise from './components/SectionExercise'
-import TestPage from './components/TestPage'
 import ParticipantEntry from './components/ParticipantEntry'
 import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
@@ -76,7 +75,10 @@ function routeFromLocation() {
   }
   const [product, view, stepId] = path.split('/').filter(Boolean)
   if (!['tas', 'trb', 'tme'].includes(product)) return { page: 'hub' }
-  if (view === 'tests') return { product, page: 'tests' }
+  if (view === 'tests') {
+    window.history?.replaceState({}, '', '/exercises')
+    return { page: 'exercises' }
+  }
   if (!view || view === 'course') {
     const coursePath = `/${product}/`
     if (window.location.pathname !== coursePath) window.history?.replaceState({}, '', coursePath + (window.location.search || '') + (window.location.hash || ''))
@@ -338,7 +340,6 @@ export default function App() {
 
     {participantSaveFailed && ['exercise', 'tests', 'exercises'].includes(route.page) && <p role="alert">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
-    {route.page === 'tests' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <TestPage product={product} parts={product === 'tas' ? tasCourseParts : activeData.tutorialParts} scores={testScores.filter(score => score.exercise.product === product)} profile={participant} participantEditUntil={participantEditUntil} language={language} onEditParticipant={beginParticipantEdit} />)}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}

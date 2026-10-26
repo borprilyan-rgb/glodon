@@ -33,15 +33,20 @@ for (const [product, getCourse] of Object.entries({ tas: getTasData, trb: getTrb
   })
 }
 
-test('TME-C test links and refresh consistently show three assessments', async ({ page }) => {
+test('TME-C section links, refresh and back retain access to all three assessments', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
   await page.goto(`${origin}/exercises`)
-  await page.locator('.exercise-hub__card a[href="/tme/tests"]').click()
-  await expect(page.locator('.test-list > article')).toHaveCount(3)
+  await expect(page.locator('.hub-course-card--tme .exercise-sections')).toBeVisible()
+  await expect(page.locator('.hub-course-card--tme .exercise-sections__item')).toHaveCount(3)
+  await page.locator('.hub-course-card--tme a[href="/tme/tests/section-1"]').click()
+  await expect(page).toHaveURL(`${origin}/tme/tests/section-1`)
+  await expect(page.locator('.section-exercise')).toBeVisible()
   await page.reload()
-  await expect(page.locator('.test-list > article')).toHaveCount(3)
+  await expect(page).toHaveURL(`${origin}/tme/tests/section-1`)
+  await expect(page.locator('.section-exercise')).toBeVisible()
   await page.goBack()
   await expect(page).toHaveURL(`${origin}/exercises`)
+  await expect(page.locator('.hub-course-card--tme .exercise-sections__item')).toHaveCount(3)
 })
 
 test('legacy TAS progress keeps its backup, mapped lesson and curriculum completion after migration', async ({ page }) => {

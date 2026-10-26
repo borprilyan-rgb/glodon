@@ -1,5 +1,6 @@
-import { ArrowLeft, ArrowRight, ClipboardCheck } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import ParticipantCard from './ParticipantCard'
+import ExerciseSectionList from './ExerciseSectionList'
 import ParticipantEntry from './ParticipantEntry'
 import { hasParticipant } from '../data/participant'
 
@@ -16,7 +17,7 @@ export default function ExerciseHub({ language, profile, scores, editingParticip
         <span className="product-mark"><img src={`/branding/cubicost-${product}-logo.png`} alt={`Cubicost ${label(product)}`} /></span>
         <h2>Cubicost {label(product)}</h2>
         <p>{en ? `${completed} of 3 section exercises completed` : `${completed} dari 3 latihan bagian selesai`}</p>
-        <a className="primary-button" href={`/${product}/tests`}><ClipboardCheck size={17} aria-hidden="true" />{en ? 'Open Exercises' : 'Buka Latihan'}<ArrowRight size={16} aria-hidden="true" /></a>
+        <ExerciseSectionList product={product} language={language} scores={scores} />
       </article>
     })}</section>
     <a className="outline-nav-button" href="/"><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back To Learning' : 'Kembali Ke Pembelajaran'}</a>

@@ -151,9 +151,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .exercise-hub .course-hub__intro h1 { margin: 12px 0 14px; font-size: clamp(34px, 4vw, 52px); line-height: 1.1; }
 .exercise-hub .course-hub__intro p { color: var(--muted); font-size: 16px; }
 .exercise-hub .hub-course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.exercise-hub .exercise-hub__card { --course-accent: #39752e; min-height: 250px; padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff; box-shadow: 0 4px 14px #172b4d03; }
-.exercise-hub .hub-course-card--trb { --course-accent: #3269ad; }
-.exercise-hub .hub-course-card--tme { --course-accent: #7551a3; }
+.exercise-hub .exercise-hub__card { --course-accent: #285523; min-height: 250px; padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: #ffffff; box-shadow: 0 4px 14px #172b4d03; }
+.exercise-hub .hub-course-card--trb { --course-accent: #234b7d; }
+.exercise-hub .hub-course-card--tme { --course-accent: #533674; }
 .exercise-hub__card .product-mark { width: 54px; height: 54px; }
 .exercise-hub__card h2 { margin: 20px 0 10px; font-size: 27px; letter-spacing: -.04em; }
 .exercise-hub__card > p { margin-bottom: 24px; color: var(--muted); font-size: 13px; line-height: 1.6; }
@@ -263,3 +263,16 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 }
 
 .exercise-score-page .exercise-hub__scores { margin-top: 0; }
+
+.exercise-hub__card .exercise-sections { display: grid; gap: 18px; margin-top: 0; }
+.exercise-hub__card .exercise-sections__item + .exercise-sections__item { border-top: 1px solid var(--line); padding-top: 18px; }
+.exercise-hub__card .exercise-sections__item .eyebrow { color: var(--course-accent); font-size: 10px; }
+.exercise-hub__card .exercise-sections__item h3 { margin: 6px 0 12px; color: var(--navy); font-size: 16px; line-height: 1.4; }
+.exercise-hub__card .exercise-sections__item p { margin: 0 0 10px; color: var(--muted); font-size: 12px; }
+.exercise-hub__card .test-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.exercise-hub__card .exercise-sections__buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.exercise-hub__card .exercise-sections__score { justify-self: end; color: var(--course-accent); font-size: 14px; white-space: nowrap; }
+.exercise-hub__card .test-actions .primary-button,
+.exercise-hub__card .test-actions .secondary-button { min-height: 36px; padding: 8px 12px; font-size: 12px; }
+.exercise-hub__card .test-actions .primary-button { color: white; background: var(--course-accent); }
+.exercise-hub__card .test-actions .secondary-button { color: var(--course-accent); border-color: currentColor; background: white; }

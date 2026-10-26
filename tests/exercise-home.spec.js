@@ -1,6 +1,45 @@
 import { test, expect } from '@playwright/test'
+import { getCurrentAssessment } from '../functions/src/assessments/registry.js'
 
 const origin = 'http://127.0.0.1:5173'
+
+for (const product of ['tas', 'trb', 'tme']) {
+  test(`${product}: compact home sections support starting, resuming, viewing results and retrying without losing the previous score`, async ({ page }) => {
+    const second = getCurrentAssessment(product, 2)
+    const third = getCurrentAssessment(product, 3)
+    await page.addInitScript(() => {
+      localStorage.setItem('cubicost-tas-tutorial-language-v1', 'en')
+      if (!localStorage.getItem('cubicost:participant')) localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Learner', jobTitle: 'Engineer', employeeId: '000012' }))
+    })
+    await page.goto(`${origin}/exercises`)
+    await page.evaluate(({ second, third }) => {
+      localStorage.setItem(second.key, JSON.stringify({ started: true, submitted: false, index: 1, answers: second.answers }))
+      localStorage.setItem(third.key, JSON.stringify({ started: true, submitted: true, index: 4, answers: third.answers }))
+    }, { second: { key: second.storageKey, answers: second.expectedAnswers }, third: { key: third.storageKey, answers: third.expectedAnswers } })
+    await page.reload()
+    const card = page.locator(`.exercise-hub__card.hub-course-card--${product}`)
+    const sections = card.locator('.exercise-sections__item')
+    await expect(sections).toHaveCount(3)
+    await expect(sections.nth(0).locator('.exercise-sections__score')).toHaveCount(0)
+    await expect(sections.nth(2).locator('.exercise-sections__score')).toHaveText('100/100')
+    const positions = await sections.nth(2).evaluate(row => ({ buttons: row.querySelector('.exercise-sections__buttons').getBoundingClientRect().right, score: row.querySelector('.exercise-sections__score').getBoundingClientRect().left }))
+    expect(positions.score).toBeGreaterThan(positions.buttons)
+    await expect(sections.nth(0).getByRole('link', { name: 'Start Exercise', exact: true })).toHaveAttribute('href', `/${product}/tests/section-1`)
+    await sections.nth(1).getByRole('link', { name: 'Continue Exercise', exact: true }).click()
+    await expect(page.locator('.exercise-question-meta')).toContainText('2 / 5')
+    await page.locator('.exercise-bottom a[href="/exercises"]').click()
+    await sections.nth(2).getByRole('link', { name: 'View Result', exact: true }).click()
+    await expect(page.locator('.exercise-result.is-passed')).toBeVisible()
+    await page.locator('.exercise-bottom a[href="/exercises"]').click()
+    await sections.nth(2).getByRole('button', { name: 'Retry Exercise', exact: true }).click()
+    await expect(page).toHaveURL(`${origin}/${product}/tests/section-3`)
+    await expect(page.locator('.exercise-question-meta')).toContainText('1 / 5')
+    const saved = await page.evaluate(key => ({ draft: JSON.parse(localStorage.getItem(key)), previous: JSON.parse(localStorage.getItem(`${key}:result`)) }), third.storageKey)
+    expect(saved.draft.answers).toEqual({})
+    expect(saved.draft.submitted).toBe(false)
+    expect(saved.previous.answers).toEqual(third.expectedAnswers)
+  })
+}
 
 test('exercise home displays and edits shared personal details without the removed copy', async ({ page }) => {
   await page.addInitScript(() => {
@@ -24,8 +63,9 @@ test('exercise home displays and edits shared personal details without the remov
   for (const product of ['tas', 'trb', 'tme']) {
     await page.goto(`${origin}/${product}/tests`)
     await expect(page.locator('.participant-profile-card')).toContainText('Quantity Surveyor')
-    await expect(page.locator('.test-list.exercise-card')).toHaveCount(1)
-    await expect(page.locator('.test-list > article')).toHaveCount(3)
+    await expect(page).toHaveURL(`${origin}/exercises`)
+    await expect(page.locator('.exercise-sections')).toHaveCount(3)
+    await expect(page.locator(`.hub-course-card--${product} .exercise-sections__item`)).toHaveCount(3)
     await expect(page.locator('.course-scores')).toHaveCount(0)
     await expect(page.getByText('Do a section exercise, review your results, and download your score card.', { exact: true })).toHaveCount(0)
     await expect(page.locator('.employee-phase-note')).toHaveCount(0)
@@ -59,6 +99,8 @@ for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 })
     await page.addInitScript(() => localStorage.setItem('cubicost-tas-tutorial-language-v1', 'en'))
     await page.goto(`${origin}/exercises`)
+    await expect(page.locator('.exercise-sections__item')).toHaveCount(9)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     if (width < 768) {
       await page.locator('.mobile-header-row button[aria-expanded]').click()
       await page.getByRole('dialog').getByRole('link', { name: 'Scores', exact: true }).click()

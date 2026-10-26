@@ -10,10 +10,10 @@ test('header uses the two contextual destinations for each page and product', ()
     const mapPath = `/${product}/`
     const cases = [
       [{ page: 'lesson', activeStep: { id: 'example' } }, ['contact', 'learningMap'], ['/contact', mapPath]],
-      [{ page: 'welcome' }, ['exercises', 'home'], [`/${product}/tests`, '/']],
-      [{ page: 'course' }, ['exercises', 'home'], [`/${product}/tests`, '/']],
+      [{ page: 'welcome' }, ['exercises', 'home'], ['/exercises', '/']],
+      [{ page: 'course' }, ['exercises', 'home'], ['/exercises', '/']],
       [{ page: 'tests' }, ['contact', 'learningMap'], ['/contact', mapPath]],
-      [{ page: 'exercise' }, ['exercises', 'learningMap'], [`/${product}/tests`, mapPath]],
+      [{ page: 'exercise' }, ['exercises', 'learningMap'], ['/exercises', mapPath]],
     ]
     for (const [context, ids, paths] of cases) {
       const links = getHeaderNavigation({ ...context, product })

@@ -4,7 +4,7 @@ export function getHeaderNavigation({ page, product, activeStep }) {
   const links = {
     contact: { id: 'contact', href: '/contact' },
     home: { id: 'home', href: '/' },
-    exercises: { id: 'exercises', href: product ? `/${product}/tests` : '/exercises' },
+    exercises: { id: 'exercises', href: '/exercises' },
     scores: { id: 'scores', href: '/exercises/score' },
     learningMap: { id: 'learningMap', href: `/${product}/` },
   }
