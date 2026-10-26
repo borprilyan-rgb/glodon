@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { applyTheme, loadTheme, saveTheme } from './data/theme'
 import { getTasData } from './data/tas/index.js'
 import { partTwoLessonAliases } from './data/tas/partTwoRevision.js'
 import { getTrbData } from './data/trb/index.js'
@@ -162,6 +163,9 @@ function loadTmeProgress(initialStepId) {
 }
 
 export default function App() {
+  const [theme, setTheme] = useState(loadTheme)
+  const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark')
+  useEffect(() => { applyTheme(theme); saveTheme(theme) }, [theme])
   const initialRoute = routeFromLocation()
   const [route, setRoute] = useState(initialRoute)
   const [language, setLanguage] = useState(() => {
@@ -328,9 +332,9 @@ export default function App() {
   const completion = getCourseCompletion(activeStep, product === 'tas' ? tasCourseSteps : activeData.allSteps, visibleProgress.completed)
   const progressCannotSave = product ? progressSaveFailed[product] || (product === 'tas' && progressSaveFailed.tasReports) : Object.values(progressSaveFailed).some(Boolean)
   if (route.page === 'presentation') {
-    return <Presentation courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+    return <Presentation theme={theme} onThemeToggle={toggleTheme} courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
-  return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
+  return <TutorialLayout theme={theme} onThemeToggle={toggleTheme} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises', 'scores'].includes(route.page) && <PresentationEntry language={language} />}
     {progressCannotSave && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'lesson' && !activeStep && <section className="tutorial-step"><header className="step-header"><h1>{t.lessonNotFound}</h1><p>{t.lessonNotFoundDescription}</p></header><a className="primary-button" href={`/${product}/`}>{t.backToCourseMap}</a></section>}

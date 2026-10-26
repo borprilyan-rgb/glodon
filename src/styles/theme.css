@@ -1,0 +1,105 @@
+.theme-toggle { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 38px; width: 38px; min-height: 38px; padding: 8px; color: var(--navy); background: white; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.theme-toggle:hover { background: #edf2fa; }
+.theme-toggle svg { flex-shrink: 0; }
+.presentation .theme-toggle { padding: 8px; min-width: 38px; }
+.mobile-header-row > .theme-toggle { flex: 0 0 40px; width: 40px; height: 40px; color: var(--navy); background: #eef2fa; }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --navy: #e8effa;
+  --blue: #416bd4;
+  --blue-dark: #3155ab;
+  --turquoise: #91b5ff;
+  --line: #35455f;
+  --muted: #afbdd1;
+  --night-bg: #0e1726;
+  --night-surface: #172439;
+  --night-raised: #20314b;
+  --night-link: #abc6ff;
+  color: #e8effa;
+  background: var(--night-bg);
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .presentation { color: var(--navy); background: var(--night-bg); }
+:root[data-theme="dark"] :focus-visible { outline: 3px solid #a9c6ff; outline-offset: 3px; }
+
+:root[data-theme="dark"] :is(.lesson-topbar, .presentation-toolbar) { color: var(--navy); background: #111e31; border-color: var(--line); }
+:root[data-theme="dark"] .presentation-toolbar .presentation-brand { color: var(--navy); }
+:root[data-theme="dark"] :is(.hub-course-card, .exercise-card, .exercise-brief, .course-scores, .contact-card, .landing-preview, .course-part, .course-lesson, .action-viewer__list, .screenshot-viewer, .screenshot-media, .screenshot-navigation, .step-link, .completion-card, .mobile-menu-drawer, .presentation-outline, .presentation-map) { color: var(--navy); background: var(--night-surface); border-color: var(--line); }
+:root[data-theme="dark"] :is(.hub-tools > a, .hub-tool-icon, .contact-card__icon, .action-list__mobile-detail, .exercise-pass-rule, .exercise-entry, .presentation-return) { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
+:root[data-theme="dark"] :is(.hub-tools > a:hover, .course-lesson:hover, .step-link:hover, .mobile-menu-drawer nav a:hover, .mobile-menu-drawer nav a:focus-visible) { background: #233754; }
+
+:root[data-theme="dark"] :is(.outline-nav-button, .secondary-button, .contact-copy, .course-map-toolbar button, .screenshot-navigation button, .mobile-action-navigation button:first-child, .exercise-numbers button, .theme-toggle, .presentation-toolbar button, .presentation-toolbar a:not(.presentation-brand), .presentation-map button, .presentation-course-nav button, .drawing-toolbar button, .drawing-toolbar select) { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
+:root[data-theme="dark"] :is(.theme-toggle:hover, .outline-nav-button:hover, .secondary-button:hover, .contact-copy:hover, .presentation-course-nav button:hover) { background: #2b4161; }
+:root[data-theme="dark"] :is(.language-switcher, .mobile-header-row > .mobile-header-language, .mobile-header-row > .theme-toggle) { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
+:root[data-theme="dark"] .language-switcher button { color: var(--muted); }
+:root[data-theme="dark"] .language-switcher button.is-active { color: white; background: #315bc4; }
+:root[data-theme="dark"] .lesson-topbar :is(.all-courses-button, .contact-nav-button, .course-map-button) { color: var(--navy); border-color: var(--line); }
+:root[data-theme="dark"] .lesson-topbar :is(.all-courses-button, .contact-nav-button, .course-map-button):hover { background: var(--night-raised); }
+:root[data-theme="dark"] .mobile-action-navigation { background: #111e31; border-color: var(--line); }
+:root[data-theme="dark"] .course-home .course-part__toggle { background: #20324e; color: #dbe8ff; border-color: #6384bb; }
+
+:root[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+:root[data-theme="dark"] :is(textarea, .exercise-field select) { background: #111e31; color: var(--navy); border-color: #59708f; }
+:root[data-theme="dark"] input::placeholder { color: #afbdd1; }
+:root[data-theme="dark"] :is(.exercise-options label.is-selected, .exercise-numbers button.is-answered, .presentation .drawing-toolbar button[aria-pressed="true"], .presentation-course-nav button[aria-pressed="true"]) { background: #233c60; color: var(--navy); border-color: #86aaff; }
+:root[data-theme="dark"] .exercise-numbers button[aria-current] { background: #315bc4; color: white; }
+:root[data-theme="dark"] :is(.action-list__item, .action-list__number) { background: var(--night-raised); color: var(--navy); border-color: var(--line); }
+:root[data-theme="dark"] .action-list__item.is-active { background: #243d60; border-color: #86aaff; }
+:root[data-theme="dark"] .action-list__item.is-active .action-list__number { color: white; background: #315bc4; }
+
+:root[data-theme="dark"] :is(.exercise-card p, .exercise-brief p, .exercise-brief dt, .exercise-brief small, .exercise-question-meta, .exercise-score small, .exercise-bottom small, .participant-details dt, .contact-value, .landing-preview__caption, .completion-card__checks label, .completion-success p, .instruction-card li p, .step-header__meta) { color: var(--muted); }
+:root[data-theme="dark"] :is(.eyebrow, .lesson-topbar__context small, .course-scores__row a, .exercise-bottom a, .exercise-results a, .contact-card__icon, .presentation-eyebrow, .hub-tool-icon, .hub-tools > a > svg, .participant-profile-card__heading .eyebrow, .course-scores__heading) { color: var(--night-link); }
+:root[data-theme="dark"] :is(.course-scores__passed, .exercise-correct) { color: #9adbb5; }
+:root[data-theme="dark"] :is(.course-scores__review, .exercise-review) { color: #f0cb89; }
+:root[data-theme="dark"] :is(.exercise-critical, .exercise-question .exercise-error) { color: #ffd0ca; background: #472727; }
+:root[data-theme="dark"] .completion-card { border-top-color: #91b5ff; }
+:root[data-theme="dark"] .completion-success__icon { color: white; background: #315bc4; }
+:root[data-theme="dark"] .exercise-result.is-passed { border-top-color: #70b88d; }
+:root[data-theme="dark"] .course-lesson.is-current { border-left-color: #86aaff; }
+:root[data-theme="dark"] .course-lesson.is-completed .course-lesson__status { color: white; background: #315bc4; }
+:root[data-theme="dark"] :is(.step-header > p, .landing-hero__copy > p:not(.landing-course-info), .screenshot-media__caption p, .screenshot-media__caption .screenshot-media__instruction) { color: var(--muted); }
+:root[data-theme="dark"] .screenshot-media__caption > strong { color: var(--night-link); }
+:root[data-theme="dark"] .screenshot-media__caption .screenshot-media__instruction { border-color: var(--line); }
+:root[data-theme="dark"] :is(.callout--warning, .action-inline-warning) { color: #f0cf9a; background: #3b3021; border-color: #e59a28; }
+:root[data-theme="dark"] :is(.callout--warning p, .action-inline-warning strong) { color: #f0cf9a; }
+:root[data-theme="dark"] .callout--note { color: var(--navy); background: var(--night-raised); }
+:root[data-theme="dark"] .callout--note p { color: var(--muted); }
+:root[data-theme="dark"] .screenshot-placeholder { background: var(--night-raised); }
+:root[data-theme="dark"] .screenshot-placeholder code { color: var(--muted); }
+:root[data-theme="dark"] :is(.course-lesson.is-completed, .completion-success) { background: #192e37; }
+:root[data-theme="dark"] :is(.hub-course-card__progress, .course-scores__row, .course-scores li, .mobile-menu-drawer > header) { border-color: var(--line); }
+:root[data-theme="dark"] .progress__track { background: #30415c; }
+:root[data-theme="dark"] .progress__track span { background: #91b5ff; }
+
+/* Preserve the original logos and instructional images instead of recolouring them. */
+:root[data-theme="dark"] :is(.product-mark, .mobile-header__logo, .lesson-brand .brand__mark) { background: white; border-radius: 8px; }
+:root[data-theme="dark"] .product-mark__fallback { color: #172b4d; }
+:root[data-theme="dark"] :is(.presentation-brand img, .presentation-application img) { background: white; padding: 3px; border-radius: 6px; }
+:root[data-theme="dark"] .screenshot-media__image { background: #e5eaf1; }
+
+:root[data-theme="dark"] :is(.hub-course-card, .presentation-outline, .presentation-application) { --night-accent: #addda2; }
+:root[data-theme="dark"] :is(.hub-course-card--trb, .presentation-outline--trb, .presentation-application--trb) { --night-accent: #adccff; }
+:root[data-theme="dark"] :is(.hub-course-card--tme, .presentation-outline--tme, .presentation-application--tme) { --night-accent: #d8b9f3; }
+:root[data-theme="dark"] :is(.hub-course-card__discipline, .hub-course-card__lesson-count svg, .exercise-hub__card .exercise-sections__item .eyebrow, .exercise-hub__card .exercise-sections__score, .exercise-hub__card .test-actions .secondary-button) { color: var(--night-accent); }
+:root[data-theme="dark"] .course-hub--learning .progress__track span { background: var(--night-accent); }
+:root[data-theme="dark"] .course-hub--learning .status-badge { background: var(--night-raised); color: var(--navy); border-color: var(--line); }
+:root[data-theme="dark"] .course-hub--learning .status-badge--complete { color: var(--night-accent); }
+:root[data-theme="dark"] .course-hub--learning .hub-course-card__actions .outline-nav-button:hover { color: var(--night-accent); background: var(--night-raised); }
+
+:root[data-theme="dark"] .presentation-application { background: var(--night-surface); color: var(--navy); border-color: var(--line); }
+:root[data-theme="dark"] .presentation-application[aria-pressed="true"] { background: var(--night-raised); color: var(--night-accent); border-color: var(--night-accent); box-shadow: inset 0 0 0 1px var(--night-accent); }
+:root[data-theme="dark"] .presentation-home-part h3 > button { background: var(--night-surface); }
+:root[data-theme="dark"] .presentation-home-part h3 > button[aria-expanded="true"],
+:root[data-theme="dark"] .presentation-home-steps a:hover { background: var(--night-raised); }
+:root[data-theme="dark"] :is(.presentation-home-part__number, .presentation-home-part h3 > button svg, .presentation-home-steps a svg, .presentation-home-steps a:hover) { color: var(--night-accent); }
+:root[data-theme="dark"] .presentation-home-steps li + li { border-color: var(--line); }
+:root[data-theme="dark"] .presentation-map__parts > details > summary { background: var(--night-raised); }
+:root[data-theme="dark"] .presentation-map li a { color: var(--navy); }
+:root[data-theme="dark"] .presentation-map li a:hover { background: var(--night-raised); }
+:root[data-theme="dark"] .presentation-map li a[aria-current="step"],
+:root[data-theme="dark"] .presentation-map__products button[aria-pressed="true"] { color: white; background: #315bc4; }
+:root[data-theme="dark"] .presentation-map__parts > details { border-color: var(--line); }
+:root[data-theme="dark"] .presentation-controls { border-color: var(--line); }
+:root[data-theme="dark"] .presentation-controls > small { color: var(--muted); }

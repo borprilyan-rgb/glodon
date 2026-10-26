@@ -10,6 +10,7 @@ import DrawingCanvas from './DrawingCanvas'
 import DrawingToolbar from './DrawingToolbar'
 import PresentationMap from './PresentationMap'
 import PresentationHome from './PresentationHome'
+import ThemeToggle from './ThemeToggle'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -24,7 +25,7 @@ export function PresentationEntry({ language }) {
   </div>
 }
 
-export default function Presentation({ courses, language, onLanguageChange }) {
+export default function Presentation({ courses, language, onLanguageChange, theme, onThemeToggle }) {
   const c = presentationCopy[language]
   const params = new URLSearchParams(window.location.search)
   const initialProduct = Object.hasOwn(courses, params.get('product')) ? params.get('product') : 'tas'
@@ -121,7 +122,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     <div className="presentation-content" inert={expandedImage ? true : undefined} aria-hidden={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
       <a href="/" className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
-      <div><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/present">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
+      <div><ThemeToggle theme={theme} onToggle={onThemeToggle} language={language} /><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/present">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
     </header>
     <div hidden={!mapOpen}><PresentationMap key={product} courses={courses} product={product} lessonId={lesson.id} index={index} walkthrough={walkthrough} language={language} onClose={() => {
       setMapOpen(false)
