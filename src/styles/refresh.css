@@ -227,6 +227,39 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .mobile-action-navigation button span, .mobile-action-navigation a span { min-width: 0; overflow-wrap: anywhere; }
   .mobile-action-navigation svg { flex-shrink: 0; }
 }
+.course-home .landing-page { padding-top: 28px; }
+.course-home .landing-hero--compact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 400px); align-items: center; gap: 40px; min-height: 0; padding: 12px 0; }
+.course-home .landing-hero__copy h2 { margin: 0 0 16px; color: var(--navy); font-size: clamp(28px, 3vw, 40px); line-height: 1.15; letter-spacing: -.035em; }
+.course-home .landing-preview { width: 100%; margin: 0; }
+.course-home .landing-preview__image img { max-height: 280px; }
+.course-home .course-start { padding: 8px 0 0; text-align: left; }
+.course-home .course-start .primary-button { justify-content: center; min-height: 48px; background: #1d3970; }
+.course-home .course-start .primary-button:hover { background: #172e5b; }
+.course-home .landing-course-info { margin-top: 14px; }
+.course-home .course-map-page { padding-top: 28px; }
+/* Course Part headers show local progress and independent collapse controls. */
+.course-home .course-part > header { grid-template-columns: 58px minmax(0, 1fr) minmax(170px, 220px) 44px; align-items: center; background: #1d3970; border-bottom-color: #172e5b; }
+.course-home .course-part > header > span { color: #c6d7ff; }
+.course-home .course-part > header h2, .course-home .course-part > header small { color: white; }
+.course-home .course-part > header p { color: #e1eaff; }
+.course-home .course-part__progress { min-width: 0; padding: 10px 14px; color: white; background: #ffffff12; border: 1px solid #ffffff40; border-radius: 9px; }
+.course-home .course-part__progress .progress__meta { align-items: center; color: white; margin-bottom: 7px; }
+.course-home .course-part__progress .progress__meta strong { color: white; font-size: 18px; }
+.course-home .course-part__progress .progress__track { height: 6px; background: white; }
+.course-home .course-part__progress .progress__track span { background: #a6c0ff; }
+.course-home .course-part__toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--blue); background: white; border: 1px solid var(--line); border-radius: 8px; }
+.course-home .course-part.is-open .course-part__toggle { transform: rotate(180deg); }
+.course-home .course-lessons[hidden] { display: none; }
+@media (max-width: 767px) {
+  .course-home .landing-page { padding-top: 18px; }
+  .course-home .landing-hero--compact { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .course-home .landing-preview { max-width: 400px; justify-self: center; }
+  .course-home .course-start .primary-button { width: 100%; }
+  .course-home .course-part > header { grid-template-columns: 36px minmax(0, 1fr) 44px; }
+  .course-home .course-part__progress { grid-column: 2 / -1; grid-row: 2; }
+  .course-home .course-part__toggle { grid-column: 3; grid-row: 1; }
+}
+
 @media (max-width: 360px) {
   .mobile-action-navigation { gap: 6px; padding-inline: 12px; }
   .mobile-action-navigation button, .mobile-action-navigation a { padding-inline: 6px; font-size: 12px; line-height: 1.3; }

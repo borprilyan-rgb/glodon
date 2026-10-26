@@ -7,12 +7,13 @@ import { getHeaderNavigation } from '../src/data/headerNavigation.js'
 
 test('header uses the two contextual destinations for each page and product', () => {
   for (const product of ['tas', 'trb', 'tme']) {
+    const mapPath = `/${product}/`
     const cases = [
-      [{ page: 'lesson', activeStep: { id: 'example' } }, ['contact', 'learningMap'], ['/contact', `/${product}/course`]],
-      [{ page: 'welcome' }, ['contact', 'learningMap'], ['/contact', `/${product}/course`]],
+      [{ page: 'lesson', activeStep: { id: 'example' } }, ['contact', 'learningMap'], ['/contact', mapPath]],
+      [{ page: 'welcome' }, ['exercises', 'home'], [`/${product}/tests`, '/']],
       [{ page: 'course' }, ['exercises', 'home'], [`/${product}/tests`, '/']],
-      [{ page: 'tests' }, ['contact', 'learningMap'], ['/contact', `/${product}/course`]],
-      [{ page: 'exercise' }, ['exercises', 'learningMap'], [`/${product}/tests`, `/${product}/course`]],
+      [{ page: 'tests' }, ['contact', 'learningMap'], ['/contact', mapPath]],
+      [{ page: 'exercise' }, ['exercises', 'learningMap'], [`/${product}/tests`, mapPath]],
     ]
     for (const [context, ids, paths] of cases) {
       const links = getHeaderNavigation({ ...context, product })
@@ -46,7 +47,8 @@ test('rendered headers retain language, progress, mobile controls and admin acti
           assert.equal((tools.match(/<a /g) || []).length, 2, `${language}/${product}/${page}`)
           for (const link of expected) assert(tools.includes(`href="${link.href}"`))
           assert(tools.includes('class="language-switcher"'))
-          if (product) assert(tools.includes('progress--compact'))
+          if (product && ['welcome', 'course'].includes(page)) assert(!tools.includes('progress--compact'))
+          else if (product) assert(tools.includes('progress--compact'))
           assert(html.includes('class="mobile-header-row"'))
           assert(html.includes('aria-expanded="false"'))
           assert(!html.includes('undefined/course'))

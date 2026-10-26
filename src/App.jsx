@@ -67,15 +67,20 @@ function routeFromLocation() {
   }
   if (path === '/') {
     const [first, second] = hashParts
-    if (first === 'course') return { product: 'tas', page: 'course' }
+    if (first === 'course') return { product: 'tas', page: 'welcome' }
     if (first && first !== 'tas' && first !== 'trb' && first !== 'tme') return { product: 'tas', page: 'lesson', stepId: mapTasLessonId(second) || second }
     return { page: 'hub' }
   }
   const [product, view, stepId] = path.split('/').filter(Boolean)
   if (!['tas', 'trb', 'tme'].includes(product)) return { page: 'hub' }
   if (view === 'tests') return { product, page: 'tests' }
+  if (!view || view === 'course') {
+    const coursePath = `/${product}/`
+    if (window.location.pathname !== coursePath) window.history?.replaceState({}, '', coursePath + (window.location.search || '') + (window.location.hash || ''))
+    return { product, page: 'welcome' }
+  }
   if (view === 'course') return { product, page: 'course' }
-  if (product === 'tas' && view === 'lesson' && stepId === 'staircase-report') return { product, page: 'course' }
+  if (product === 'tas' && view === 'lesson' && stepId === 'staircase-report') return { product, page: 'welcome' }
   if (view === 'lesson' && stepId) return { product, page: 'lesson', stepId: product === 'tas' ? mapTasLessonId(stepId) || stepId : stepId }
   return { product, page: 'welcome' }
 }
@@ -307,6 +312,11 @@ export default function App() {
   })
 
   const product = route.product || null
+  const courseHome = {
+    tas: { parts: filteredParts, allSteps: tasCourseSteps, started: tasCourseStarted, lastLesson: tasProgress.lastLesson, continueStep, onReset: reset },
+    trb: { parts: filteredTrbParts, allSteps: trb.allSteps, started: trbProgress.started, lastLesson: trbProgress.lastLesson, continueStep: continueTrbStep, onReset: resetTrb, course: trb },
+    tme: { parts: filteredTmeParts, allSteps: tme.allSteps, started: tmeProgress.started, lastLesson: tmeProgress.lastLesson, continueStep: continueTmeStep, onReset: resetTme, course: tme },
+  }[product]
   const visibleProgress = product === 'tas' ? { completed: tasCourseCompleted } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'tas' ? tasCourseSteps.length : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') {
@@ -326,15 +336,10 @@ export default function App() {
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the exercises page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman latihan.'}</p><a className="primary-button" href="/exercises">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
-    {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} continueStep={continueStep} product="tas" language={language} t={t} />}
-    {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
+    {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}
     {activeReport && <PileCapReportLesson key={activeReport.id} step={activeReport} index={tasCourseSteps.findIndex(step => step.id === activeReport.id)} total={tasCourseSteps.length} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
     {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={activeStep.partId === 'part-3' ? allSteps.length : tasCourseSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'calculate-verify-quantity' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
-    {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
-    {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} language={language} t={t} />}
     {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" language={language} t={t} />}
-    {product === 'tme' && route.page === 'welcome' && <LandingPage product="tme" course={tme} allSteps={tme.allSteps} completed={tmeProgress.completed} started={tmeProgress.started} continueStep={continueTmeStep} t={t} />}
-    {product === 'tme' && route.page === 'course' && <CourseMapPage parts={filteredTmeParts} allSteps={tme.allSteps} completed={tmeProgress.completed} started={tmeProgress.started} lastLesson={tmeProgress.lastLesson} continueStep={continueTmeStep} onReset={resetTme} query={query} setQuery={setQuery} product="tme" course={tme} t={t} />}
     {product === 'tme' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={tme.allSteps.length} isComplete={tmeProgress.completed.has(activeStep.id)} selectedChecks={tmeProgress.checklists[activeStep.id] || []} onCheck={updateTmeCheck} onToggle={toggleTmeComplete} previous={tme.allSteps[activeIndex - 1]} next={tme.allSteps[activeIndex + 1]} product="tme" t={t} />}
   </TutorialLayout>
 }

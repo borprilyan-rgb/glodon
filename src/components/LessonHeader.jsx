@@ -31,16 +31,17 @@ export default function LessonHeader({ page, product, activeStep, completed, tot
     return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', handleMenuKeyDown); menuButton?.focus() }
   }, [menuOpen])
   const productLabel = product ? getProductLabel(product) : null
+  const isCourseHome = Boolean(product) && ['welcome', 'course'].includes(page) && !activeStep
   const title = page === 'exercises' ? (language === 'en' ? 'Exercise' : 'Latihan') : page === 'contact' ? t.contact : activeStep?.title || (product ? `Cubicost ${productLabel}` : t.hubBrand)
   const navigation = getHeaderNavigation({ page, product, activeStep })
   const navigationLabels = { contact: t.contact, home: t.home, exercises: language === 'en' ? 'Exercises' : 'Latihan', learningMap: t.courseMapLabel }
   const navigationIcons = { contact: Mail, home: Home, exercises: ClipboardCheck, learningMap: ArrowLeft }
   const navigationClasses = { contact: 'contact-nav-button', home: 'all-courses-button', exercises: 'all-courses-button', learningMap: 'course-map-button' }
   return <>
-    <header className={`lesson-topbar${page === 'admin' ? ' lesson-topbar--admin' : ''}`}>
+    <header className={`lesson-topbar${page === 'admin' ? ' lesson-topbar--admin' : ''}${isCourseHome ? ' lesson-topbar--course-home' : ''}`}>
       <a className="lesson-brand" href="/"><span className="brand__mark"><img src="/branding/company-logo.png" alt="Glodon company logo" /></span><span><strong>{product ? `Cubicost ${productLabel}` : t.hubBrand}</strong><small>{t.tutorialSubtitle}</small></span>{product && <span className="header-product-mark">{productLabel}</span>}</a>
       {activeStep && <div className="lesson-topbar__context"><small>{t.part} {activeStep.partNumber}</small><strong>{activeStep.title}</strong></div>}
-      <div className="lesson-topbar__tools">{showProgress && <ProgressBar completed={completed.size} total={total} t={t} compact />}<LanguageSwitcher language={language} onChange={onLanguageChange} t={t} />{navigation.map(link => {
+      <div className="lesson-topbar__tools">{showProgress && !isCourseHome && <ProgressBar completed={completed.size} total={total} t={t} compact />}<LanguageSwitcher language={language} onChange={onLanguageChange} t={t} />{navigation.map(link => {
         const Icon = navigationIcons[link.id]
         return <a key={link.id} className={navigationClasses[link.id]} href={link.href} aria-label={link.id === 'learningMap' ? t.backToCourseMap : navigationLabels[link.id]}><Icon size={16} /><span>{navigationLabels[link.id]}</span></a>
       })}</div>

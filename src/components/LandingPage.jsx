@@ -4,7 +4,7 @@ import { getProductConfig } from '../data/productConfig'
 import { getStepPath } from '../data/tutorialUtils'
 import ImageLightbox from './ImageLightbox'
 
-export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', course, t }) {
+export default function LandingPage({ allSteps = [], completed = new Set(), started = new Set(), continueStep, product = 'tas', course, compact = false, t }) {
   const [imageAvailable, setImageAvailable] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxOpener, setLightboxOpener] = useState(null)
@@ -17,8 +17,8 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
   const previewItem = { image: config.preview, alt: t.productPreviewAlt(config.name), label: t.previewLabel, caption: t.productPreviewCaption(config.name) }
 
   return <div className="landing-page" data-product={product}>
-    <section className="landing-hero" aria-labelledby="landing-title">
-      <div className="landing-hero__copy">
+    <section className={`landing-hero${compact ? ' landing-hero--compact' : ''}`} aria-labelledby={compact ? undefined : 'landing-title'}>
+      {compact ? <div className="landing-hero__copy"><h2>{config.courseTitle}</h2><p>{config.courseIntro}</p><div className="course-start"><a className="primary-button" href={getStepPath(progressLesson, product)}>{t.landingPrimary[state]}<ArrowRight size={17} /></a><p className="landing-course-info">{t.learningSummary(config.partCount, allSteps.length)}</p></div></div> : <div className="landing-hero__copy">
         <div className="landing-product-label"><span><img src={config.logo} alt={config.name} onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling.hidden = false }} /><span className="product-logo-fallback" hidden>{config.shortName}</span></span><span className="eyebrow">{config.welcomeEyebrow}</span></div>
         <h1 id="landing-title">{heading}</h1>
         <p>{config.welcomeText}</p>
@@ -27,7 +27,7 @@ export default function LandingPage({ allSteps = [], completed = new Set(), star
           <a className="secondary-button" href={config.courseRoute}>{t.viewCourseMap}</a>
         </div>
         <p className="landing-course-info">{t.learningSummary(config.partCount, allSteps.length)}</p>
-      </div>
+      </div>}
       <div className="landing-preview">
         {imageAvailable ? <button className="landing-preview__image" type="button" onClick={(event) => { setLightboxOpener(event.currentTarget); setLightboxOpen(true) }} aria-label={t.enlargeProductPreview(config.name)}>
           <img src={config.preview} alt={t.productPreviewAlt(config.name)} onError={() => setImageAvailable(false)} />

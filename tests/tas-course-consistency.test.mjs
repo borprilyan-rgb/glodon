@@ -47,11 +47,16 @@ test('TAS home, overview, map and lesson progress use the same 22 current lesson
       assert(!overview.includes(language === 'en' ? 'Review Learning' : 'Tinjau Kembali Pembelajaran'))
       for (const path of ['/tas/course', '/tas/lesson/create-project', '/tas/lesson/beam-report']) {
         const html = render(path)
-        assert(html.includes('aria-valuenow="77"'), path)
-        assert(!html.includes('aria-valuenow="100"'), path)
+        if (path === '/tas/course') {
+          assert.equal((html.match(/class="course-part__progress"/g) || []).length, 3)
+          assert(html.includes('aria-valuenow="17"'), 'one of six Part 3 lessons completed')
+        } else {
+          assert(html.includes('aria-valuenow="77"'), path)
+          assert(!html.includes('aria-valuenow="100"'), path)
+        }
       }
       const removed = render('/tas/lesson/staircase-report')
-      assert(removed.includes('class="course-map-hero"'))
+      assert(removed.includes('class="course-home"'))
       const map = render('/tas/course')
       assert.equal((map.match(/class="course-lesson /g) || []).length, 22)
       assert(!map.includes('/tas/lesson/quantity-reports'))

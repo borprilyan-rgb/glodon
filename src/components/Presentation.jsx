@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight, Maximize, Minimize, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, List, Maximize, Minimize, X } from 'lucide-react'
 import { presentationCopy } from '../data/presentation'
 import { getProductLabel } from '../data/productConfig'
 import '../styles/presentation.css'
@@ -8,6 +8,7 @@ import { uiText } from '../data/uiText'
 import usePresentationDrawing from './usePresentationDrawing'
 import DrawingCanvas from './DrawingCanvas'
 import DrawingToolbar from './DrawingToolbar'
+import PresentationMap from './PresentationMap'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -37,6 +38,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const [notice, setNotice] = useState('')
   const [failedImage, setFailedImage] = useState(null)
   const [expandedImage, setExpandedImage] = useState(null)
+  const [mapOpen, setMapOpen] = useState(false)
   const root = useRef(null)
   const t = uiText[language]
   const lesson = courses[product].allSteps.find((step) => step.id === lessonId) || courses[product].allSteps[0]
@@ -86,6 +88,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   useEffect(() => {
     const keydown = (event) => {
       if (expandedImage) return
+      if (event.target.closest('.presentation-map')) return
       // Let the focused instructions use native scrolling keys. ArrowLeft and
       // ArrowRight still navigate slides, and F still toggles fullscreen.
       if (event.target.closest('.presentation-instructions') && ['PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) return
@@ -112,10 +115,21 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     <div className="presentation-content" inert={expandedImage ? true : undefined} aria-hidden={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
       <a href={exitPath} className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
-      <div><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button><a href={exitPath} aria-label={c.exit}><X size={20} /></a></div>
+      <div><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
     </header>
+    <div hidden={!mapOpen}><PresentationMap key={product} courses={courses} product={product} lessonId={lesson.id} index={index} walkthrough={walkthrough} language={language} onClose={() => {
+      setMapOpen(false)
+      root.current?.querySelector('[aria-controls="presentation-map"]')?.focus()
+    }} onSelect={(id, stepId, slide) => {
+      setProduct(id)
+      setLessonId(stepId)
+      setIndex(slide)
+      setWalkthrough(true)
+      setMapOpen(false)
+      root.current?.querySelector('.presentation-stage')?.focus()
+    }} /></div>
     {walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="tools" />}
-    <main className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
+    <main tabIndex={-1} className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
       <div className="presentation-heading"><span className="presentation-eyebrow">{walkthrough ? `${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}` : c.home.label}</span><h1>{walkthrough ? (revisedLayout ? lesson.title : action.title) : c.home.title}</h1>{!walkthrough && <p>{c.home.text}</p>}</div>
       {walkthrough ? <div className={`presentation-action${revisedLayout ? ' presentation-action--revised' : ''}`}>
         <div className="presentation-image">

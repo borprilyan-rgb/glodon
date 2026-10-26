@@ -16,7 +16,7 @@ export function getProductConfig(product, t, course = {}) {
     partCount: course.tutorialParts?.length || 3,
     progressKey: `cubicost:tutorial:${product}:progress`,
     lastLessonKey: `cubicost:tutorial:${product}:lastLesson`,
-    courseRoute: `/${product}/course`,
+    courseRoute: `/${product}/`,
     lessonRoute: `/${product}/lesson`,
     preview: `/tutorial/${product}/welcome-preview.webp`,
     outcomes: isTme
