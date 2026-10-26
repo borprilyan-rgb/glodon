@@ -9,24 +9,24 @@ test('header uses the two contextual destinations for each page and product', ()
   for (const product of ['tas', 'trb', 'tme']) {
     const mapPath = `/${product}/`
     const cases = [
-      [{ page: 'lesson', activeStep: { id: 'example' } }, ['contact', 'learningMap'], ['/contact', mapPath]],
+      [{ page: 'lesson', activeStep: { id: 'example' } }, ['learningMap'], [mapPath]],
       [{ page: 'welcome' }, ['exercises', 'home'], ['/exercises', '/']],
       [{ page: 'course' }, ['exercises', 'home'], ['/exercises', '/']],
-      [{ page: 'tests' }, ['contact', 'learningMap'], ['/contact', mapPath]],
+      [{ page: 'tests' }, ['learningMap'], [mapPath]],
       [{ page: 'exercise' }, ['exercises', 'learningMap'], ['/exercises', mapPath]],
     ]
     for (const [context, ids, paths] of cases) {
       const links = getHeaderNavigation({ ...context, product })
       assert.deepEqual(links.map(link => link.id), ids)
       assert.deepEqual(links.map(link => link.href), paths)
-      assert.equal(new Set(links.map(link => link.href)).size, 2)
+      assert.equal(new Set(links.map(link => link.href)).size, ids.length)
     }
   }
-  assert.deepEqual(getHeaderNavigation({ page: 'hub' }).map(link => link.href), ['/contact'])
+  assert.deepEqual(getHeaderNavigation({ page: 'hub' }).map(link => link.href), [])
   assert.deepEqual(getHeaderNavigation({ page: 'contact' }).map(link => link.href), ['/', '/exercises'])
-  assert.deepEqual(getHeaderNavigation({ page: 'exercises' }).map(link => link.href), ['/contact', '/exercises/score'])
+  assert.deepEqual(getHeaderNavigation({ page: 'exercises' }).map(link => link.href), ['/exercises/score'])
   assert.deepEqual(getHeaderNavigation({ page: 'scores' }).map(link => link.href), ['/exercises', '/'])
-  assert.deepEqual(getHeaderNavigation({ page: 'admin' }).map(link => link.href), ['/contact', '/'])
+  assert.deepEqual(getHeaderNavigation({ page: 'admin' }).map(link => link.href), ['/'])
 })
 
 test('rendered headers retain language, progress, mobile controls and admin actions with only two primary links', async () => {

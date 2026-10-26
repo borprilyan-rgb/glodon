@@ -21,6 +21,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .header-product-mark { color: var(--blue); background: #edf2fb; border-color: #d1dcf0; }
 .main-content--focused { width: min(1240px, calc(100% - 72px)); }
 .main-content--focused footer { color: var(--muted); border-color: var(--line); font-size: 12px; margin-top: 30px; }
+.site-footer { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 8px 18px; }
+.site-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.site-footer a:hover { color: var(--navy); }
+.presentation .site-footer { margin: 30px 3vw 0; padding: 22px 0; color: var(--muted); border-top: 1px solid var(--line); font-size: 12px; text-align: center; }
 .primary-button, .outline-nav-button, .secondary-button { border-radius: 9px; }
 .primary-button { box-shadow: 0 3px 0 #00000008; }
 .outline-nav-button { border-color: var(--line); }

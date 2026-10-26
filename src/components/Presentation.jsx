@@ -11,6 +11,7 @@ import DrawingToolbar from './DrawingToolbar'
 import PresentationMap from './PresentationMap'
 import PresentationHome from './PresentationHome'
 import ThemeToggle from './ThemeToggle'
+import SiteFooter from './SiteFooter'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -154,6 +155,7 @@ export default function Presentation({ courses, language, onLanguageChange, them
       <div className="presentation-options"><a href={`/${product}/lesson/${lesson.id}`} onClick={() => { try { sessionStorage.setItem(DEMO_KEY, currentPath) } catch { /* Demo still opens if storage is unavailable. */ } }}>{c.demo}<ArrowRight size={16} /></a></div>
     </footer>
     <nav className="presentation-course-nav" aria-label={c.course}>{Object.keys(courses).map((id) => <button key={id} type="button" aria-label={getProductLabel(id)} title={getProductLabel(id)} aria-pressed={walkthrough && product === id} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /></button>)}</nav></>}
+    <SiteFooter text={t.footer} />
     {notice && <p role="status" className="presentation-notice">{notice}</p>}
     </div>
     {expandedImage && <ImageLightbox items={[expandedImage]} index={0} onIndexChange={() => {}} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} drawing={drawing} language={language} />}
