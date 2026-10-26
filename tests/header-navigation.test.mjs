@@ -22,7 +22,7 @@ test('header uses the two contextual destinations for each page and product', ()
       assert.equal(new Set(links.map(link => link.href)).size, 2)
     }
   }
-  assert.deepEqual(getHeaderNavigation({ page: 'hub' }).map(link => link.href), ['/contact', '/exercises'])
+  assert.deepEqual(getHeaderNavigation({ page: 'hub' }).map(link => link.href), ['/contact'])
   assert.deepEqual(getHeaderNavigation({ page: 'contact' }).map(link => link.href), ['/', '/exercises'])
   assert.deepEqual(getHeaderNavigation({ page: 'exercises' }).map(link => link.href), ['/contact', '/'])
   assert.deepEqual(getHeaderNavigation({ page: 'admin' }).map(link => link.href), ['/contact', '/'])
@@ -44,7 +44,7 @@ test('rendered headers retain language, progress, mobile controls and admin acti
           }))
           const tools = html.slice(html.indexOf('class="lesson-topbar__tools"'), html.indexOf('class="mobile-header-row"'))
           const expected = getHeaderNavigation({ page, product, activeStep })
-          assert.equal((tools.match(/<a /g) || []).length, 2, `${language}/${product}/${page}`)
+          assert.equal((tools.match(/<a /g) || []).length, expected.length, `${language}/${product}/${page}`)
           for (const link of expected) assert(tools.includes(`href="${link.href}"`))
           assert(tools.includes('class="language-switcher"'))
           if (product && ['welcome', 'course'].includes(page)) assert(!tools.includes('progress--compact'))

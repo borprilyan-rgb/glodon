@@ -14,6 +14,7 @@ export function getHeaderNavigation({ page, product, activeStep }) {
   else if (product && ['course', 'welcome'].includes(page)) selected = ['exercises', 'home']
   else if (product && ['welcome', 'tests', 'lesson'].includes(page)) selected = ['contact', 'learningMap']
   else if (['exercises', 'admin'].includes(page) || product) selected = ['contact', 'home']
+  else if (page === 'hub') selected = ['contact']
   else selected = ['contact', 'exercises']
   return selected.map(id => links[id])
 }
