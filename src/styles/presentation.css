@@ -28,10 +28,6 @@
 .presentation-eyebrow { color: #2673ab; font-size: 15px; font-weight: 750; letter-spacing: .06em; }
 .presentation-heading h1 { max-width: 1200px; font-size: clamp(32px, 4.1vw, 64px); line-height: 1.12; letter-spacing: -.035em; margin: 15px 0 20px; }
 .presentation-heading > p { font-size: clamp(19px, 1.8vw, 28px); line-height: 1.5; max-width: 1100px; color: #536a80; margin: 0 0 30px; }
-.presentation-products { display: flex; gap: 30px; margin: 50px 0 20px; }
-.presentation-products > button { flex: 1; display: flex; align-items: center; gap: 20px; padding: 30px; background: white; border-bottom: 4px solid #168bc1; border-radius: 10px; }
-.presentation-products img { width: 90px; height: 70px; object-fit: contain; }
-.presentation-products strong { font-size: 30px; }
 .presentation-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 35px; }
 .presentation-cards article { padding: clamp(22px, 2.4vw, 38px); background: white; border: 1px solid #d6e1eb; border-radius: 12px; }
 .presentation-card-number { font-size: 22px; color: #2588b5; }
@@ -57,7 +53,6 @@
 .presentation-return a { color: #145e96; font-weight: 700; }
 .presentation-return button { display: grid; place-items: center; border: 0; background: transparent; padding: 8px; cursor: pointer; }
 @media (max-width: 900px) {
-  .presentation-products > button { flex-direction: column; gap: 8px; padding: 18px; }
   .presentation-controls { flex-wrap: wrap; }
   .presentation-controls > small { display: none; }
   .presentation-action { grid-template-columns: 1fr; }
@@ -67,10 +62,6 @@
   .presentation-toolbar { padding: 12px 16px; }
   .presentation-brand span, .presentation-toolbar button span { display: none; }
   .presentation-cards, .presentation-experience { grid-template-columns: 1fr; gap: 16px; }
-  .presentation-products { gap: 10px; margin-top: 30px; }
-  .presentation-products img { width: 60px; height: 50px; }
-  .presentation-products strong { font-size: 20px; }
-  .presentation-products > button { padding: 14px 6px; }
   .presentation-options { flex-wrap: wrap; }
   .presentation-stage { padding: 28px 20px; }
 }
@@ -88,9 +79,6 @@
 .presentation .lightbox__close { color: white; background: #1d3c5d; }
 .presentation .lightbox__zoom button { padding: 0; color: white; background: transparent; border: 0; }
 
-.presentation-stage--home { display: flex; flex-direction: column; justify-content: center; }
-.presentation-products > button { justify-content: flex-start; text-align: left; border: 0; border-bottom: 4px solid #168bc1; transition: background .15s, box-shadow .15s; }
-.presentation-products > button:hover { background: #e4f2ff; box-shadow: 0 8px 24px rgba(22,52,83,.12); }
 
 .presentation-action--revised { grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr); gap: 28px; }
 .presentation-action--revised .presentation-image { min-height: 0; }
@@ -103,4 +91,55 @@
 }
 
 .presentation-selection-title { font-size: clamp(24px, 2.4vw, 36px); line-height: 1.2; margin: 0 0 16px; }
-.presentation-stage--home .presentation-products { margin-top: 16px; }
+
+.presentation--home { background: #f5f7fb; color: var(--navy); }
+.presentation-stage--home { max-width: 1312px; display: flex; flex-direction: column; justify-content: flex-start; padding: 44px 36px; }
+.presentation-home { width: 100%; }
+.presentation-applications { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 8px 0 24px; }
+.presentation .presentation-application { --course-accent: #285523; justify-content: flex-start; min-width: 0; min-height: 68px; gap: 12px; padding: 12px 18px; border-color: var(--line); border-radius: 12px; background: white; color: var(--navy); }
+.presentation .presentation-application--trb { --course-accent: #234b7d; }
+.presentation .presentation-application--tme { --course-accent: #533674; }
+.presentation .presentation-application[aria-pressed="true"] { color: var(--course-accent); border-color: var(--course-accent); box-shadow: inset 0 0 0 1px var(--course-accent); background: #f5f7fb; }
+.presentation-application img { width: 36px; height: 36px; object-fit: contain; }
+.presentation-application strong { font-size: 14px; }
+.presentation-outline { --course-accent: #285523; background: white; border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+.presentation-outline--trb { --course-accent: #234b7d; }
+.presentation-outline--tme { --course-accent: #533674; }
+.presentation-outline__heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.presentation-outline__heading h2 { margin: 0 0 8px; color: var(--navy); font-size: 27px; font-weight: 650; letter-spacing: -.04em; }
+.presentation-outline__heading p { margin: 0; color: var(--muted); font-size: 12px; }
+.presentation .presentation-outline__start { min-height: 44px; padding: 12px 16px; border: 0; color: white; background: var(--course-accent); font-size: 13px; font-weight: 700; }
+.presentation .presentation-outline__start:hover { filter: brightness(.92); }
+.presentation-home-part + .presentation-home-part { border-top: 1px solid var(--line); }
+.presentation-home-part h3 { margin: 0; }
+.presentation .presentation-home-part h3 > button { display: flex; width: 100%; min-height: 60px; padding: 16px 12px; gap: 16px; border: 0; border-radius: 8px; text-align: left; background: white; }
+.presentation .presentation-home-part h3 > button[aria-expanded="true"] { background: #f5f7fb; }
+.presentation-home-part__number { flex: 0 0 70px; color: var(--course-accent); font-size: 10px; font-weight: 800; }
+.presentation-home-part__title { flex: 1; min-width: 0; color: var(--navy); font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
+.presentation-home-part h3 > button small { flex-shrink: 0; color: var(--muted); font-size: 11px; }
+.presentation-home-part h3 > button svg { flex-shrink: 0; color: var(--course-accent); }
+.presentation-home-part h3 > button[aria-expanded="true"] svg { transform: rotate(180deg); }
+.presentation-home-steps { list-style: none; padding: 0 12px; margin: 0 0 12px; }
+.presentation-home-steps[hidden] { display: none; }
+.presentation-home-steps li + li { border-top: 1px solid #edf0f5; }
+.presentation-home-steps a { display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 12px; border-radius: 6px; text-decoration: none; color: var(--navy); }
+.presentation-home-steps a small { flex: 0 0 58px; color: var(--muted); font-size: 10px; }
+.presentation-home-steps a span { flex: 1; min-width: 0; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.presentation-home-steps a svg { flex-shrink: 0; color: var(--course-accent); }
+.presentation-home-steps a:hover { background: #f5f7fb; color: var(--course-accent); }
+@media (max-width: 767px) {
+  .presentation-stage--home { padding: 28px 16px; }
+  .presentation-outline { padding: 16px; }
+  .presentation-outline__heading { flex-wrap: wrap; }
+  .presentation .presentation-application { padding: 10px; gap: 6px; justify-content: center; flex-direction: column; }
+  .presentation-application img { width: 28px; height: 28px; }
+  .presentation-application strong { font-size: 13px; }
+  .presentation-applications { gap: 8px; }
+  .presentation .presentation-home-part h3 > button { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 14px 8px; }
+  .presentation-home-part__title { grid-row: 2; }
+  .presentation-home-part h3 > button small { grid-row: 1; grid-column: 2; }
+  .presentation-home-part h3 > button svg { grid-row: 2; grid-column: 2; justify-self: end; }
+  .presentation-home-steps { padding: 0; }
+  .presentation-home-steps a { padding: 12px 8px; gap: 10px; }
+  .presentation-home-steps a small { flex-basis: 52px; }
+}

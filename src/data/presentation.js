@@ -22,6 +22,7 @@ export const presentationCopy = {
     "home": {
       "label": "Cubicost Learning Centre",
       "title": "Choose an application",
+      "start": "Start presenting",
       "text": "Guided learning for quantity surveyors, estimators, and project teams."
     }
   },
@@ -48,6 +49,7 @@ export const presentationCopy = {
     "home": {
       "label": "Cubicost Learning Centre",
       "title": "Pilih aplikasi",
+      "start": "Mulai presentasi",
       "text": "Pembelajaran terpandu untuk quantity surveyor, estimator, dan tim proyek."
     }
   }

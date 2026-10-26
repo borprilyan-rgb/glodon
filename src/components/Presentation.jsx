@@ -9,6 +9,7 @@ import usePresentationDrawing from './usePresentationDrawing'
 import DrawingCanvas from './DrawingCanvas'
 import DrawingToolbar from './DrawingToolbar'
 import PresentationMap from './PresentationMap'
+import PresentationHome from './PresentationHome'
 
 const DEMO_KEY = 'cubicost:presentation:return'
 
@@ -53,10 +54,16 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const drawing = usePresentationDrawing(walkthrough ? `${product}:${lesson.id}:${action.id}` : 'home')
   const currentPath = walkthrough ? `/present?${new URLSearchParams({ product, lesson: lesson.id, slide: String(index) })}` : '/present'
   function startCourse(id) {
+    startLesson(id, courses[id].allSteps[0].id)
+  }
+
+  function startLesson(id, stepId) {
     setProduct(id)
-    setLessonId(courses[id].allSteps[0].id)
+    setLessonId(stepId)
     setIndex(0)
     setWalkthrough(true)
+    setMapOpen(false)
+    root.current?.querySelector('.presentation-stage')?.focus()
   }
 
   const navigate = useCallback((direction) => {
@@ -110,11 +117,11 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     return () => window.removeEventListener('keydown', keydown)
   }, [count, c.fullscreenError, navigate, expandedImage, walkthrough])
 
-  return <div className="presentation" ref={root}>
+  return <div className={`presentation${walkthrough ? '' : ' presentation--home'}`} ref={root}>
     <div className="presentation-content" inert={expandedImage ? true : undefined} aria-hidden={expandedImage ? true : undefined}>
     <header className="presentation-toolbar">
       <a href="/" className="presentation-brand"><img src="/branding/company-logo.png" alt="Glodon" /><span>Cubicost Learning Centre</span></a>
-      <div><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
+      <div><button type="button" aria-expanded={mapOpen} aria-controls="presentation-map" aria-label="List" title="List" onClick={() => setMapOpen(open => !open)}><List size={18} /><span>List</span></button><button type="button" onClick={() => onLanguageChange(language === 'en' ? 'id' : 'en')} aria-label={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke bahasa Inggris'}>{language.toUpperCase()}</button>{walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="toggle" />}<button type="button" onClick={toggleFullscreen}>{fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}<span>{fullscreen ? c.leaveFullscreen : c.fullscreen}</span></button>{!fullscreen && <a className="presentation-close" href="/present">{language === 'en' ? 'Close' : 'Tutup'}</a>}</div>
     </header>
     <div hidden={!mapOpen}><PresentationMap key={product} courses={courses} product={product} lessonId={lesson.id} index={index} walkthrough={walkthrough} language={language} onClose={() => {
       setMapOpen(false)
@@ -129,7 +136,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
     }} /></div>
     {walkthrough && <DrawingToolbar drawing={drawing} language={language} mode="tools" />}
     <main tabIndex={-1} className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
-      {walkthrough ? <div className="presentation-heading"><span className="presentation-eyebrow">{`${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}`}</span><h1>{revisedLayout ? lesson.title : action.title}</h1></div> : <h1 className="presentation-selection-title">{c.home.title}</h1>}
+      {walkthrough ? <div className="presentation-heading"><span className="presentation-eyebrow">{`${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}`}</span><h1>{revisedLayout ? lesson.title : action.title}</h1></div> : <h1 className="sr-only">{c.home.label}</h1>}
       {walkthrough ? <div className={`presentation-action${revisedLayout ? ' presentation-action--revised' : ''}`}>
         <div className="presentation-image">
           {failedImage === image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image, alt: action.imageAlt || action.alt || action.title, caption: action.title, description: action.description, instructionFormat: action.instructionFormat, opener: event.currentTarget })}>
@@ -138,7 +145,7 @@ export default function Presentation({ courses, language, onLanguageChange }) {
           {!expandedImage && failedImage !== image && <DrawingCanvas drawing={drawing} image={image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}
         </div>
         <div key={`${product}:${lesson.id}:${action.id}`} className="presentation-instructions" role="region" aria-label={language === 'en' ? 'Slide instructions' : 'Instruksi slide'} tabIndex={0}><p>{action.description || lesson.intro}</p></div>
-      </div> : <div className="presentation-products">{Object.keys(courses).map((id) => <button type="button" key={id} aria-label={getProductLabel(id)} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /><strong>{getProductLabel(id)}</strong></button>)}</div>}
+      </div> : <PresentationHome courses={courses} initialProduct={product} language={language} t={t} c={c} onStart={startLesson} />}
     </main>
     {walkthrough && <><footer className="presentation-controls">
       <div className="presentation-navigation"><button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button><span aria-live="polite">{walkthrough && <>{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; </>}{c.slide} {index + 1} / {count}</span><button type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button></div>
