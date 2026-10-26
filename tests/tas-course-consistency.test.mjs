@@ -16,7 +16,6 @@ test('TAS home, overview, map and lesson progress use the same 22 current lesson
     const { default: App } = await server.ssrLoadModule('/src/App.jsx')
     const legacy = getTasData('en').allSteps
     const current = [...legacy.filter(step => step.partId !== 'part-3'), ...getReportLessons('en')]
-    const combinedTotal = current.length + getTrbData('en').allSteps.length + getTmeData('en').allSteps.length
     assert.equal(current.length, 22)
     for (const language of ['id', 'en']) {
       const values = new Map([
@@ -32,7 +31,8 @@ test('TAS home, overview, map and lesson progress use the same 22 current lesson
       const card = html => html.match(/<article class="hub-course-card hub-course-card--tas">[\s\S]*?<\/article>/)[0]
       const emptyHome = render('/')
       assert(card(emptyHome).includes(`22 ${language === 'en' ? 'lessons' : 'pelajaran'}`))
-      assert(emptyHome.includes(` / ${combinedTotal}</span>`))
+      assert(!emptyHome.includes('hub-overall-progress'))
+      assert(!emptyHome.includes('hub-section-heading'))
       assert(render('/tas').includes(`${language === 'en' ? '3 parts' : '3 bagian'} · 22`))
 
       // Replaced wall/report lessons must not inflate current course progress.

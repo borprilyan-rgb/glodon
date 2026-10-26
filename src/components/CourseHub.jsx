@@ -27,12 +27,8 @@ function CourseCard({ product, data, description, t, language, index }) {
 
 export default function CourseHub({ tas, trb, tme, t, language }) {
   const en = language === 'en'
-  const courses = [tas, trb, tme]
-  const total = courses.reduce((sum, data) => sum + data.allSteps.length, 0)
-  const completed = courses.reduce((sum, data) => sum + data.allSteps.filter(step => data.progress.completed.has(step.id)).length, 0)
   return <div className="course-hub course-hub--learning">
     <h1 className="sr-only">{t.hubTitle}</h1>
-    <div className="hub-section-heading"><div><span className="eyebrow">{en ? 'THE LEARNING COLLECTION' : 'KOLEKSI PEMBELAJARAN'}</span><h2>{en ? 'Choose your next chapter' : 'Pilih langkah belajar Anda'}</h2></div><div className="hub-overall-progress"><span className="hub-overall-progress__icon"><BookOpen size={19} /></span><div><strong>{completed}<span> / {total}</span></strong><small>{en ? 'lessons completed' : 'pelajaran selesai'}</small></div></div></div>
     <section id="learning-courses" tabIndex={-1} className="hub-course-grid" aria-label={t.allCourses}><CourseCard product="tas" data={tas} language={language} description={t.tasCardDescription} t={t} index={1} /><CourseCard product="trb" data={trb} language={language} description={t.trbCardDescription} t={t} index={2} /><CourseCard product="tme" data={tme} language={language} description={t.tmeCardDescription} t={t} index={3} /></section>
     <section className="hub-tools" aria-label={en ? 'Learning tools' : 'Alat pembelajaran'}><a href="/exercises"><span className="hub-tool-icon"><ClipboardCheck size={23} /></span><div><strong>{en ? 'Start exercise' : 'Mulai latihan'}</strong></div><ArrowRight size={20} /></a><a href="/present"><span className="hub-tool-icon"><Play size={23} /></span><div><strong>{en ? 'Start presenting' : 'Mulai presentasi'}</strong></div><ArrowRight size={20} /></a></section>
   </div>
