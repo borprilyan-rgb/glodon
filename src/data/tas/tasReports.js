@@ -1,4 +1,5 @@
 import source from './tasReports.source.json' with { type: 'json' }
+import { getTasChecklist } from './checklists.js'
 
 const uses = {
   'Volume(m3)': 'Digunakan untuk volume elemen.',
@@ -148,7 +149,7 @@ export function getReportLessons(language = 'id') {
   return groups.map(([id, title, elements], stepIndex) => ({
   id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: groups.length,
   hideIntro: true, showInstructionsBelowImage: true, duration: `${elements.length * 5} ${isEn ? 'min' : 'menit'}`,
-  checks: isEn ? ['I can identify the Quantity columns in the report', 'I can read column names and their units', 'I can explain what each Quantity column is used for'] : ['Dapat mengenali kolom Quantity pada report', 'Dapat membaca nama kolom dan satuannya', 'Dapat menjelaskan kegunaan kolom Quantity'],
+  checks: getTasChecklist(id, language),
   actions: elements.flatMap(slug => {
     const report = source.reports[slug]
     return (report.segments || [report.display || report]).map(segment => {

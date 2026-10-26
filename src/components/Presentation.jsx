@@ -26,7 +26,9 @@ export default function Presentation({ courses, language, onLanguageChange }) {
   const c = presentationCopy[language]
   const params = new URLSearchParams(window.location.search)
   const initialProduct = Object.hasOwn(courses, params.get('product')) ? params.get('product') : 'tas'
-  const selectedLesson = courses[initialProduct].allSteps.find((step) => step.id === params.get('lesson'))
+  const requestedLesson = params.get('lesson')
+  const initialLesson = courses[initialProduct].lessonAliases?.[requestedLesson] || requestedLesson
+  const selectedLesson = courses[initialProduct].allSteps.find((step) => step.id === initialLesson)
   const [product, setProduct] = useState(initialProduct)
   const [lessonId, setLessonId] = useState(selectedLesson?.id || courses[initialProduct].allSteps[0].id)
   const [walkthrough, setWalkthrough] = useState(Boolean(selectedLesson))

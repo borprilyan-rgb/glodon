@@ -38,8 +38,8 @@ test('PileCap-def preserves source headers, grouping, merged ranges and blank va
   assert.equal(reportPrototype.actions[0].description.split('\n').length, 7)
   for (const column of report.columns.slice(3)) assert(reportPrototype.actions[0].description.includes(column.header))
   const course = getTasData('id')
-  assert.equal(course.allSteps.length, 18)
-  assert.deepEqual(course.tutorialParts[2].steps.map(step => step.id), ['calculate-verify-quantity', 'quantity-reports'])
+  assert.equal(course.allSteps.length, 16)
+  assert.deepEqual(course.tutorialParts[2].steps.map(step => step.id), [])
   assert(!course.allSteps.some(step => step.id === reportPrototype.id))
 })
 
@@ -78,7 +78,7 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
     assert(!html.includes('report-action-navigation'))
     assert(!html.includes('aria-pressed'))
     assert(html.includes('slab-report'))
-    assert(html.includes('apply-finishes'))
+    assert(html.includes('calculate-verify-quantity'))
     const done = renderToStaticMarkup(React.createElement(Lesson, { ...props, progress: { completed: true, checks: [0, 1, 2] } }))
     assert(done.includes('completion-success'))
     assert(!done.includes(uiText.id.completedCourse('TAS')))
@@ -112,7 +112,7 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
       const mapHtml = renderToStaticMarkup(React.createElement(App))
       assert.equal((mapHtml.match(/class="course-lesson /g) || []).length, 23)
       for (const step of reportLessons) assert(mapHtml.includes(`/tas/lesson/${step.id}`))
-      assert(!mapHtml.includes('/tas/lesson/calculate-verify-quantity'))
+      assert(mapHtml.includes('/tas/lesson/calculate-verify-quantity'))
       const previousDocument = globalThis.document
       globalThis.document = { fullscreenElement: null }
       try {

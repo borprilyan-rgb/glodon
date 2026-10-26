@@ -35,8 +35,8 @@ test('TAS home, overview, map and lesson progress use the same 23 current lesson
       assert(emptyHome.includes(` / ${combinedTotal}</span>`))
       assert(render('/tas').includes(`${language === 'en' ? '3 parts' : '3 bagian'} · 23`))
 
-      // Retired Part 3 completion must not inflate the current course's progress.
-      values.set('cubicost:tutorial:tas:progress', JSON.stringify({ completed: legacy.map(step => step.id), started: legacy.map(step => step.id) }))
+      // Replaced wall/report lessons must not inflate current course progress.
+      values.set('cubicost:tutorial:tas:progress', JSON.stringify({ completed: [...legacy.map(step => step.id), 'identify-structural-walls', 'quantity-reports'], started: legacy.map(step => step.id) }))
       values.set(reportProgressKey, JSON.stringify({ 'pile-cap-report': { completed: true, checks: [0, 1, 2] } }))
       values.set('cubicost:tutorial:tas:lastLesson', 'beam-report')
       const home = card(render('/'))

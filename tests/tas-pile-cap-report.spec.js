@@ -20,7 +20,7 @@ test('existing action and image controls stay synchronized without interactive t
   await expect(page.locator('.screenshot-media__image img')).toHaveAttribute('src', reportPrototype.actions[0].image)
   await expect(page.getByRole('button', { name: 'Next Image', exact: true })).toBeDisabled()
   await expect(page.locator('.step-navigation a')).toHaveCount(2)
-  await expect(page.locator('.step-navigation a').first()).toHaveAttribute('href', '/tas/lesson/apply-finishes')
+  await expect(page.locator('.step-navigation a').first()).toHaveAttribute('href', '/tas/lesson/calculate-verify-quantity')
   await expect(page.locator('.step-navigation a').last()).toHaveAttribute('href', '/tas/lesson/slab-report')
 })
 

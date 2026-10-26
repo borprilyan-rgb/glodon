@@ -1,0 +1,283 @@
+{
+  "source": "Format Revisi TAS TRB part2.pdf",
+  "sha256": "d6934bb479a9f3d02d5b7dfe101ec7031f3f8ea576ea71b7cd351883c1ea2e34",
+  "pages": [
+    {
+      "page": 1,
+      "image": "/tutorial/tas/revision-part-2/illustration-01.png",
+      "crop": [
+        33.16299819946289,
+        225.4040069580078,
+        872.3599853515625,
+        527.239990234375
+      ],
+      "context": [
+        "ELEMENT : Wall\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Pilih “Pick Concrete Wall Sideline” > Ubah menjadi “Pick Masonry Wall Sideline”",
+        "Pilih “Select by layer/color”",
+        "Klik Layer terluar garis Dinding > Klik Kanan",
+        "Pilih “Auto-Identify”"
+      ],
+      "note": "Pengambilan layer dinding diambil garis terluar dinding (termasuk tebal finishing) karena berpengaruh ke volume area finishing lantai dan ceiling. Pada saat pemodelan Room Finish/Finishing ketebalannya tidak mempengaruhi volume finishing lainnya."
+    },
+    {
+      "page": 2,
+      "image": "/tutorial/tas/revision-part-2/illustration-02.png",
+      "crop": [
+        33.16299819946289,
+        225.4040069580078,
+        901.8800048828125,
+        540.0
+      ],
+      "context": [
+        "ELEMENT : Wall\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Hapus entity dan element list yang tidak digunakan",
+        "Ubah Nama Element, Kategori & Material Element, Ketebalan dinding pada Attribute Editor",
+        "Modeling secara manual untuk dinding yang belum termodelkan menggunakan tools “Draw”"
+      ],
+      "note": ""
+    },
+    {
+      "page": 3,
+      "image": "/tutorial/tas/revision-part-2/illustration-03.png",
+      "crop": [
+        197.55999755859375,
+        151.95999145507812,
+        744.9199829101562,
+        503.9599914550781
+      ],
+      "context": [
+        "ELEMENT : Wall\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [],
+      "note": ""
+    },
+    {
+      "page": 4,
+      "image": "/tutorial/tas/revision-part-2/illustration-04.png",
+      "crop": [
+        52.319000244140625,
+        218.1370086669922,
+        872.2150268554688,
+        540.0
+      ],
+      "context": [
+        "ELEMENT : Door / Window\nLANTAI : Ground Floor",
+        "TAB MENU : DRAW\nDRAWING : DENAH LANTAI 1 KUSEN"
+      ],
+      "instructions": [
+        "Pilih “Element Schedule”",
+        "Pilih “Import Excel File” > Pilih file Schedule Door & Window > Open",
+        "Pastikan kembali kolom dan row sudah sesuai dengan formatnya",
+        "Pilih “Identify”"
+      ],
+      "note": ""
+    },
+    {
+      "page": 5,
+      "image": "/tutorial/tas/revision-part-2/illustration-05.png",
+      "crop": [
+        58.375,
+        234.95999145507812,
+        878.27099609375,
+        530.0
+      ],
+      "context": [
+        "ELEMENT : Door / Window\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 KUSEN"
+      ],
+      "instructions": [
+        "Pilih “Pick Door/Window Sideline”",
+        "Pilih “Select by layer/color”",
+        "Klik Layer Pintu / Jendela > Klik Kanan"
+      ],
+      "note": ""
+    },
+    {
+      "page": 6,
+      "image": "/tutorial/tas/revision-part-2/illustration-06.png",
+      "crop": [
+        58.375,
+        234.95999145507812,
+        878.27099609375,
+        530.0
+      ],
+      "context": [
+        "ELEMENT : Door / Window\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 KUSEN"
+      ],
+      "instructions": [
+        "Pilih “Pick Door/Window Label”",
+        "Pilih “Select by layer/color”",
+        "Klik Label Pintu / Jendela > Klik Kanan",
+        "Pilih “Auto-Identify”"
+      ],
+      "note": ""
+    },
+    {
+      "page": 7,
+      "image": "/tutorial/tas/revision-part-2/illustration-07.png",
+      "crop": [
+        58.375,
+        234.95999145507812,
+        878.27099609375,
+        530.0
+      ],
+      "context": [
+        "ELEMENT : Door / Window\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 KUSEN"
+      ],
+      "instructions": [
+        "Pilih “Pick Door/Window Label”",
+        "Pilih “Select by layer/color”",
+        "Klik Label Pintu / Jendela > Klik Kanan",
+        "Pilih “Auto-Identify”"
+      ],
+      "note": "Jika terdapat pintu / jendela yang belum termodelkan maka perlu dimodelkan secara manual menggunakan tools point pada menu Draw"
+    },
+    {
+      "page": 8,
+      "image": "/tutorial/tas/revision-part-2/illustration-08.png",
+      "crop": [
+        167.1999969482422,
+        195.27999877929688,
+        792.7999877929688,
+        511.2799987792969
+      ],
+      "context": [
+        "ELEMENT : Door / Window\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 KUSEN"
+      ],
+      "instructions": [
+        "Jika terdapat pintu / jendela yang belum termodelkan maka perlu dimodelkan secara manual menggunakan tools Point pada menu Draw"
+      ],
+      "note": ""
+    },
+    {
+      "page": 9,
+      "image": "/tutorial/tas/revision-part-2/illustration-09.png",
+      "crop": [
+        60.35700225830078,
+        217.125,
+        878.9310302734375,
+        540.0
+      ],
+      "context": [
+        "ELEMENT : Room (Finishes)\nLANTAI : Ground Floor",
+        "TAB MENU : DRAW\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Pilih “Finish Schedule”",
+        "Pilih “Import Excel File” > Pilih file Schedule Finish > Open",
+        "Pastikan kembali kolom dan row sudah sesuai dengan formatnya",
+        "Pilih “Identify” > Klik OK"
+      ],
+      "note": ""
+    },
+    {
+      "page": 10,
+      "image": "/tutorial/tas/revision-part-2/illustration-10.png",
+      "crop": [
+        61.01799774169922,
+        230.99600219726562,
+        879.592041015625,
+        525.0800170898438
+      ],
+      "context": [
+        "ELEMENT : Room (Finishes)\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Pilih Room pada Element List yang akan dimodelkan",
+        "Pilih “Point” pada menu Draw",
+        "Klik area Room pada gambar untuk Element List yang dipilih > Klik Kanan"
+      ],
+      "note": ""
+    },
+    {
+      "page": 11,
+      "image": "/tutorial/tas/revision-part-2/illustration-11.png",
+      "crop": [
+        172.37899780273438,
+        212.77500915527344,
+        763.6420288085938,
+        530.1199951171875
+      ],
+      "context": [
+        "ELEMENT : Finishes\nLANTAI : Ground Floor",
+        "TAB MENU : IDENTIFY\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Pilih Element List/Material yang akan diubah tampilannya",
+        "Klik “Material Texture” pada paling bawah Attribute Editor",
+        "Klik “Import” > Pilih Tampilan Texture/Warna > Open > Klik Material Texturenya > Select"
+      ],
+      "note": ""
+    },
+    {
+      "page": 12,
+      "image": "/tutorial/tas/revision-part-2/illustration-12.png",
+      "crop": [
+        34.512001037597656,
+        203.67601013183594,
+        875.5390014648438,
+        530.0
+      ],
+      "context": [
+        "ELEMENT : Room (Finishes)\nLANTAI : Ground Floor",
+        "TAB MENU : DRAW\nDRAWING : DENAH LANTAI 1 ARS"
+      ],
+      "instructions": [
+        "Pilih Finishing yang akan diubah",
+        "Klik “Regenerate Finish Entity”",
+        "Pilih Room dan jenis Finishing yang sebelumnya diubah > Klik OK"
+      ],
+      "note": ""
+    },
+    {
+      "page": 13,
+      "image": "/tutorial/tas/revision-part-2/illustration-13.png",
+      "crop": [
+        21.040000915527344,
+        190.7010040283203,
+        957.6799926757812,
+        530.5999755859375
+      ],
+      "context": [
+        "TAB MENU : QUANTITY"
+      ],
+      "instructions": [
+        "Klik “Calculate” untuk menghitung quantity dari hasil pemodelan yang dibuat",
+        "Pilih “All Floors” > Klik OK > Setelah proses menghitung selesai lalu Klik OK",
+        "Jika ingin melihat Quantity Expression, Pilih Element List yang dipilih > Pilih “View Expression” > Pilih Entity pada Model"
+      ],
+      "note": "Jika terdapat revisi pemodelan setelah melakukan Calculate maka perlu dilakukan Calculate ulang agar quantity terupdate sesuai pemodelan yang diubah"
+    },
+    {
+      "page": 14,
+      "image": "/tutorial/tas/revision-part-2/illustration-14.png",
+      "crop": [
+        2.439999580383301,
+        192.68301391601562,
+        949.2799682617188,
+        540.0
+      ],
+      "context": [
+        "TAB MENU : QUANTITY"
+      ],
+      "instructions": [
+        "Pilih “View Quantity by Category” > Pilih Lantai dan Element > Klik OK",
+        "Pilih “Set Classification and Quantity” apabila ingin menampilkan atau menyembunyikan beberapa klasifikasi pada Report Quantity > Klik OK",
+        "Klik “Export to Excel” > Klik OK > Save"
+      ],
+      "note": ""
+    }
+  ]
+}

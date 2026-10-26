@@ -1,5 +1,7 @@
 import { getScreenshotCopy } from '../screenshotCopy.js'
 import { applySectionOneRevision } from './sectionOneRevision.js'
+import { applyPartTwoRevision, replacePartTwoLessons } from './partTwoRevision.js'
+import { getTasChecklist } from './checklists.js'
 
 const a = (titleId, descriptionId, titleEn, descriptionEn, file) => ({ titleId, descriptionId, titleEn, descriptionEn, file })
 
@@ -114,8 +116,8 @@ const lessons = [
 ]
 
 const parts = {
-  id: [['Persiapan Proyek dan Gambar', 'Measurement Settings → Measurement Rules → Create Project → Configure → Import → Scale → Align → Create Axis'], ['Pemodelan Elemen Bangunan', 'Pile Cap → Column → Beam → Slab → Wall → Opening → Finishing'], ['Kuantitas dan Laporan', 'Calculate → Verify → Report']],
-  en: [['Project and Drawing Preparation', 'Measurement Settings → Measurement Rules → Create Project → Configure → Import → Scale → Align → Create Axis'], ['Building Element Modelling', 'Pile Cap → Column → Beam → Slab → Wall → Opening → Finishing'], ['Quantity and Reports', 'Calculate → Verify → Report']],
+  id: [['Persiapan Proyek dan Gambar', 'Measurement Settings → Measurement Rules → Create Project → Configure → Import → Scale → Align → Create Axis'], ['Pemodelan Elemen Bangunan', 'Pile Cap → Column → Beam → Slab → Wall → Door/Window → Room Finish → Quantity/Report'], ['Kuantitas dan Laporan', 'Calculate → Verify → Report']],
+  en: [['Project and Drawing Preparation', 'Measurement Settings → Measurement Rules → Create Project → Configure → Import → Scale → Align → Create Axis'], ['Building Element Modelling', 'Pile Cap → Column → Beam → Slab → Wall → Door/Window → Room Finish → Quantity/Report'], ['Quantity and Reports', 'Calculate → Verify → Report']],
 }
 const ranges = [[0, 6], [6, 14], [14, 18]]
 
@@ -151,9 +153,10 @@ export function getTasData(language) {
   tutorialParts.forEach((part) => part.steps.forEach((step) => {
     step.actions = step.actions.map((action) => withScreenshotCopy(action, Number(action.image.match(/page-(\d+)/)?.[1]), language))
   }))
-  tutorialParts.forEach((part) => {
-    part.steps = part.steps.map((step) => applySectionOneRevision(step, language))
+  const revisedParts = replacePartTwoLessons(tutorialParts)
+  revisedParts.forEach((part) => {
+    part.steps = part.steps.map((step) => ({ ...applyPartTwoRevision(applySectionOneRevision(step, language), language), checks: getTasChecklist(step.id, language) }))
   })
-  const updatedSteps = tutorialParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
-  return { tutorialParts, allSteps: updatedSteps }
+  const updatedSteps = revisedParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
+  return { tutorialParts: revisedParts, allSteps: updatedSteps }
 }

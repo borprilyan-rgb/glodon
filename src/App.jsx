@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getTasData } from './data/tas/index.js'
+import { partTwoLessonAliases } from './data/tas/partTwoRevision.js'
 import { getTrbData } from './data/trb/index.js'
 import { getTmeData } from './data/tme/index.js'
 import { uiText } from './data/uiText'
@@ -43,7 +44,10 @@ const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
 const TME_LESSON_IDS = new Set(getTmeData('en').allSteps.map((step) => step.id))
 const TAS_LAST_LESSON_MAP = { 'floor-settings': 'floor-grade-settings', 'import-drawing': 'import-split-drawing', 'set-scale': 'scale-relocate-drawing', 'verify-scale': 'scale-relocate-drawing', 'view-expression': 'measurement-rules', 'filter-deduction': 'measurement-rules', 'change-rule': 'measurement-rules', recalculate: 'calculate-verify-quantity', 'verify-deduction': 'calculate-verify-quantity', 'quantity-category': 'quantity-reports', 'configure-report': 'quantity-reports' }
 
-function mapTasLessonId(id) { return TAS_LESSON_IDS.has(id) ? id : TAS_LAST_LESSON_MAP[id] || null }
+function mapTasLessonId(id) {
+  const mapped = partTwoLessonAliases[id] || TAS_LAST_LESSON_MAP[id] || id
+  return partTwoLessonAliases[mapped] || (TAS_LESSON_IDS.has(mapped) ? mapped : null)
+}
 
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -116,7 +120,8 @@ function loadTasProgress(initialStepId) {
       mappedLast ? localStorage.setItem(TAS_LAST_LESSON_KEY, mappedLast) : localStorage.removeItem(TAS_LAST_LESSON_KEY)
       localStorage.setItem(TAS_CURRICULUM_MIGRATION_KEY, '1')
     }
-    return normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY))
+    const progress = normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY))
+    return { ...progress, lastLesson: mapTasLessonId(progress.lastLesson), started: new Set([...progress.started].map(mapTasLessonId).filter(Boolean)) }
   } catch {
     // A failed migration write must not hide progress that is still readable.
     try { return normaliseProgress(JSON.parse(localStorage.getItem(TAS_PROGRESS_KEY) || localStorage.getItem(LEGACY_TAS_KEY) || '[]'), initialStepId, localStorage.getItem(TAS_LAST_LESSON_KEY)) }
@@ -305,9 +310,7 @@ export default function App() {
   const visibleProgress = product === 'tas' ? { completed: tasCourseCompleted } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'tas' ? tasCourseSteps.length : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') {
-    const legacyLesson = new URLSearchParams(window.location.search).get('lesson')
-    const legacy = allSteps.some(step => step.partId === 'part-3' && step.id === legacyLesson)
-    return <Presentation courses={{ tas: legacy ? { tutorialParts, allSteps } : { tutorialParts: tasCourseParts, allSteps: tasCourseSteps }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+    return <Presentation courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: partTwoLessonAliases }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}
@@ -326,7 +329,7 @@ export default function App() {
     {product === 'tas' && route.page === 'welcome' && <LandingPage allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} continueStep={continueStep} product="tas" language={language} t={t} />}
     {product === 'tas' && route.page === 'course' && <CourseMapPage parts={filteredParts} allSteps={tasCourseSteps} completed={tasCourseCompleted} started={tasCourseStarted} lastLesson={tasProgress.lastLesson} continueStep={continueStep} onReset={reset} query={query} setQuery={setQuery} product="tas" language={language} t={t} />}
     {activeReport && <PileCapReportLesson key={activeReport.id} step={activeReport} index={tasCourseSteps.findIndex(step => step.id === activeReport.id)} total={tasCourseSteps.length} progress={reportProgress[activeReport.id]} onCheck={(index) => setReportProgress(current => { const entry = current[activeReport.id]; return { ...current, [activeReport.id]: { ...entry, checks: entry.checks.includes(index) ? entry.checks.filter(item => item !== index) : [...entry.checks, index] } } })} onToggle={() => setReportProgress(current => ({ ...current, [activeReport.id]: { ...current[activeReport.id], completed: !current[activeReport.id].completed } }))} previous={reportLessons[activeReport.stepNumber - 2] || allSteps.filter(step => step.partId === 'part-2').at(-1)} next={reportLessons[activeReport.stepNumber]} t={t} />}
-    {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={activeStep.partId === 'part-3' ? allSteps.length : tasCourseSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'apply-finishes' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
+    {product === 'tas' && route.page === 'lesson' && !isReportPrototype && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={activeStep.partId === 'part-3' ? allSteps.length : tasCourseSteps.length} isComplete={completed.has(activeStep.id)} selectedChecks={tasProgress.checklists[activeStep.id] || []} onCheck={toggleCheck} onToggle={toggleComplete} previous={allSteps[activeIndex - 1]} next={activeStep.id === 'calculate-verify-quantity' ? reportLessons[0] : allSteps[activeIndex + 1]} product="tas" language={language} t={t} />}
     {product === 'trb' && route.page === 'welcome' && <LandingPage product="trb" course={trb} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} continueStep={continueTrbStep} t={t} />}
     {product === 'trb' && route.page === 'course' && <CourseMapPage parts={filteredTrbParts} allSteps={trb.allSteps} completed={trbProgress.completed} started={trbProgress.started} lastLesson={trbProgress.lastLesson} continueStep={continueTrbStep} onReset={resetTrb} query={query} setQuery={setQuery} product="trb" course={trb} language={language} t={t} />}
     {product === 'trb' && route.page === 'lesson' && activeStep && <TutorialStep step={activeStep} index={activeIndex} total={trb.allSteps.length} isComplete={trbProgress.completed.has(activeStep.id)} selectedChecks={trbProgress.checklists[activeStep.id] || []} onCheck={updateTrbCheck} onToggle={toggleTrbComplete} previous={trb.allSteps[activeIndex - 1]} next={trb.allSteps[activeIndex + 1]} product="trb" language={language} t={t} />}
