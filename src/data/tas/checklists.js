@@ -92,14 +92,9 @@ const checklists = {
     ['Saya dapat menjelaskan Weight of rebar(kg) sebagai berat tulangan slab dalam kg.', 'I can explain Weight of rebar(kg) as slab rebar weight in kg.'],
   ],
   'beam-report': [
-    ['Saya dapat menjelaskan Volume(m3) sebagai volume beton Beam.', 'I can explain Volume(m3) as beam concrete volume.'],
+    ['Saya dapat menjelaskan Volume(m3) untuk beton serta Area of formwork(m2) untuk bekisting pada Beam dan Column.', 'I can explain Volume(m3) for concrete and Area of formwork(m2) for formwork in Beam and Column reports.'],
     ['Saya dapat membedakan Area of formwork(m2), Area of formwork to side of beam(m2), dan Area of formwork to soffit of beam(m2).', 'I can distinguish Area of formwork(m2), Area of formwork to side of beam(m2), and Area of formwork to soffit of beam(m2).'],
-    ['Saya dapat menjelaskan Weight of rebar(kg) sebagai berat tulangan Beam dalam kg.', 'I can explain Weight of rebar(kg) as beam rebar weight in kg.'],
-  ],
-  'column-report': [
-    ['Saya dapat membedakan Volume(m3) untuk beton dan Area of formwork(m2) untuk bekisting Column.', 'I can distinguish Volume(m3) for concrete from Area of formwork(m2) for column formwork.'],
-    ['Saya dapat menjelaskan Number(pc) untuk jumlah Column dan Weight of rebar(kg) untuk berat tulangan.', 'I can explain Number(pc) for the column count and Weight of rebar(kg) for rebar weight.'],
-    ['Saya dapat menjelaskan Girth(m) sebagai keliling elemen Column dalam m.', 'I can explain Girth(m) as the column element perimeter in m.'],
+    ['Saya dapat menjelaskan Weight of rebar(kg) pada Beam dan Column, serta Number(pc) dan Girth(m) pada Column.', 'I can explain Weight of rebar(kg) in Beam and Column reports, and Number(pc) and Girth(m) in the Column report.'],
   ],
   'wall-report': [
     ['Saya dapat menjelaskan Area(m2) sebagai luas elemen Wall.', 'I can explain Area(m2) as the wall element area.'],

@@ -28,7 +28,7 @@ test('PileCap-def preserves source headers, grouping, merged ranges and blank va
   }
   assert.equal(reportPrototype.actions.length, 1)
   assert.equal(reportPrototype.stepNumber, 1)
-  assert.equal(reportPrototype.partStepCount, 7)
+  assert.equal(reportPrototype.partStepCount, 6)
   assert.equal(reportPrototype.hideIntro, true)
   assert.equal(reportPrototype.showInstructionsBelowImage, true)
   assert(reportPrototype.actions.every(action => action.pending === false))
@@ -110,7 +110,7 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
       }
       globalThis.window.location = { pathname: '/tas/course', hash: '', search: '' }
       const mapHtml = renderToStaticMarkup(React.createElement(App))
-      assert.equal((mapHtml.match(/class="course-lesson /g) || []).length, 23)
+      assert.equal((mapHtml.match(/class="course-lesson /g) || []).length, 22)
       for (const step of reportLessons) assert(mapHtml.includes(`/tas/lesson/${step.id}`))
       assert(mapHtml.includes('/tas/lesson/calculate-verify-quantity'))
       const previousDocument = globalThis.document
@@ -137,11 +137,11 @@ test('prototype reuses the unchanged lesson interface and never renders an inter
   } finally { await server.close() }
 })
 
-test('seven report steps contain only the retained sections and columns', async () => {
-  assert.deepEqual(reportLessons.map(step => step.actions.length), [1, 1, 3, 1, 1, 2, 6])
+test('six report steps contain only the retained sections and columns', async () => {
+  assert.deepEqual(reportLessons.map(step => step.actions.length), [1, 1, 4, 1, 2, 6])
   assert.deepEqual(reportLessons.map(step => step.actions.map(action => action.title)), [
-    ['Pile Cap'], ['In-Situ Slab'], ['Beam – Volume Beton', 'Beam – Bekisting', 'Beam – Tulangan'],
-    ['Column'], ['Wall'], ['Door', 'Window'],
+    ['Pile Cap'], ['In-Situ Slab'], ['Beam – Volume Beton', 'Beam – Bekisting', 'Beam – Tulangan', 'Column'],
+    ['Wall'], ['Door', 'Window'],
     ['Room', 'Floor Finish', 'Waterproof', 'Skirting', 'Wall Finish', 'Suspended Ceiling'],
   ])
   const expected = {
@@ -162,7 +162,7 @@ test('seven report steps contain only the retained sections and columns', async 
   const seen = new Set()
   for (const [stepIndex, step] of reportLessons.entries()) {
     assert.equal(step.stepNumber, stepIndex + 1)
-    assert.equal(step.partStepCount, 7)
+    assert.equal(step.partStepCount, 6)
     for (const [actionIndex, action] of step.actions.entries()) {
       assert.equal(action.number, actionIndex + 1)
       if (step.id !== 'beam-report') assert(!seen.has(action.sourceSheet))
@@ -184,7 +184,7 @@ test('seven report steps contain only the retained sections and columns', async 
   assert.equal(seen.size, 13)
 })
 
-test('report completion is isolated and sanitized for each of the seven steps', () => {
+test('report completion is isolated and sanitized for each of the six steps', () => {
   const previous = globalThis.localStorage
   try {
     globalThis.localStorage = { getItem: key => key === reportProgressKey ? JSON.stringify({
@@ -193,12 +193,28 @@ test('report completion is isolated and sanitized for each of the seven steps', 
       'staircase-report': { completed: true, checks: [0, 1, 2] },
     }) : null }
     const progress = loadReportProgress()
-    assert.equal(Object.keys(progress).length, 7)
+    assert.equal(Object.keys(progress).length, 6)
     assert(!progress['staircase-report'])
     assert.deepEqual(progress['pile-cap-report'], { completed: true, checks: [0, 1, 2] })
     assert.deepEqual(progress['slab-report'], { completed: false, checks: [1] })
     assert.deepEqual(progress['finishes-report'], { completed: false, checks: [] })
   } finally { globalThis.localStorage = previous }
+})
+
+test('Beam and Column progress combines only completed pairs and preserves the current merged record', () => {
+  const priorStorage = globalThis.localStorage
+  try {
+    for (const [beamDone, columnDone] of [[false, false], [true, false], [false, true], [true, true]]) {
+      const old = { 'beam-report': { completed: beamDone, checks: [0, 1, 2] }, 'column-report': { completed: columnDone, checks: [0, 1, 2] }, 'wall-report': { completed: true, checks: [0, 1, 2] } }
+      globalThis.localStorage = { getItem: key => key === 'cubicost:tas:reports:progress:v2' ? JSON.stringify(old) : null }
+      const migrated = loadReportProgress()
+      assert.deepEqual(migrated['beam-report'], { completed: beamDone && columnDone, checks: beamDone && columnDone ? [0, 1, 2] : [] })
+      assert.equal(migrated['wall-report'].completed, true)
+      assert(!migrated['column-report'])
+      globalThis.localStorage = { getItem: key => key === reportProgressKey ? JSON.stringify(migrated) : null }
+      assert.deepEqual(loadReportProgress(), migrated)
+    }
+  } finally { globalThis.localStorage = priorStorage }
 })
 
 test('all report descriptions follow the language while Excel column names and report identities stay unchanged', () => {

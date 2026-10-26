@@ -11,7 +11,7 @@ import LandingPage from './components/LandingPage'
 import CourseMapPage from './components/CourseMapPage'
 import TutorialStep from './components/TutorialStep'
 import PileCapReportLesson from './components/PileCapReportLesson'
-import { getReportLessons, getReportLesson, emptyReportProgress, loadReportProgress, reportProgressKey } from './data/tas/tasReports'
+import { getReportLessons, getReportLesson, emptyReportProgress, loadReportProgress, reportProgressKey, reportLessonAliases } from './data/tas/tasReports'
 import ContactPage from './components/ContactPage'
 import ExerciseHub from './components/ExerciseHub'
 import SectionExercise from './components/SectionExercise'
@@ -45,7 +45,7 @@ const TME_LESSON_IDS = new Set(getTmeData('en').allSteps.map((step) => step.id))
 const TAS_LAST_LESSON_MAP = { 'floor-settings': 'floor-grade-settings', 'import-drawing': 'import-split-drawing', 'set-scale': 'scale-relocate-drawing', 'verify-scale': 'scale-relocate-drawing', 'view-expression': 'measurement-rules', 'filter-deduction': 'measurement-rules', 'change-rule': 'measurement-rules', recalculate: 'calculate-verify-quantity', 'verify-deduction': 'calculate-verify-quantity', 'quantity-category': 'quantity-reports', 'configure-report': 'quantity-reports' }
 
 function mapTasLessonId(id) {
-  const mapped = partTwoLessonAliases[id] || TAS_LAST_LESSON_MAP[id] || id
+  const mapped = reportLessonAliases[id] || partTwoLessonAliases[id] || TAS_LAST_LESSON_MAP[id] || id
   return partTwoLessonAliases[mapped] || (TAS_LESSON_IDS.has(mapped) ? mapped : null)
 }
 
@@ -310,7 +310,7 @@ export default function App() {
   const visibleProgress = product === 'tas' ? { completed: tasCourseCompleted } : product === 'trb' ? trbProgress : product === 'tme' ? tmeProgress : tasProgress
   const visibleTotal = product === 'tas' ? tasCourseSteps.length : product === 'trb' ? trb.allSteps.length : product === 'tme' ? tme.allSteps.length : allSteps.length
   if (route.page === 'presentation') {
-    return <Presentation courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: partTwoLessonAliases }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+    return <Presentation courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
   return <TutorialLayout page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises'].includes(route.page) && <PresentationEntry language={language} />}

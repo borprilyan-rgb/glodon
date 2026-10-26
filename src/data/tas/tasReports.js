@@ -70,11 +70,10 @@ const uses = {
 const groups = [
   ['pile-cap-report', 'Pile Cap', ['pile-cap']],
   ['slab-report', 'In-Situ Slab', ['in-situ-slab']],
-  ['beam-report', 'Beam', ['beam']],
-  ['column-report', 'Column', ['column']],
+  ['beam-report', 'Beam – Column', ['beam', 'column']],
   ['wall-report', 'Wall', ['wall']],
   ['openings-report', 'Door – Window', ['door', 'window']],
-  ['finishes-report', 'Room – Floor Finish – Waterproof – Skirting – Wall Finish – Suspended Ceiling', ['room', 'floor-finish', 'waterproof', 'skirting', 'wall-finish', 'suspended-ceiling']],
+  ['finishes-report', 'Room', ['room', 'floor-finish', 'waterproof', 'skirting', 'wall-finish', 'suspended-ceiling']],
 ]
 
 const usesEn = {
@@ -170,13 +169,21 @@ export function getReportLessons(language = 'id') {
 
 export const reportLessons = getReportLessons('id')
 
-export const reportProgressKey = 'cubicost:tas:reports:progress:v2'
+export const reportProgressKey = 'cubicost:tas:reports:progress:v3'
+export const reportLessonAliases = { 'column-report': 'beam-report' }
 export const getReportLesson = (id, language = 'id') => getReportLessons(language).find(lesson => lesson.id === id)
 export const emptyReportProgress = () => Object.fromEntries(reportLessons.map(lesson => [lesson.id, { completed: false, checks: [] }]))
 
 export function loadReportProgress() {
   try {
-    const saved = JSON.parse(localStorage.getItem(reportProgressKey) || '{}')
+    const current = localStorage.getItem(reportProgressKey)
+    const saved = JSON.parse(current || localStorage.getItem('cubicost:tas:reports:progress:v2') || '{}')
+    if (!current) {
+      // The combined lesson is complete only if both former lessons were done.
+      // Keep the v2 record intact; old checkbox meanings differ from the new set.
+      const completed = saved['beam-report']?.completed === true && saved['column-report']?.completed === true
+      saved['beam-report'] = { completed, checks: completed ? [0, 1, 2] : [] }
+    }
     return Object.fromEntries(reportLessons.map(lesson => {
       const record = saved[lesson.id] || {}
       return [lesson.id, { completed: record.completed === true, checks: [...new Set((Array.isArray(record.checks) ? record.checks : []).filter(index => Number.isInteger(index) && index >= 0 && index < lesson.checks.length))] }]

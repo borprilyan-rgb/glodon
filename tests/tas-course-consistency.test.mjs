@@ -8,7 +8,7 @@ import { getTrbData } from '../src/data/trb/index.js'
 import { getTmeData } from '../src/data/tme/index.js'
 import { getReportLessons, reportProgressKey } from '../src/data/tas/tasReports.js'
 
-test('TAS home, overview, map and lesson progress use the same 23 current lessons in both languages', async () => {
+test('TAS home, overview, map and lesson progress use the same 22 current lessons in both languages', async () => {
   const server = await createServer({ server: { middlewareMode: true, hmr: false }, appType: 'custom' })
   const previousWindow = globalThis.window
   const previousStorage = globalThis.localStorage
@@ -17,7 +17,7 @@ test('TAS home, overview, map and lesson progress use the same 23 current lesson
     const legacy = getTasData('en').allSteps
     const current = [...legacy.filter(step => step.partId !== 'part-3'), ...getReportLessons('en')]
     const combinedTotal = current.length + getTrbData('en').allSteps.length + getTmeData('en').allSteps.length
-    assert.equal(current.length, 23)
+    assert.equal(current.length, 22)
     for (const language of ['id', 'en']) {
       const values = new Map([
         ['cubicost-tas-tutorial-language-v1', language],
@@ -31,33 +31,37 @@ test('TAS home, overview, map and lesson progress use the same 23 current lesson
       }
       const card = html => html.match(/<article class="hub-course-card hub-course-card--tas">[\s\S]*?<\/article>/)[0]
       const emptyHome = render('/')
-      assert(card(emptyHome).includes(`23 ${language === 'en' ? 'lessons' : 'pelajaran'}`))
+      assert(card(emptyHome).includes(`22 ${language === 'en' ? 'lessons' : 'pelajaran'}`))
       assert(emptyHome.includes(` / ${combinedTotal}</span>`))
-      assert(render('/tas').includes(`${language === 'en' ? '3 parts' : '3 bagian'} · 23`))
+      assert(render('/tas').includes(`${language === 'en' ? '3 parts' : '3 bagian'} · 22`))
 
       // Replaced wall/report lessons must not inflate current course progress.
       values.set('cubicost:tutorial:tas:progress', JSON.stringify({ completed: [...legacy.map(step => step.id), 'identify-structural-walls', 'quantity-reports'], started: legacy.map(step => step.id) }))
       values.set(reportProgressKey, JSON.stringify({ 'pile-cap-report': { completed: true, checks: [0, 1, 2] } }))
-      values.set('cubicost:tutorial:tas:lastLesson', 'beam-report')
+      values.set('cubicost:tutorial:tas:lastLesson', 'column-report')
       const home = card(render('/'))
-      assert(home.includes('aria-valuenow="74"'), '17 of 23 completed, excluding two retired lessons')
+      assert(home.includes('aria-valuenow="77"'), '17 of 22 completed, excluding two retired lessons')
       assert(home.includes('href="/tas/lesson/beam-report"'), 'Resume the last visited report')
       const overview = render('/tas')
       assert(overview.includes('href="/tas/lesson/beam-report"'))
       assert(!overview.includes(language === 'en' ? 'Review Learning' : 'Tinjau Kembali Pembelajaran'))
       for (const path of ['/tas/course', '/tas/lesson/create-project', '/tas/lesson/beam-report']) {
         const html = render(path)
-        assert(html.includes('aria-valuenow="74"'), path)
+        assert(html.includes('aria-valuenow="77"'), path)
         assert(!html.includes('aria-valuenow="100"'), path)
       }
       const removed = render('/tas/lesson/staircase-report')
       assert(removed.includes('class="course-map-hero"'))
       const map = render('/tas/course')
-      assert.equal((map.match(/class="course-lesson /g) || []).length, 23)
+      assert.equal((map.match(/class="course-lesson /g) || []).length, 22)
       assert(!map.includes('/tas/lesson/quantity-reports'))
+      assert(!map.includes('/tas/lesson/column-report'))
+      const oldColumn = render('/tas/lesson/column-report')
+      assert(oldColumn.includes('<h1>Beam – Column</h1>'))
+      assert.equal((oldColumn.match(/role="listitem"/g) || []).length, 4)
       assert(!map.includes('/tas/lesson/staircase-report'))
       const firstReport = render('/tas/lesson/pile-cap-report')
-      assert(firstReport.includes('class="step-position"><span style="width:73.91304347826086%"'))
+      assert(firstReport.includes('class="step-position"><span style="width:77.27272727272727%"'))
       const lastReport = render('/tas/lesson/finishes-report')
       assert(lastReport.includes('class="step-position"><span style="width:100%"'))
 

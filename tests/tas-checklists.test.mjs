@@ -8,10 +8,10 @@ import { getReportLessons } from '../src/data/tas/tasReports.js'
 
 const course = language => [...getTasData(language).allSteps, ...getReportLessons(language)]
 
-test('all 23 TAS lessons have distinct bilingual checklists with the existing three saved positions', () => {
+test('all 22 TAS lessons have distinct bilingual checklists with the existing three saved positions', () => {
   const idLessons = course('id')
   const enLessons = course('en')
-  assert.equal(idLessons.length, 23)
+  assert.equal(idLessons.length, 22)
   for (const [index, lesson] of idLessons.entries()) {
     const english = enLessons[index]
     assert.equal(lesson.id, english.id)
@@ -24,8 +24,8 @@ test('all 23 TAS lessons have distinct bilingual checklists with the existing th
     assert(!lesson.checks.join(' ').includes('Tindakan utama telah diselesaikan'))
     assert(!english.checks.join(' ').includes('The main actions are complete'))
   }
-  assert.equal(new Set(idLessons.map(lesson => lesson.checks.join('\n'))).size, 23)
-  assert.equal(new Set(enLessons.map(lesson => lesson.checks.join('\n'))).size, 23)
+  assert.equal(new Set(idLessons.map(lesson => lesson.checks.join('\n'))).size, 22)
+  assert.equal(new Set(enLessons.map(lesson => lesson.checks.join('\n'))).size, 22)
 })
 
 test('revised checklists cover the actual Wall, Door/Window, Finish and Calculation actions and retained report columns', () => {
@@ -52,7 +52,7 @@ test('revised checklists cover the actual Wall, Door/Window, Finish and Calculat
         for (const header of check.match(/\b(?:Volume|Area|Number|Weight|Girth|Net length|Length)[A-Za-z ]*\((?:m3|m2|m|kg|pc)\)/g) || []) assert(content.includes(header), `${lesson.id}: ${header}`)
       }
       assert(!lesson.checks.join('\n').includes('Classification Condition'))
-      if (['beam-report', 'wall-report', 'slab-report'].includes(lesson.id)) assert(!lesson.checks.join('\n').includes('Number(pc)'))
+      if (['wall-report', 'slab-report'].includes(lesson.id)) assert(!lesson.checks.join('\n').includes('Number(pc)'))
     }
   }
 })

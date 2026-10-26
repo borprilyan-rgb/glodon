@@ -41,7 +41,7 @@ function CourseCard({ product, data, description, t, language, index }) {
     <h2>Cubicost {label}</h2><p>{description}</p>
     <div className="hub-course-card__lesson-count"><BookOpen size={15} />{data.allSteps.length} {language === 'en' ? 'lessons' : 'pelajaran'}<span>·</span>{language === 'en' ? 'Self-paced' : 'Belajar mandiri'}</div>
     <div className="hub-course-card__progress"><ProgressBar completed={data.progress.completed.size} total={data.allSteps.length} t={t} /></div>
-    <div className="hub-course-card__actions"><a className="primary-button" href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={17} /></a><a className="outline-nav-button" href={'/' + product}>{language === 'en' ? 'Course overview' : 'Ringkasan kursus'}<ArrowRight size={15} aria-hidden="true" /></a></div>
+    <div className="hub-course-card__actions"><a className="primary-button" href={'/' + product}>{language === 'en' ? 'Course overview' : 'Ringkasan kursus'}<ArrowRight size={17} aria-hidden="true" /></a><a className="outline-nav-button" href={getStepPath(data.continueStep, product)}>{primary}<ArrowRight size={15} aria-hidden="true" /></a></div>
   </article>
 }
 
