@@ -8,7 +8,7 @@ import { getTasData } from '../data/tas'
 import { getTmeData } from '../data/tme'
 import { getTrbData } from '../data/trb'
 
-export default function CourseScores({ product, scores, language, profile }) {
+export default function CourseScores({ product, scores, language, profile, courseProgress = { completed: 0, total: 0 } }) {
   const en = language === 'en'
   const [downloading, setDownloading] = useState(false)
   const [downloadFailed, setDownloadFailed] = useState(false)
@@ -20,24 +20,20 @@ export default function CourseScores({ product, scores, language, profile }) {
   const rows = sections.map(exercise => ({
     exercise,
     result: scores.find(score => score.exercise.path === exercise.path)?.result,
-    started: exercise.load().started,
     title: sectionTitle(exercise),
   }))
-  const completed = rows.filter(row => row.result).length
-  const progress = { completed, total: rows.length }
-  const progressLabel = en ? 'Course assessment progress' : 'Progres asesmen kursus'
+  const progressLabel = en ? 'Course learning progress' : 'Progres belajar kursus'
   const completionLabel = en
-    ? `${completed} of ${rows.length} assessments completed`
-    : `${completed} dari ${rows.length} asesmen selesai`
+    ? `${courseProgress.completed} of ${courseProgress.total} steps`
+    : `${courseProgress.completed} dari ${courseProgress.total} langkah`
   async function download() {
     setDownloading(true)
     setDownloadFailed(false)
     try {
-      await downloadScoreCard({ product, profile, language, progress, rows: rows.map(({ exercise, result, started, title }) => ({
+      await downloadScoreCard({ product, profile, language, progress: courseProgress, rows: rows.map(({ exercise, result, title }) => ({
         section: exercise.section,
         title,
         result,
-        started,
         critical: exercise.copy[language].critical,
       })) })
     } catch { setDownloadFailed(true) }
@@ -50,12 +46,12 @@ export default function CourseScores({ product, scores, language, profile }) {
       {sections.length ? <>
       <div className="course-scores__progress" aria-label={`${progressLabel}: ${completionLabel}`}>
         <div><strong>{progressLabel}</strong><span>{completionLabel}</span></div>
-        <progress value={completed} max={rows.length} aria-label={progressLabel}>{completed}/{rows.length}</progress>
+        <progress value={courseProgress.completed} max={courseProgress.total || 1} aria-label={progressLabel}>{completionLabel}</progress>
       </div>
-      <ul>{rows.map(({ exercise, result, started, title }) => {
+      <ul>{rows.map(({ exercise, result, title }) => {
         return <li key={exercise.path}>
           <div className="course-scores__row"><a href={exercise.path}>{en ? 'Section' : 'Bagian'} {exercise.section}: {title}</a><strong>{result?.total ?? 0}/100</strong></div>
-        <span className={result ? (result.passed ? 'course-scores__passed' : 'course-scores__review') : 'course-scores__pending'}>{result ? scoreStatus(result, language) : started ? en ? 'In progress' : 'Sedang dikerjakan' : en ? 'Not started' : 'Belum dikerjakan'}</span>
+        {result && <span className={result.passed ? 'course-scores__passed' : 'course-scores__review'}>{scoreStatus(result, language)}</span>}
         {result && !result.criticalPassed && <p>{exercise.copy[language].critical}</p>}
       </li>
       })}</ul>
