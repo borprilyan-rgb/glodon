@@ -38,6 +38,9 @@
 :root[data-theme="dark"] .lesson-topbar :is(.all-courses-button, .contact-nav-button, .course-map-button) { color: var(--navy); border-color: var(--line); }
 :root[data-theme="dark"] .lesson-topbar :is(.all-courses-button, .contact-nav-button, .course-map-button):hover { background: var(--night-raised); }
 :root[data-theme="dark"] .mobile-action-navigation { background: #111e31; border-color: var(--line); }
+:root[data-theme="dark"] .mobile-bottom-nav { background: #111e31; border-color: var(--line); }
+:root[data-theme="dark"] .mobile-bottom-nav a.is-current { color: #add0ff; }
+:root[data-theme="dark"] .settings-page__card { background: var(--night-surface); border-color: var(--line); }
 :root[data-theme="dark"] .course-home .course-part__toggle { background: #20324e; color: #dbe8ff; border-color: #6384bb; }
 
 :root[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),

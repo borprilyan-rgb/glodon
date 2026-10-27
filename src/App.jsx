@@ -17,6 +17,7 @@ import { getCourseCompletion } from './data/courseCompletion'
 import ContactPage from './components/ContactPage'
 import ExerciseHub from './components/ExerciseHub'
 import ExerciseScoresPage from './components/ExerciseScoresPage'
+import SettingsPage from './components/SettingsPage'
 import SectionExercise from './components/SectionExercise'
 import ParticipantEntry from './components/ParticipantEntry'
 import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
@@ -61,6 +62,7 @@ function routeFromLocation() {
   }
   if (path === '/exercises/score') return { page: 'scores' }
   if (path === '/exercises') return { page: 'exercises' }
+  if (path === '/settings') return { page: 'settings' }
   if (path === '/present') return { page: 'presentation' }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/admin/results') return { page: 'admin' }
@@ -346,6 +348,7 @@ export default function App() {
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} />}
+    {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} t={t} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}
