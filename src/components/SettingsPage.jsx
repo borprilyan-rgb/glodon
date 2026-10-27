@@ -1,10 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 
 const settingDefinitions = ['language', 'appearance', 'fullscreen']
 
-export default function SettingsPage({ language, onLanguageChange, theme, onThemeToggle, mobileLessonFullscreen, onMobileLessonFullscreenToggle, t }) {
+export default function SettingsPage({ language, onLanguageChange, theme, onThemeToggle, t }) {
   const [openSetting, setOpenSetting] = useState(null)
+  const [isFullscreen, setIsFullscreen] = useState(() => Boolean(document.fullscreenElement))
+  const [fullscreenError, setFullscreenError] = useState('')
+  useEffect(() => {
+    const updateFullscreen = () => setIsFullscreen(Boolean(document.fullscreenElement))
+    document.addEventListener('fullscreenchange', updateFullscreen)
+    return () => document.removeEventListener('fullscreenchange', updateFullscreen)
+  }, [])
+
+  async function toggleFullscreen() {
+    try {
+      const app = document.querySelector('.app-shell')
+      if (document.fullscreenElement) await document.exitFullscreen()
+      else if (app?.requestFullscreen) await app.requestFullscreen()
+      else throw new Error('Fullscreen unavailable')
+      setFullscreenError('')
+    } catch {
+      setFullscreenError(t.fullscreenUnavailable)
+    }
+  }
+
   const settings = {
     language: {
       title: t.language,
@@ -28,13 +48,7 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
     },
     fullscreen: {
       title: t.fullScreenMode,
-      value: mobileLessonFullscreen ? t.enabled : t.disabled,
-      options: [
-        { value: 'on', label: t.enabled },
-        { value: 'off', label: t.disabled },
-      ],
-      selected: mobileLessonFullscreen ? 'on' : 'off',
-      choose: (value) => { if ((value === 'on') !== mobileLessonFullscreen) onMobileLessonFullscreenToggle() },
+      value: isFullscreen ? t.enabled : t.disabled,
     },
   }
 
@@ -46,10 +60,11 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
       {settingDefinitions.map((key) => {
         const setting = settings[key]
         return <div key={key} className={`settings-page__card${key === 'fullscreen' ? ' settings-page__card--mobile-only' : ''}`}>
-          <button type="button" className="settings-row" onClick={() => setOpenSetting(key)} aria-label={`${setting.title}: ${setting.value}`}>
-            <span className="settings-row__title">{setting.title}</span>
+          <button type="button" className="settings-row" onClick={() => key === 'fullscreen' ? toggleFullscreen() : setOpenSetting(key)} aria-label={key === 'fullscreen' ? `${setting.title}: ${setting.value}. ${isFullscreen ? t.exitFullscreen : t.enterFullscreen}` : `${setting.title}: ${setting.value}`} aria-pressed={key === 'fullscreen' ? isFullscreen : undefined}>
+            <span className="settings-row__copy"><span className="settings-row__title">{setting.title}</span>{key === 'fullscreen' && <span className="settings-row__description">{t.fullscreenCompatibilityShort}</span>}</span>
             <span className="settings-row__trailing"><span className="settings-row__value">{setting.value}</span><ChevronRight size={20} aria-hidden="true" /></span>
           </button>
+          {key === 'fullscreen' && fullscreenError && <p className="settings-fullscreen-error" role="status">{fullscreenError}</p>}
         </div>
       })}
     </div> : <section className="settings-subpage" aria-labelledby="settings-subpage-title">
@@ -65,7 +80,6 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
           <input type="radio" name={`settings-${openSetting}`} value={option.value} checked={active.selected === option.value} aria-label={option.ariaLabel || option.label} onChange={() => active.choose(option.value)} />
         </label>)}
       </div>
-      {openSetting === 'fullscreen' && <p className="settings-subpage__note">{t.fullscreenCompatibilityNote}</p>}
     </section>}
   </section>
 }

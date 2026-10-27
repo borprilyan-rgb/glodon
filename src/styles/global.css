@@ -92,7 +92,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 
 /* Guided mobile tutorial navigation */
 .mobile-header-row, .mobile-menu-layer, .mobile-action-navigation, .course-part__toggle { display: none; }
-.mobile-fullscreen-notice { display: none; }
 
 @media (max-width: 767px) {
   html, body, #root { max-width: 100%; overflow-x: hidden; }
@@ -106,7 +105,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .mobile-header__logo img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; }
   .mobile-header-row > strong { display: -webkit-box; flex: 1 1 auto; min-width: 0; overflow: hidden; color: white; font-size: 14px; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
   .mobile-header-row > button { flex: 0 0 44px; }
-  .mobile-fullscreen-notice { display: block; margin: 5px 0 0 52px; color: #f4d187; font-size: 12px; line-height: 1.4; }
   .mobile-menu-layer { position: fixed; inset: 0; z-index: 80; display: block; }
   .mobile-menu-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; background: rgba(5, 21, 38, .58); border: 0; }
   .mobile-menu-drawer { position: absolute; top: 0; right: 0; width: min(88vw, 340px); height: 100dvh; padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; color: var(--navy); background: white; box-shadow: -18px 0 44px rgba(3, 20, 38, .22); }
@@ -359,7 +357,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .settings-page { max-width: 760px; margin: 32px auto; }
 .settings-page__card { margin-top: 12px; padding: 0 20px; background: white; border: 1px solid var(--line); border-radius: 12px; }
 .settings-row { display: flex; width: 100%; min-height: 68px; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; color: var(--navy); background: transparent; border: 0; text-align: left; cursor: pointer; }
+.settings-row__copy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
 .settings-row__title { font-size: 16px; font-weight: 700; }
+.settings-row__description { color: var(--muted); font-size: 13px; font-weight: 400; line-height: 1.35; }
 .settings-row__trailing { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); }
 .settings-row__value { font-size: 14px; }
 .settings-row__trailing svg { color: var(--muted); }
@@ -375,7 +375,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .settings-radio-option input:checked { border: 7px solid var(--blue); }
 .settings-radio-option input:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .settings-radio-option:focus-within { border-radius: 4px; }
-.settings-subpage__note { margin: 22px 4px 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.settings-fullscreen-error { margin: 12px 0 0; color: #a52d24; font-size: 14px; line-height: 1.5; }
 .settings-page__card--mobile-only { display: none; }
 .mobile-bottom-nav { display: none; }
 
@@ -390,15 +390,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .settings-page__card--mobile-only { display: flex; }
   .settings-row { min-height: 64px; }
   .settings-row__title { font-size: 15px; }
+  .settings-row__description { font-size: 12px; }
   .settings-row__value { font-size: 13px; }
   .settings-subpage__header { margin-bottom: 16px; }
   .settings-subpage__header h2 { font-size: 20px; }
   .settings-radio-option { min-height: 64px; font-size: 16px; }
-  .app-shell--mobile-fullscreen { display: flex; height: 100dvh; min-height: 100dvh; flex-direction: column; overflow: hidden; }
-  .app-shell--mobile-fullscreen:fullscreen { width: 100%; height: 100%; min-height: 100%; }
-  .app-shell--mobile-fullscreen .mobile-fullscreen-toggle { color: white; }
-  .app-shell--mobile-fullscreen > .lesson-topbar { flex: 0 0 auto; }
-  .app-shell--mobile-fullscreen > .main-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; }
-  .app-shell--mobile-fullscreen .main-content--focused .tutorial-step { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
-  .app-shell--mobile-fullscreen .main-content--focused > footer { display: none; }
+  .app-shell:fullscreen { display: flex; width: 100vw; height: 100dvh; min-height: 100dvh; flex-direction: column; overflow: hidden; }
+  .app-shell:fullscreen > .lesson-topbar { flex: 0 0 auto; }
+  .app-shell:fullscreen > .main-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; }
 }

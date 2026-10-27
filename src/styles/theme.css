@@ -40,6 +40,7 @@
 :root[data-theme="dark"] .mobile-bottom-nav { background: #111e31; border-color: var(--line); }
 :root[data-theme="dark"] .mobile-bottom-nav a.is-current { color: #add0ff; }
 :root[data-theme="dark"] .settings-page__card { background: var(--night-surface); border-color: var(--line); }
+:root[data-theme="dark"] .settings-fullscreen-error { color: #ffaaa3; }
 :root[data-theme="dark"] :is(.settings-row, .settings-subpage__back, .settings-radio-option) { color: var(--navy); }
 :root[data-theme="dark"] .settings-row__trailing,
 :root[data-theme="dark"] .settings-row__trailing svg { color: var(--muted); }

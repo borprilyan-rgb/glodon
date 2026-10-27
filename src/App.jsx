@@ -40,7 +40,6 @@ const TRB_PROGRESS_KEY = 'cubicost:tutorial:trb:progress'
 const TRB_LAST_LESSON_KEY = 'cubicost:tutorial:trb:lastLesson'
 const TME_PROGRESS_KEY = 'cubicost:tutorial:tme:progress'
 const TME_LAST_LESSON_KEY = 'cubicost:tutorial:tme:lastLesson'
-const MOBILE_LESSON_FULLSCREEN_KEY = 'cubicost:mobile-lesson-fullscreen'
 
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
 const TAS_LESSON_IDS = new Set([...getTasData('en').allSteps, ...getReportLessons('en')].map((step) => step.id))
@@ -169,11 +168,6 @@ export default function App() {
   const [theme, setTheme] = useState(loadTheme)
   const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark')
   useEffect(() => { applyTheme(theme); saveTheme(theme) }, [theme])
-  const [mobileLessonFullscreen, setMobileLessonFullscreen] = useState(() => {
-    try { return localStorage.getItem(MOBILE_LESSON_FULLSCREEN_KEY) !== 'false' } catch { return true }
-  })
-  const toggleMobileLessonFullscreen = () => setMobileLessonFullscreen(current => !current)
-  useEffect(() => { try { localStorage.setItem(MOBILE_LESSON_FULLSCREEN_KEY, String(mobileLessonFullscreen)) } catch { /* Keep the setting usable when storage is blocked. */ } }, [mobileLessonFullscreen])
   const initialRoute = routeFromLocation()
   const [route, setRoute] = useState(initialRoute)
   const [language, setLanguage] = useState(() => {
@@ -347,7 +341,7 @@ export default function App() {
   if (route.page === 'presentation') {
     return <Presentation theme={theme} onThemeToggle={toggleTheme} courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
-  return <TutorialLayout theme={theme} onThemeToggle={toggleTheme} mobileLessonFullscreen={mobileLessonFullscreen} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
+  return <TutorialLayout theme={theme} onThemeToggle={toggleTheme} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises', 'scores'].includes(route.page) && <PresentationEntry language={language} />}
     {progressCannotSave && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'lesson' && !activeStep && <section className="tutorial-step"><header className="step-header"><h1>{t.lessonNotFound}</h1><p>{t.lessonNotFoundDescription}</p></header><a className="primary-button" href={`/${product}/`}>{t.backToCourseMap}</a></section>}
@@ -359,7 +353,7 @@ export default function App() {
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} courseProgress={courseLearningProgress} />}
-    {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} mobileLessonFullscreen={mobileLessonFullscreen} onMobileLessonFullscreenToggle={toggleMobileLessonFullscreen} t={t} />}
+    {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} t={t} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}
