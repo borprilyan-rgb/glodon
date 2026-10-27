@@ -65,6 +65,8 @@
 .participant-profile-card .participant-details { display: flex; flex-wrap: wrap; gap: 12px 40px; margin: 0; }
 .participant-profile-card__heading .secondary-button { min-height: 42px; padding: 10px 16px; gap: 8px; }
 .participant-profile-card__timer { margin: 0; color: var(--muted); font-size: 12px; }
+.participant-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+.participant-name strong { color: var(--navy); font-size: 14px; }
 .participant-field-hint { color: var(--muted); font-size: 12px; font-weight: 400; }
 @media (max-width: 760px) { .exercise-layout, .exercise-results { grid-template-columns: 1fr; }.exercise-card, .exercise-brief { padding: 20px; }.exercise-navigation button { flex: 1; justify-content: center; font-size: 13px; }.exercise-question h2 { font-size: 21px; }.exercise-grid-point { width: 40px; height: 40px; }.exercise-result-heading { align-items: start; } }
 

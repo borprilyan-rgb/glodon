@@ -1,4 +1,4 @@
-import { participantFields, participantLabels } from './participant'
+import { participantLabels } from './participant'
 import { scoreLabel, scoreStatus } from './testScores'
 
 export async function downloadScoreCard({ product, profile, rows, language, progress }) {
@@ -13,7 +13,7 @@ export async function downloadScoreCard({ product, profile, rows, language, prog
       ctx.font = `${bold ? '700' : '400'} ${size}px Arial, sans-serif`
       ctx.fillStyle = color
       ctx.textBaseline = 'top'
-      // Wrap long names, IDs and section titles without truncating the export.
+      // Wrap long names and section titles without truncating the export.
       let line = ''
       for (const word of String(value).split(/\s+/)) {
         if (line && ctx.measureText(`${line} ${word}`).width > maxWidth) {
@@ -43,11 +43,9 @@ export async function downloadScoreCard({ product, profile, rows, language, prog
     text(`Cubicost ${product.toUpperCase()} · ${scoreLabel(language)}`, { size: 36, bold: true })
     y += 20
     divider()
-    for (const field of participantFields) {
-      text(participantLabels[language][field], { size: 16, color: '#536a80' })
-      text(profile?.[field]?.trim() || '—', { bold: true })
-      y += 12
-    }
+    text(participantLabels[language].name, { size: 16, color: '#536a80' })
+    text(profile?.name?.trim() || '—', { bold: true })
+    y += 12
     divider()
     const totalSteps = progress?.total ?? 0
     const completedSteps = progress?.completed ?? 0

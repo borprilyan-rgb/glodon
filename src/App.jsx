@@ -19,7 +19,6 @@ import ExerciseHub from './components/ExerciseHub'
 import ExerciseScoresPage from './components/ExerciseScoresPage'
 import SettingsPage from './components/SettingsPage'
 import SectionExercise from './components/SectionExercise'
-import ParticipantEntry from './components/ParticipantEntry'
 import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
 import { getSectionExercise } from './data/sectionExercises'
@@ -367,7 +366,7 @@ export default function App() {
     {route.page === 'hub' && <CourseHub language={language} tas={{ allSteps: tasCourseSteps, progress: { completed: tasCourseCompleted, started: tasCourseStarted }, continueStep }} trb={{ ...trb, progress: trbProgress, continueStep: continueTrbStep }} tme={{ ...tme, progress: tmeProgress, continueStep: continueTmeStep }} t={t} />}
 
     {participantSaveFailed && ['exercise', 'tests', 'exercises'].includes(route.page) && <p role="alert">{language === 'en' ? 'Your details could not be saved in this browser.' : 'Data diri tidak dapat disimpan di browser ini.'}</p>}
-    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <ParticipantEntry key={product + '-' + route.section} profile={participant} language={language} product={product} onContinue={saveParticipant} /> : <SectionExercise key={product + '-' + route.section} profile={participant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
+    {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <section className="exercise-card participant-required"><h1>{language === 'en' ? 'Personal details required' : 'Data diri diperlukan'}</h1><p>{language === 'en' ? 'Add or update your details on the main Exercises page before opening a section.' : 'Tambahkan atau ubah data diri di halaman utama Latihan sebelum membuka bagian.'}</p><a className="primary-button" href="/exercises">{language === 'en' ? 'Go to Exercises' : 'Buka Latihan'}</a></section> : <SectionExercise key={product + '-' + route.section} profile={participant} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} courseProgress={courseLearningProgress} />}
     {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} t={t} />}

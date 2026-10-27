@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { downloadScoreCard } from '../data/downloadScoreCard'
-import ParticipantDetails from './ParticipantDetails'
+import ParticipantName from './ParticipantName'
 import { Download } from 'lucide-react'
 import { getSectionExercise } from '../data/sectionExercises'
 import { scoreLabel, scoreStatus } from '../data/testScores'
@@ -42,7 +42,7 @@ export default function CourseScores({ product, scores, language, profile, cours
   return <section className="course-scores" aria-labelledby={`score-heading-${product}`}>
     <h2 className="course-scores__heading" id={`score-heading-${product}`}>{scoreLabel(language)}</h2>
     <div className="course-scores__content">
-      <ParticipantDetails profile={profile} language={language} />
+      <ParticipantName profile={profile} language={language} />
       {sections.length ? <>
       <div className="course-scores__progress" aria-label={`${progressLabel}: ${completionLabel}`}>
         <div><strong>{progressLabel}</strong><span>{completionLabel}</span></div>

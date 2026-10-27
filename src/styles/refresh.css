@@ -118,9 +118,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .course-hub--learning .hub-course-card { --home-card-padding: 24px; min-height: 0; }
   .course-hub--learning .hub-course-card > p { display: block; }
   .hub-course-card__discipline { margin-top: 20px; }
-  .hub-tools { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
-  .hub-tools > a { padding: 20px; gap: 12px; }
-  .hub-tools strong { font-size: 13px; }
+  .course-hub--learning .hub-tools { display: none; }
   .main-content--focused footer { padding-bottom: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -249,10 +247,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .course-home .course-part.is-open .course-part__toggle { transform: rotate(180deg); }
 .course-home .course-lessons[hidden] { display: none; }
 @media (max-width: 767px) {
-  .course-home .landing-page { padding-top: 18px; }
-  .course-home .landing-hero--compact { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .course-home .landing-preview { max-width: 400px; justify-self: center; }
-  .course-home .course-start .primary-button { width: 100%; }
+  .course-home .landing-page { display: none; }
+  .course-home .course-map-page { padding-top: 16px; }
   .course-home .course-part > header { grid-template-columns: 36px minmax(0, 1fr) 44px; }
   .course-home .course-part__progress { grid-column: 2 / -1; grid-row: 2; }
   .course-home .course-part__toggle { grid-column: 3; grid-row: 1; }
