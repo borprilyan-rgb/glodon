@@ -3,6 +3,7 @@
 .theme-toggle svg { flex-shrink: 0; }
 .presentation .theme-toggle { padding: 8px; min-width: 38px; }
 
+:root { --page-background: #f5f7fb; }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --navy: #e8effa;
@@ -12,6 +13,7 @@
   --line: #35455f;
   --muted: #afbdd1;
   --night-bg: #0e1726;
+  --page-background: var(--night-bg);
   --night-surface: #172439;
   --night-raised: #20314b;
   --night-link: #abc6ff;
@@ -19,6 +21,9 @@
   background: var(--night-bg);
 }
 :root[data-theme="light"] { color-scheme: light; }
+html:fullscreen { overflow-y: auto; background: var(--page-background); }
+html:fullscreen::backdrop { background: var(--page-background); }
+html:fullscreen :is(body, #root, .app-shell) { min-height: 100dvh; background: var(--page-background); }
 :root[data-theme="dark"] body,
 :root[data-theme="dark"] .presentation { color: var(--navy); background: var(--night-bg); }
 :root[data-theme="dark"] :focus-visible { outline: 3px solid #a9c6ff; outline-offset: 3px; }

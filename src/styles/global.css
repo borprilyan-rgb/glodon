@@ -395,7 +395,4 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .settings-subpage__header { margin-bottom: 16px; }
   .settings-subpage__header h2 { font-size: 20px; }
   .settings-radio-option { min-height: 64px; font-size: 16px; }
-  .app-shell:fullscreen { display: flex; width: 100vw; height: 100dvh; min-height: 100dvh; flex-direction: column; overflow: hidden; }
-  .app-shell:fullscreen > .lesson-topbar { flex: 0 0 auto; }
-  .app-shell:fullscreen > .main-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; }
 }

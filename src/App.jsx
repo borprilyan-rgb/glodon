@@ -63,7 +63,7 @@ function routeFromLocation() {
   if (path === '/exercises/score') return { page: 'scores' }
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/settings') return { page: 'settings' }
-  if (path === '/present') return { page: 'presentation' }
+  if (path === '/present') return { page: 'presentation', search: window.location.search }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/admin/results') return { page: 'admin' }
   if (path === '/trb/reference' || (path === '/' && hashParts[0] === 'trb' && hashParts[1] === 'reference')) {
@@ -232,9 +232,26 @@ export default function App() {
       })
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+    const onFullscreenNavigation = (event) => {
+      // Reloading a document ends native fullscreen. Keep ordinary app links
+      // in this document only while the app-wide fullscreen session is active.
+      if (document.fullscreenElement !== document.documentElement || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+      const link = event.target instanceof Element ? event.target.closest('a[href]') : null
+      if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return
+      const destination = new URL(link.href, window.location.href)
+      if (destination.origin !== window.location.origin) return
+      const isAppRoute = /^\/(?:settings|contact|present|exercises(?:\/score)?|(?:tas|trb|tme)(?:\/(?:course|reference|tests|lesson\/[^/]+|(?:exercise|tests)\/section-[1-3]))?)?\/?$/.test(destination.pathname)
+      if (!isAppRoute || (destination.pathname === window.location.pathname && destination.search === window.location.search && destination.hash)) return
+      event.preventDefault()
+      window.history.pushState({}, '', destination.pathname + destination.search + destination.hash)
+      setQuery('')
+      setEditingParticipant(false)
+      onLocationChange()
+    }
     window.addEventListener('popstate', onLocationChange)
     window.addEventListener('hashchange', onLocationChange)
-    return () => { window.removeEventListener('popstate', onLocationChange); window.removeEventListener('hashchange', onLocationChange) }
+    document.addEventListener('click', onFullscreenNavigation)
+    return () => { window.removeEventListener('popstate', onLocationChange); window.removeEventListener('hashchange', onLocationChange); document.removeEventListener('click', onFullscreenNavigation) }
   }, [])
   useEffect(() => {
     try {
@@ -339,9 +356,9 @@ export default function App() {
   const completion = getCourseCompletion(activeStep, product === 'tas' ? tasCourseSteps : activeData.allSteps, visibleProgress.completed)
   const progressCannotSave = product ? progressSaveFailed[product] || (product === 'tas' && progressSaveFailed.tasReports) : Object.values(progressSaveFailed).some(Boolean)
   if (route.page === 'presentation') {
-    return <Presentation theme={theme} onThemeToggle={toggleTheme} courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
+    return <Presentation key={route.search || ''} theme={theme} onThemeToggle={toggleTheme} courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
-  return <TutorialLayout theme={theme} onThemeToggle={toggleTheme} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
+  return <TutorialLayout key={`${route.page}:${product || ''}:${route.stepId || ''}:${route.section || ''}`} theme={theme} onThemeToggle={toggleTheme} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
     {!['exercise', 'tests', 'exercises', 'scores'].includes(route.page) && <PresentationEntry language={language} />}
     {progressCannotSave && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'lesson' && !activeStep && <section className="tutorial-step"><header className="step-header"><h1>{t.lessonNotFound}</h1><p>{t.lessonNotFoundDescription}</p></header><a className="primary-button" href={`/${product}/`}>{t.backToCourseMap}</a></section>}

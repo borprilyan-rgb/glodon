@@ -15,7 +15,7 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
 
   async function toggleFullscreen() {
     try {
-      const app = document.querySelector('.app-shell')
+      const app = document.documentElement
       if (document.fullscreenElement) await document.exitFullscreen()
       else if (app?.requestFullscreen) await app.requestFullscreen()
       else throw new Error('Fullscreen unavailable')
