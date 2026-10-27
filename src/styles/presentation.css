@@ -137,6 +137,7 @@
 .presentation-home-steps a svg { flex-shrink: 0; color: var(--course-accent); }
 .presentation-home-steps a:hover { background: #f5f7fb; color: var(--course-accent); }
 @media (max-width: 767px) {
+  .presentation-content { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
   .presentation-stage--home { padding: 28px 16px; }
   .presentation-outline { padding: 16px; }
   .presentation-outline__heading { flex-wrap: wrap; }

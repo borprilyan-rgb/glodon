@@ -8,9 +8,9 @@ const destinations = [
 ]
 
 export default function MobileBottomNavigation({ page, product, t }) {
-  const current = page === 'hub' || page === 'welcome' || page === 'course'
+  const current = ['hub', 'welcome', 'course', 'lesson'].includes(page)
     ? 'course'
-    : page === 'exercises'
+    : ['exercises', 'exercise', 'tests'].includes(page)
       ? 'assessment'
       : page === 'scores'
         ? 'scores'

@@ -2,6 +2,51 @@ import { test, expect } from '@playwright/test'
 
 const origin = 'http://127.0.0.1:5173'
 
+test('mobile navigation persists in lessons, active exercises, and Presentation without covering controls', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.addInitScript(() => {
+    localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test Student', jobTitle: 'Surveyor', employeeId: '123456' }))
+  })
+  const nav = page.locator('.mobile-bottom-nav')
+  for (const product of ['tas', 'trb', 'tme']) {
+    await page.goto(`${origin}/${product}/`)
+    await page.locator('.course-lesson').first().click()
+    await expect(nav).toBeVisible()
+    await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute('href', `/${product}/`)
+    const actionBar = await page.locator('.mobile-action-navigation').boundingBox()
+    const navBar = await nav.boundingBox()
+    expect(actionBar.y + actionBar.height).toBeLessThanOrEqual(navBar.y + 1)
+    await nav.locator('a[href="/settings"]').click()
+    await expect(page).toHaveURL(`${origin}/settings`)
+
+    await page.goto(`${origin}/${product}/tests/section-1`)
+    await page.getByRole('button', { name: 'Mulai Latihan', exact: true }).click()
+    await expect(page.locator('.exercise-question')).toBeVisible()
+    await expect(nav).toBeVisible()
+    await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute('href', '/exercises')
+    await page.locator('.site-footer').scrollIntoViewIfNeeded()
+    const question = await page.locator('.exercise-question').boundingBox()
+    expect(question.y + question.height).toBeLessThanOrEqual((await nav.boundingBox()).y)
+    await nav.locator('a[href="/exercises/score"]').click()
+    await expect(page).toHaveURL(`${origin}/exercises/score`)
+  }
+  await page.goto(`${origin}/present`)
+  await expect(nav).toBeVisible()
+  await page.getByRole('button', { name: 'Mulai presentasi TAS', exact: true }).click()
+  await expect(nav).toBeVisible()
+  await page.locator('.site-footer').scrollIntoViewIfNeeded()
+  const controls = await page.locator('.presentation-controls').boundingBox()
+  expect(controls.y + controls.height).toBeLessThanOrEqual((await nav.boundingBox()).y)
+  await nav.locator('a[href="/settings"]').click()
+  await expect(page).toHaveURL(`${origin}/settings`)
+
+  await page.setViewportSize({ width: 1280, height: 800 })
+  for (const route of ['/tas/lesson/axis-grid', '/tas/tests/section-1', '/present']) {
+    await page.goto(`${origin}${route}`)
+    await expect(nav).toBeHidden()
+  }
+})
+
 test('mobile language and night mode controls live in Settings and remain persisted', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto(`${origin}/tas/`)
@@ -23,7 +68,8 @@ test('mobile language and night mode controls live in Settings and remain persis
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
 
   await page.goto(`${origin}/tas/lesson/axis-grid`)
-  await expect(page.locator('.mobile-bottom-nav')).toHaveCount(0)
+  await expect(page.locator('.mobile-bottom-nav')).toBeVisible()
+  await expect(page.locator('.mobile-bottom-nav a[aria-current="page"]')).toHaveAttribute('href', '/tas/')
   await expect(mobileHeader.locator('.theme-toggle, .language-switcher, button[lang]')).toHaveCount(0)
 })
 
@@ -112,7 +158,7 @@ test.describe('fullscreen navigation on phones', () => {
       const lessonId = (await lesson.getAttribute('href')).split('/').at(-1)
       await lesson.click()
       await assertFullscreen()
-      await expect(page.locator('.mobile-bottom-nav')).toHaveCount(0)
+      await expect(page.locator('.mobile-bottom-nav')).toBeVisible()
       const checks = page.locator('.completion-card__checks input')
       for (const check of await checks.all()) await check.check()
       await page.locator('.complete-button').click()
