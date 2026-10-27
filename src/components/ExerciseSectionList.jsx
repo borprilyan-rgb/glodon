@@ -22,7 +22,6 @@ export default function ExerciseSectionList({ product, language, scores = [] }) 
       return <article className="exercise-sections__item" key={exercise.path}>
         <span className="eyebrow">{en ? 'Section' : 'Bagian'} {exercise.section}</span>
         <h3>{product === 'tme' ? exercise.copy[language].title : exercise.copy[language].sectionTitle}</h3>
-        {inProgress && <p>{en ? 'In progress' : 'Sedang dikerjakan'}</p>}
         <div className="test-actions"><div className="exercise-sections__buttons">
           <a className="primary-button" href={exercise.path}>{inProgress ? (en ? 'Continue Exercise' : 'Lanjutkan Latihan') : state.submitted ? (en ? 'View Result' : 'Lihat Hasil') : (en ? 'Start Exercise' : 'Mulai Latihan')}</a>
           {state.submitted && <button className="secondary-button" type="button" onClick={() => retry(exercise, state)}>{en ? 'Retry Exercise' : 'Coba Lagi'}</button>}
