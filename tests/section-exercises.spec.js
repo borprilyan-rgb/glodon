@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { getSectionExercise, exerciseForLastLesson } from '../src/data/sectionExercises.js'
 import { getTasData } from '../src/data/tas/index.js'
 import { getTrbData } from '../src/data/trb/index.js'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 
 const origin = 'http://127.0.0.1:5173'
 const exercises = [
@@ -104,7 +105,7 @@ for (const [product, section, correct] of exercises) {
 test('section progress is isolated and mobile numbered navigation fits', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto(`${origin}/trb/exercise/section-2`)
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.locator('input[name="q1"][value="2"]').check()
   await page.getByRole('navigation').getByRole('button', { name: /^Question 8:/ }).click()

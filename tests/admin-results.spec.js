@@ -4,6 +4,7 @@ import { doc, writeBatch, Timestamp } from 'firebase/firestore'
 import { randomUUID } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { provisionAdmin, passwordSignIn } from './firebase/adminAuth.mjs'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 
 const origin = 'http://127.0.0.1:5173'
 const languageKey = 'cubicost-tas-tutorial-language-v1'
@@ -103,7 +104,7 @@ for (const language of ['en', 'id']) test(`${language} admin layout supports com
     expect(csv).toContain('"assessmentVersion"')
     expect(csv).toContain('"attemptId"')
     expect(csv).toContain('"uid"')
-    if (mobile) await page.locator('.mobile-header-language').click()
+    if (mobile) await changeLanguageFromSettings(page, language === 'en' ? 'id' : 'en')
     else await page.locator(`button[lang="${language === 'en' ? 'id' : 'en'}"]`).click()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(labels[language === 'en' ? 'id' : 'en'].title)
     expect(await page.evaluate(key => localStorage.getItem(key), languageKey)).toBe(language === 'en' ? 'id' : 'en')

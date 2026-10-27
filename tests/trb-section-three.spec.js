@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 import { rebarQuantityNumber } from '../src/data/trb/sectionThreeExercise.js'
 
@@ -53,7 +54,7 @@ test.beforeEach(async ({ page }) => {
 test('TRB section 3 mobile quantities validate and persist across languages', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/trb/tests/section-3')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.getByRole('button', { name: /^Question 3:/ }).click()
   await page.locator('input[name="q3"][value="2"]').check()
@@ -66,7 +67,7 @@ test('TRB section 3 mobile quantities validate and persist across languages', as
   await page.getByLabel('B1 sample reinforcement weight (kg)', { exact: true }).fill('59,28 kg')
   await page.reload()
   await expect(page.getByLabel('B1 sample reinforcement weight (kg)', { exact: true })).toHaveValue('59,28 kg')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByLabel('Berat tulangan sampel B1 (kg)', { exact: true })).toHaveValue('59,28 kg')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/trb-section-three-mobile.png', fullPage: true })

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { scoreExercise, questionAnswered, numberAnswer } from '../src/data/tas/sectionOneExercise.js'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 
 const perfect = { settings: 'review', rules: 'inspect', projectName: 'ASG Training', ground: '-0.5', ruleSet: 'SMPI', attributes: 'private', height1: '3.5', height2: '3,50', grade: 'K-300', copy: 'yes', drawing: 'split', length: '6000', verify: 'independent', grid: 'A/1', alignmentCheck: 'other' }
 
@@ -58,7 +59,7 @@ test('exercise validates, resumes, scores and retries on mobile', async ({ page 
   await expect(page.locator('.exercise-results a')).toHaveCount(8)
   await page.reload()
   await expect(page.locator('.exercise-score')).toHaveText('100/100')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByRole('heading', { name: 'Lulus Bagian 1' })).toBeVisible()
   await page.getByRole('button', { name: 'Coba lagi' }).click()
   await expect(page.getByText('Pertanyaan 1 / 8')).toBeVisible()

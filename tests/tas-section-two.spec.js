@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 
 const exercise = getSectionExercise('tas', 2)
@@ -34,7 +35,7 @@ test('section 2 dimensions validate and persist on mobile in both languages', as
   await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/tas/tests/section-2')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.getByRole('button', { name: /^Question 4:/ }).click()
   await page.locator('input[name="q4"][value="1"]').check()
@@ -46,7 +47,7 @@ test('section 2 dimensions validate and persist on mobile in both languages', as
   await page.getByLabel('Slab thickness (mm)', { exact: true }).fill('150 mm')
   await page.reload()
   await expect(page.getByLabel('Slab thickness (mm)', { exact: true })).toHaveValue('150 mm')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByLabel('Ketebalan pelat (mm)', { exact: true })).toHaveValue('150 mm')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/tas-section-two-mobile.png', fullPage: true })

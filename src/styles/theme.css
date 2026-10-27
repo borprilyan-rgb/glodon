@@ -2,7 +2,6 @@
 .theme-toggle:hover { background: #edf2fa; }
 .theme-toggle svg { flex-shrink: 0; }
 .presentation .theme-toggle { padding: 8px; min-width: 38px; }
-.mobile-header-row > .theme-toggle { flex: 0 0 40px; width: 40px; height: 40px; color: var(--navy); background: #eef2fa; }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -32,7 +31,7 @@
 
 :root[data-theme="dark"] :is(.outline-nav-button, .secondary-button, .contact-copy, .course-map-toolbar button, .screenshot-navigation button, .mobile-action-navigation button:first-child, .exercise-numbers button, .theme-toggle, .presentation-toolbar button, .presentation-toolbar a:not(.presentation-brand), .presentation-map button, .presentation-course-nav button, .drawing-toolbar button, .drawing-toolbar select) { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
 :root[data-theme="dark"] :is(.theme-toggle:hover, .outline-nav-button:hover, .secondary-button:hover, .contact-copy:hover, .presentation-course-nav button:hover) { background: #2b4161; }
-:root[data-theme="dark"] :is(.language-switcher, .mobile-header-row > .mobile-header-language, .mobile-header-row > .theme-toggle) { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
+:root[data-theme="dark"] .language-switcher { color: var(--navy); background: var(--night-raised); border-color: var(--line); }
 :root[data-theme="dark"] .language-switcher button { color: var(--muted); }
 :root[data-theme="dark"] .language-switcher button.is-active { color: white; background: #315bc4; }
 :root[data-theme="dark"] .lesson-topbar :is(.all-courses-button, .contact-nav-button, .course-map-button) { color: var(--navy); border-color: var(--line); }

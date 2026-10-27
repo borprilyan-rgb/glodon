@@ -76,6 +76,8 @@ test('all nine local assessments preserve grading, drafts, results and routes wi
     assert(scorePage.includes('exercise-hub__scores'))
     assert.equal((scorePage.match(/class="course-scores"/g) || []).length, 3)
     assert.equal((scorePage.match(/100\/100/g) || []).length, 9)
+    assert.equal((scorePage.match(/class="course-scores__progress"/g) || []).length, 3)
+    assert(scorePage.includes('3 of 3 assessments completed'))
     assert(render('/admin/results').includes('Central results temporarily disconnected'))
     assert(![...values.keys()].some(key => key.startsWith('cubicost:firebase:attempt:')))
     values.delete('cubicost:participant')

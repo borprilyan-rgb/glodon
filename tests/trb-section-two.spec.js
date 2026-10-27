@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 import { reinforcementNumber } from '../src/data/trb/sectionTwoExercise.js'
 
@@ -51,7 +52,7 @@ test.beforeEach(async ({ page }) => {
 test('TRB section 2 mobile inputs validate, restore and switch languages', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/trb/tests/section-2')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.getByRole('button', { name: /^Question 2:/ }).click()
   await page.locator('input[name="q2"][value="0"]').check()
@@ -65,7 +66,7 @@ test('TRB section 2 mobile inputs validate, restore and switch languages', async
   await page.getByLabel('C1 Floor 1 longitudinal bar count', { exact: true }).fill('8')
   await page.reload()
   await expect(page.getByLabel('C1 Floor 1 tie spacing (mm)', { exact: true })).toHaveValue('150 mm')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByLabel('Jumlah batang utama C1 Lantai 1', { exact: true })).toHaveValue('8')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/trb-section-two-mobile.png', fullPage: true })

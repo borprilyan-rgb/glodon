@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 import { preparationNumber } from '../src/data/trb/sectionOneExercise.js'
 
@@ -50,7 +51,7 @@ test.beforeEach(async ({ page }) => {
 test('TRB mobile dimensions validate and persist across languages', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/trb/tests/section-1')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.getByRole('button', { name: /^Question 4:/ }).click()
   await page.locator('input[name="q4"][value="1"]').check()
@@ -63,7 +64,7 @@ test('TRB mobile dimensions validate and persist across languages', async ({ pag
   await page.getByLabel('Approved Floor 2 height (m)', { exact: true }).fill('3,60 m')
   await page.reload()
   await expect(page.getByLabel('Approved Floor 2 height (m)', { exact: true })).toHaveValue('3,60 m')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByLabel('Tinggi Lantai 1 yang disetujui (m)', { exact: true })).toHaveValue('3,50 m')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/trb-section-one-mobile.png', fullPage: true })

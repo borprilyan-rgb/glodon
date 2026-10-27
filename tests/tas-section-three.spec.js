@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 import { getSectionExercise } from '../src/data/sectionExercises.js'
 import { volumeAnswer } from '../src/data/tas/sectionThreeExercise.js'
 
@@ -38,7 +39,7 @@ test('section 3 volume inputs validate and persist across languages on mobile', 
   await page.addInitScript(() => localStorage.setItem('cubicost:participant', JSON.stringify({ name: 'Test User', jobTitle: 'Engineer', employeeId: '000012' })))
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('http://127.0.0.1:5173/tas/tests/section-3')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'en')
   await page.getByRole('button', { name: 'Start exercise' }).click()
   await page.getByRole('button', { name: /^Question 3:/ }).click()
   await page.locator('input[name="q3"][value="2"]').check()
@@ -50,7 +51,7 @@ test('section 3 volume inputs validate and persist across languages on mobile', 
   await page.getByLabel('B1 net concrete volume (m³)', { exact: true }).fill('0,70 m³')
   await page.reload()
   await expect(page.getByLabel('B1 net concrete volume (m³)', { exact: true })).toHaveValue('0,70 m³')
-  await page.locator('.mobile-header-language').click()
+  await changeLanguageFromSettings(page, 'id')
   await expect(page.getByLabel('Volume beton bersih B1 (m³)', { exact: true })).toHaveValue('0,70 m³')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'test-results/tas-section-three-mobile.png', fullPage: true })

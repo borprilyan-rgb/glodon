@@ -95,7 +95,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .lesson-topbar { min-height: 64px; padding: 9px 16px; }
   .mobile-header-row { color: var(--navy); }
   .mobile-header-row strong, .mobile-header-row button, .mobile-header__back { color: var(--navy); }
-  .mobile-header-language { background: #eef2fa; border-color: var(--line); }
   .main-content--focused { width: 100%; padding-inline: 16px; }
   .course-hub--learning { padding-top: 20px; }
   .course-hub--learning .course-hub__intro { grid-template-columns: 1fr; min-height: 0; border-radius: 16px; margin-bottom: 30px; }
@@ -131,7 +130,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 }
 
 @media (max-width: 767px) {
-  .mobile-header-row > .mobile-header-language { color: var(--navy); background: #eef2fa; border-color: #ccd8ed; }
   .mobile-header-row > a:focus-visible, .mobile-header-row > button:focus-visible { outline: 3px solid #3673cf; outline-offset: 1px; }
 }
 

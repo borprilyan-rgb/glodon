@@ -1,7 +1,7 @@
 import { participantFields, participantLabels } from './participant'
 import { scoreLabel, scoreStatus } from './testScores'
 
-export async function downloadScoreCard({ product, profile, rows, language }) {
+export async function downloadScoreCard({ product, profile, rows, language, progress }) {
   const en = language === 'en'
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
@@ -49,7 +49,20 @@ export async function downloadScoreCard({ product, profile, rows, language }) {
       y += 12
     }
     divider()
-    for (const { section, title, result, critical } of rows) {
+    const totalAssessments = progress?.total ?? rows.length
+    const completedAssessments = progress?.completed ?? rows.filter(row => row.result).length
+    text(en ? 'Course assessment progress' : 'Progres asesmen kursus', { size: 18, bold: true })
+    text(en
+      ? `${completedAssessments} of ${totalAssessments} assessments completed`
+      : `${completedAssessments} dari ${totalAssessments} asesmen selesai`, { size: 16 })
+    const progressTop = y
+    ctx.fillStyle = '#e7edf4'
+    ctx.fillRect(52, progressTop, 736, 12)
+    ctx.fillStyle = '#315fc1'
+    ctx.fillRect(52, progressTop, 736 * (totalAssessments ? completedAssessments / totalAssessments : 0), 12)
+    y += 32
+    divider()
+    for (const { section, title, result, started, critical } of rows) {
       const top = y
       text(`${en ? 'Section' : 'Bagian'} ${section}: ${title}`, { bold: true, maxWidth: 570 })
       const afterTitle = y
@@ -59,7 +72,7 @@ export async function downloadScoreCard({ product, profile, rows, language }) {
       ctx.fillText(`${result?.total ?? 0}/100`, 788, top)
       ctx.textAlign = 'left'
       y = Math.max(afterTitle, top + 38)
-      text(scoreStatus(result, language), { size: 18, bold: true, color: !result ? '#536a80' : result.passed ? '#23754f' : '#956013' })
+      text(result ? scoreStatus(result, language) : started ? en ? 'In progress' : 'Sedang dikerjakan' : en ? 'Not started' : 'Belum dikerjakan', { size: 18, bold: true, color: !result ? '#536a80' : result.passed ? '#23754f' : '#956013' })
       if (result && !result.criticalPassed) text(critical, { size: 17, color: '#956013' })
       y += 20
       divider()

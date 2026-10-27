@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing'
 import { doc, setDoc } from 'firebase/firestore'
 import { provisionAdmin, passwordSignIn } from './firebase/adminAuth.mjs'
+import { changeLanguageFromSettings } from './helpers/settings.js'
 
 const origin = 'http://127.0.0.1:5173'
 async function open(page, language = 'en') {
@@ -34,9 +35,9 @@ for (const language of ['en', 'id']) test(`${language} compact login supports ke
     await page.locator('.lesson-topbar').getByRole('link', { name: 'Contact', exact: true }).click()
   } else {
     await expect(page.locator('.mobile-header__logo')).toBeVisible()
-    await page.locator('.mobile-header-language').click()
+    await changeLanguageFromSettings(page, 'en')
     await expect(page.getByRole('heading', { name: 'Test Results', exact: true })).toBeVisible()
-    await page.locator('.mobile-header-language').click()
+    await changeLanguageFromSettings(page, 'id')
     await page.locator('.mobile-header-row button[aria-expanded]').click()
     await expect(page.getByRole('dialog')).toBeVisible()
     await page.getByRole('dialog').getByRole('link', { name: 'Kontak', exact: true }).click()
