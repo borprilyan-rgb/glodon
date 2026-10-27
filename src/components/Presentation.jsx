@@ -157,9 +157,9 @@ export default function Presentation({ courses, language, onLanguageChange, them
       </div> : <PresentationHome courses={courses} initialProduct={product} language={language} t={t} c={c} onStart={startLesson} />}
     </main>
     {walkthrough && <><footer className="presentation-controls">
-      <div className="presentation-navigation"><button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button><span aria-live="polite">{walkthrough && <>{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; </>}{c.slide} {index + 1} / {count}</span><button type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button></div>
-      <small>{c.keyboard}</small>
-      <div className="presentation-options"><a href={`/${product}/lesson/${lesson.id}`} onClick={() => { try { sessionStorage.setItem(DEMO_KEY, currentPath) } catch { /* Demo still opens if storage is unavailable. */ } }}>{c.demo}<ArrowRight size={16} /></a></div>
+      <button type="button" onClick={() => navigate(-1)} disabled={index === 0 && !previousLesson} aria-label={index === 0 && previousLesson ? c.previousLesson : c.previous} title={index === 0 && previousLesson ? previousLesson.title : c.previous}><ArrowLeft size={22} /></button>
+      <span className="presentation-page" aria-live="polite">{c.lessonLabel} {lessonIndex + 1} / {lessons.length} &middot; {c.slide} {index + 1} / {count}</span>
+      <button className="presentation-next" type="button" onClick={() => navigate(1)} disabled={index === count - 1 && !nextLesson} aria-label={index === count - 1 && nextLesson ? c.nextLesson : c.next} title={index === count - 1 && nextLesson ? nextLesson.title : c.next}><ArrowRight size={22} /></button>
     </footer>
     <nav className="presentation-course-nav" aria-label={c.course}>{Object.keys(courses).map((id) => <button key={id} type="button" aria-label={getProductLabel(id)} title={getProductLabel(id)} aria-pressed={walkthrough && product === id} onClick={() => startCourse(id)}><img src={`/branding/cubicost-${id}-logo.png`} alt="" /></button>)}</nav></>}
     <SiteFooter text={t.footer} />
