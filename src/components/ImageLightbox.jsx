@@ -12,6 +12,16 @@ export default function ImageLightbox({ items, index, onIndexChange, onClose, t,
   const [zoomState, setZoomState] = useState({ index, value: 1 })
   const item = items[index]
   const zoom = zoomState.index === index ? zoomState.value : 1
+  const crop = item.crop
+  const cropAspect = crop ? crop.imageWidth / crop.imageHeight * crop.width / crop.height : null
+  const cropFrameStyle = crop ? { width: `${zoom * 100}%`, aspectRatio: `${cropAspect}` } : undefined
+  const cropImageStyle = crop ? {
+    position: 'absolute',
+    left: `${-100 * crop.x / crop.width}%`,
+    top: `${-100 * crop.y / crop.height}%`,
+    width: `${100 / crop.width}%`,
+    height: `${100 / crop.height}%`,
+  } : undefined
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
@@ -73,9 +83,9 @@ export default function ImageLightbox({ items, index, onIndexChange, onClose, t,
     <div className="lightbox__panel" ref={panelRef}>
       <button ref={closeRef} type="button" className="lightbox__close" onClick={onClose} aria-label={t.closeImage}><X /><span>{t.closeImage}</span></button>
       <div className="lightbox__zoom" aria-label={t.imageZoomControls}><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.max(1, (current.index === index ? current.value : 1) - 0.5) }))} disabled={zoom === 1} aria-label={t.zoomOut}><ZoomOut size={17} /></button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.min(4, (current.index === index ? current.value : 1) + 0.5) }))} disabled={zoom === 4} aria-label={t.zoomIn}><ZoomIn size={17} /></button></div>
-      <div className="lightbox__image-wrap" ref={imageWrapRef} onPointerDown={startPan} onPointerMove={pan} onPointerUp={stopPan} onPointerCancel={stopPan}>{drawing ? <div className="lightbox__annotated-image" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }} />}</div>
+      <div className="lightbox__image-wrap" ref={imageWrapRef} onPointerDown={startPan} onPointerMove={pan} onPointerUp={stopPan} onPointerCancel={stopPan}>{crop ? <div className="lightbox__crop" style={cropFrameStyle}>{drawing ? <div className="lightbox__annotated-image" style={cropImageStyle}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={cropImageStyle} />}</div> : drawing ? <div className="lightbox__annotated-image" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }} />}</div>
       {drawing && <div className="lightbox__drawing-tools"><DrawingToolbar drawing={drawing} language={language} /></div>}
-      <div className={`lightbox__caption${item.description ? ' lightbox__caption--instructions' : ''}`}><div>{item.label && <strong>{item.label}</strong>}{item.caption && <p>{item.caption}</p>}<InstructionCaption description={item.description} format={item.instructionFormat} /></div><span>{t.imageCount(index + 1, items.length)}</span></div>
+      <div className={`lightbox__caption${item.description ? ' lightbox__caption--instructions' : ''}`}><div>{item.label && <strong>{item.label}</strong>}{item.caption && <p>{item.caption}</p>}<InstructionCaption description={item.description} format={item.instructionFormat} plainText /></div><span>{t.imageCount(index + 1, items.length)}</span></div>
       <button type="button" className="lightbox__arrow lightbox__arrow--previous" onClick={() => onIndexChange(index - 1)} disabled={index === 0} aria-label={t.previousImage}><ChevronLeft /></button>
       <button type="button" className="lightbox__arrow lightbox__arrow--next" onClick={() => onIndexChange(index + 1)} disabled={index === items.length - 1} aria-label={t.nextImage}><ChevronRight /></button>
     </div>

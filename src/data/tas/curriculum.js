@@ -147,10 +147,143 @@ const withScreenshotCopy = (action, manualPage, language) => {
   return { ...action, imageAlt: screenshotCopy.alt, alt: screenshotCopy.alt, caption: screenshotCopy.caption, requiredDescription: '' }
 }
 
+const screenshotCropByPage = {
+  14: { x: 0.19, y: 0.30, width: 0.76, height: 0.65, imageWidth: 1676, imageHeight: 1002 },
+  16: { x: 0.20, y: 0.25, width: 0.68, height: 0.67, imageWidth: 1943, imageHeight: 991 },
+  19: { x: 0.19, y: 0.41, width: 0.73, height: 0.50, imageWidth: 1705, imageHeight: 968 },
+  20: { x: 0.14, y: 0.27, width: 0.82, height: 0.67, imageWidth: 1713, imageHeight: 950 },
+  23: { x: 0.03, y: 0.29, width: 0.94, height: 0.66, imageWidth: 1961, imageHeight: 978 },
+  24: { x: 0.03, y: 0.22, width: 0.94, height: 0.74, imageWidth: 1906, imageHeight: 996 },
+  25: { x: 0.36, y: 0.18, width: 0.62, height: 0.75, imageWidth: 2004, imageHeight: 947 },
+  26: { x: 0.02, y: 0.35, width: 0.96, height: 0.61, imageWidth: 1852, imageHeight: 989 },
+  93: { x: 0.15, y: 0.23, width: 0.72, height: 0.74, imageWidth: 1911, imageHeight: 1002 },
+  94: { x: 0.02, y: 0.27, width: 0.96, height: 0.70, imageWidth: 2036, imageHeight: 1002 },
+  95: { x: 0.04, y: 0.20, width: 0.94, height: 0.78, imageWidth: 1707, imageHeight: 916 },
+  96: { x: 0.02, y: 0.20, width: 0.96, height: 0.78, imageWidth: 1768, imageHeight: 1002 },
+  97: { x: 0.02, y: 0.28, width: 0.96, height: 0.66, imageWidth: 2024, imageHeight: 775 },
+  98: { x: 0.01, y: 0.24, width: 0.98, height: 0.71, imageWidth: 2048, imageHeight: 939 },
+}
+
+const imageStepTextByPage = {
+  14: {
+    id: ['Step 1: Buat project baru.', 'Step 2: Masukkan judul project.', 'Step 3: Pilih Measurement Rules.', 'Step 4: Masukkan Existing Ground Level.'],
+    en: ['Step 1: Create a new project.', 'Step 2: Enter the project title.', 'Step 3: Select Measurement Rules.', 'Step 4: Enter Existing Ground Level.'],
+  },
+  16: {
+    id: ['Public: tanpa seleksi, perubahan berlaku untuk semua entitas dengan nama yang sama.', 'Private: entitas harus dipilih; perubahan hanya berlaku untuk entitas yang dipilih.'],
+    en: ['Public: without selection, changes apply to all entities with the same name.', 'Private: an entity must be selected; changes apply only to the selected entity.'],
+  },
+  19: {
+    id: ['Step 1: Di 1st Floor, pilih Insert Floor untuk superstructure; di Foundation Floor, pilih Insert Floor untuk substructure.', 'Step 2: Masukkan Floor Height setiap lantai.', 'Step 3: Masukkan Bottom Elevation hanya untuk 1st Floor.'],
+    en: ['Step 1: At 1st Floor, select Insert Floor for the superstructure; at Foundation Floor, select Insert Floor for the substructure.', 'Step 2: Enter the Floor Height for each floor.', 'Step 3: Enter Bottom Elevation for the 1st Floor only.'],
+  },
+  20: {
+    id: ['Step 1: Masukkan Concrete Grade untuk elemen yang berbeda.', 'Step 2: Gunakan Copy to Other Floor jika grade sama pada lantai tertentu.'],
+    en: ['Step 1: Enter Concrete Grade for different elements.', 'Step 2: Use Copy to Other Floor when the grade is the same on selected floors.'],
+  },
+  23: {
+    id: ['Step 1: Pilih tab Identify, lalu Add drawing(s).', 'Step 2: Pilih drawing(s).'],
+    en: ['Step 1: Select the Identify tab, then Add drawing(s).', 'Step 2: Select the drawing(s).'],
+  },
+  24: {
+    id: ['Step 1: Di Drawing Manager, pilih Split.', 'Step 2: Block-select gambar CAD, lalu klik kanan.', 'Step 3: Masukkan nama drawing dengan mengetik atau memilih judul pada gambar.'],
+    en: ['Step 1: In Drawing Manager, select Split.', 'Step 2: Block-select the CAD drawing, then right-click.', 'Step 3: Enter the drawing name by typing or selecting its title on the drawing.'],
+  },
+  25: {
+    id: ['Step 1: Buka tab Identify, lalu pilih Scale Drawing.', 'Step 2: Klik kanan pada drawing.', 'Step 3: Tentukan titik awal.', 'Step 4: Tentukan titik akhir.', 'Step 5: Masukkan actual length.'],
+    en: ['Step 1: Open the Identify tab, then select Scale Drawing.', 'Step 2: Right-click the drawing.', 'Step 3: Specify the start point.', 'Step 4: Specify the end point.', 'Step 5: Enter the actual length.'],
+  },
+  26: {
+    id: ['Step 1: Buka tab Identify, lalu pilih Relocate.', 'Step 2: Pilih satu titik pada drawing, misalnya A/1.', 'Step 3: Pindahkan titik ke titik yang sama pada gridline. Gunakan intersection snap jika pemilihan kurang akurat.'],
+    en: ['Step 1: Open the Identify tab, then select Relocate.', 'Step 2: Select a point on the drawing, such as A/1.', 'Step 3: Move it to the same point on the gridline. Use intersection snap if the selection is inaccurate.'],
+  },
+  93: {
+    id: ['Step 1: Pada tab Quantity, pilih entitas model 3D, misalnya Beam.', 'Step 2: Pilih View Expression.', 'Step 3: Tinjau volume concrete dan deduction dari column yang ingin diubah.'],
+    en: ['Step 1: On the Quantity tab, select a 3D model entity, such as a Beam.', 'Step 2: Select View Expression.', 'Step 3: Review the concrete volume and the column deduction to be changed.'],
+  },
+  94: {
+    id: ['Step 1: Pada tab Quantity, pilih Measurement Rules dan elemen Beam.', 'Step 2: Pilih View Expression.', 'Step 3: Pilih Filter Relevant Element dan centang hanya elemen Column.', 'Step 4: Pilih OK.'],
+    en: ['Step 1: On the Quantity tab, select Measurement Rules and the Beam element.', 'Step 2: Select View Expression.', 'Step 3: Select Filter Relevant Element and check only Column.', 'Step 4: Select OK.'],
+  },
+  95: {
+    id: ['Step 1: Baca Description dan tentukan rule yang perlu disesuaikan.', 'Step 2: Ubah Option List ke pilihan yang diperlukan, misalnya No Effect.', 'Step 3: Pilih Calculate untuk memperbarui hasil quantity.'],
+    en: ['Step 1: Read the Description and decide which rules to adjust.', 'Step 2: Change the Option List to the required choice, such as No Effect.', 'Step 3: Select Calculate to update the quantity result.'],
+  },
+  96: {
+    id: ['Step 1: Bandingkan hasil quantity sebelum dan sesudah Measurement Rules diubah.', 'Angka 1 menunjukkan Volume 0.571 m3 sebelum perubahan (deducted by column).', 'Angka 2 menunjukkan Volume 0.691 m3 setelah perubahan (undeducted by column).'],
+    en: ['Step 1: Compare quantity results before and after changing Measurement Rules.', 'Number 1 shows Volume 0.571 m3 before the change (deducted by column).', 'Number 2 shows Volume 0.691 m3 after the change (undeducted by column).'],
+  },
+  97: {
+    id: ['Step 1: Pada tab Quantity, pilih Measurement Setting.', 'Step 2: Pilih contoh Wall Finish.'],
+    en: ['Step 1: On the Quantity tab, select Measurement Setting.', 'Step 2: Select Wall Finish as the example.'],
+  },
+  98: {
+    id: ['Step 1: Opsi nomor 2 dan 3 dapat dianggap sebagai setting untuk plaster; nomor 2 untuk finish position dan nomor 3 untuk additional height (dapat disesuaikan sesuai kebutuhan).', 'Step 2: Pilih opsi nomor 5 dan ubah nilainya menjadi Yes.', 'Step 3: Opsi nomor 6 dan 7 dapat dianggap sebagai outer finish dan setting untuk plaster; nomor 6 untuk finish position dan nomor 7 untuk additional height (dapat disesuaikan sesuai kebutuhan).'],
+    en: ['Step 1: Options 2 and 3 can be assumed to be settings for plaster; option 2 is for finish position and option 3 for additional height (adjust as desired).', 'Step 2: Select option 5 and change the value to Yes.', 'Step 3: Options 6 and 7 can be assumed to be outer finish and settings for plaster; option 6 is for finish position and option 7 for additional height (adjust as desired).'],
+  },
+}
+
+const groupedActionTitles = {
+  'measurement-settings': {
+    97: { id: 'Buka Measurement Setting dan pilih Wall Finish', en: 'Open Measurement Setting and choose Wall Finish' },
+    98: { id: 'Tinjau pengaturan finish position dan additional height', en: 'Review finish-position and additional-height settings' },
+  },
+  'measurement-rules': {
+    94: { id: 'Filter kondisi column pada Measurement Rules', en: 'Filter the column condition in Measurement Rules' },
+  },
+  'create-project': {
+    14: { id: 'Siapkan proyek baru dan aturan pengukurannya', en: 'Set up a new project and its measurement rules' },
+  },
+  'tas-interface-attributes': {
+    15: { id: 'Kenali area kerja TAS', en: 'Explore the TAS workspace' },
+    16: { id: 'Gunakan Public dan Private Attribute', en: 'Use Public and Private Attributes' },
+  },
+  'floor-grade-settings': {
+    19: { id: 'Atur struktur lantai dan elevasi', en: 'Set up floor levels and elevations' },
+    20: { id: 'Atur Concrete Grade pada lantai', en: 'Set Concrete Grades across floors' },
+  },
+  'import-split-drawing': {
+    24: { id: 'Pisahkan dan namai drawing', en: 'Split and name the drawing' },
+  },
+  'scale-relocate-drawing': {
+    25: { id: 'Atur skala drawing dengan titik referensi', en: 'Set the drawing scale using reference points' },
+    26: { id: 'Selaraskan drawing dengan axis grid', en: 'Align the drawing with the axis grid' },
+  },
+}
+
+const groupActionsByImage = (actions, stepId, language) => {
+  const groups = []
+  for (const action of actions) {
+    const previous = groups.at(-1)
+    if (previous?.image === action.image) previous.actions.push(action)
+    else groups.push({ image: action.image, actions: [action] })
+  }
+  return groups.map(({ image, actions: groupedActions }, index) => {
+    const first = groupedActions[0]
+    const page = Number(image.match(/page-(\d+)/)?.[1])
+    const sourceText = imageStepTextByPage[page]
+    const extractedText = sourceText?.[language] || []
+    const contextualTitle = groupedActionTitles[stepId]?.[page]?.[language]
+    return {
+      ...first,
+      id: `${stepId}-image-${index + 1}`,
+      number: index + 1,
+      title: contextualTitle || first.title,
+      description: [...extractedText, ...groupedActions.map((action) => `${action.title} - ${action.description}`)].join('\n'),
+      instructionFormat: extractedText.length ? 'numbered' : undefined,
+      crop: screenshotCropByPage[page],
+    }
+  })
+}
+
 export function getTasData(language) {
   const isId = language === 'id'
   const tutorialParts = parts[language].map(([title, flow], partIndex) => ({ id: `part-${partIndex + 1}`, number: `0${partIndex + 1}`, title, shortTitle: title, summary: partIndex === 1 ? (isId ? 'Identifikasi otomatis berdasarkan layer atau colour ditujukan terutama untuk CAD dan vector PDF yang memiliki data garis serta teks.' : 'Automatic identification by layer or colour is intended primarily for CAD and vector PDFs containing line and text data.') : (isId ? 'Ikuti alur kerja yang terdokumentasi untuk bagian ini.' : 'Follow the documented workflow for this part.'), workflow: flow.split(' → '), steps: (partIndex === 0 ? [...['measurement-settings', 'measurement-rules'].map((firstId) => lessons.find(([id]) => id === firstId)), ...lessons.slice(...ranges[partIndex])] : lessons.slice(...ranges[partIndex]).filter(([id]) => !['measurement-settings', 'measurement-rules'].includes(id))).map(([id, titleId, titleEn, introId, introEn, pages, actions]) => ({ id, title: isId ? titleId : titleEn, intro: isId ? introId : introEn, duration: `${actions.length * 2} min`, manualPages: pages, instructions: actions.map((item) => isId ? item.titleId : item.titleEn), actions: actions.map((item, index) => { const imageAlt = isId ? `Halaman manual TAS untuk ${item.titleId}` : `TAS manual page for ${item.titleEn}`; const manualPage = manualPagesByLesson[id][index]; return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/tas/processed/page-${String(manualPage).padStart(3, '0')}.png`, imageAlt, alt: imageAlt, caption: isId ? `Screenshot asli TAS C v10.300, halaman manual ${manualPage}; tampilan versi baru mungkin sedikit berbeda.` : `Original TAS C v10.300 screenshot from manual page ${manualPage}; newer versions may differ slightly.`, requiredDescription: isId ? `Potongan halaman manual TAS ${manualPage}.` : `Cropped TAS manual page ${manualPage}.`, pending: false } }), checks: isId ? ['Tindakan utama telah diselesaikan', 'Data atau hasil telah dibandingkan dengan dokumen sumber', 'Hasil siap untuk langkah berikutnya'] : ['The main actions are complete', 'Data or results were checked against the source document', 'The result is ready for the next step'] })) }))
-  tutorialParts.forEach((part) => part.steps.forEach((step) => {
+  tutorialParts.forEach((part) => part.steps.forEach((step, index) => {
+    if (part.id === 'part-1' && index < 7) {
+      step.actions = groupActionsByImage(step.actions, step.id, language)
+      step.showInstructionsBelowImage = true
+    }
     step.actions = step.actions.map((action) => withScreenshotCopy(action, Number(action.image.match(/page-(\d+)/)?.[1]), language))
   }))
   const revisedParts = replacePartTwoLessons(tutorialParts)

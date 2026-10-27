@@ -39,6 +39,13 @@
 .presentation-stage--lesson { padding-top: 25px; padding-bottom: 25px; }
 .presentation-stage--lesson h1 { font-size: clamp(28px, 2.8vw, 44px); }
 .presentation-action { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 28px; align-items: start; }
+.presentation-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 20px; }
+.presentation-comparison section { min-width: 0; }
+.presentation-comparison .presentation-image-button { width: 100%; }
+.presentation-comparison .presentation-image-button img { display: block; width: 100%; height: min(44vh, 480px); padding: 10px; object-fit: contain; }
+.presentation-comparison h2 { margin: 12px 0 8px; font-size: 16px; color: var(--navy); }
+.presentation-comparison .presentation-instructions { max-height: none; padding: 0; }
+.presentation-comparison .presentation-instructions p { font-size: 15px; line-height: 1.55; }
 .presentation-image { display: grid; place-items: center; min-height: 240px; background: white; border: 1px solid #d6e1eb; border-radius: 8px; overflow: hidden; }
 .presentation-image img { display: block; width: 100%; height: min(52vh, 650px); object-fit: contain; }
 .presentation-instructions p { font-size: clamp(18px, 1.5vw, 24px); line-height: 1.65; margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
@@ -56,6 +63,7 @@
   .presentation-controls { flex-wrap: wrap; }
   .presentation-controls > small { display: none; }
   .presentation-action { grid-template-columns: 1fr; }
+  .presentation-comparison { grid-template-columns: 1fr; }
   .presentation-image img { height: auto; max-height: 55vh; }
 }
 @media (max-width: 600px) {

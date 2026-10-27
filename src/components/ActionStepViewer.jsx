@@ -11,8 +11,8 @@ export default function ActionStepViewer({ actions, isComplete, destination, sho
   const [opener, setOpener] = useState(null)
 
   const mediaItems = useMemo(() => actions.flatMap((action, actionIndex) => action.mediaLayout === 'comparison'
-    ? action.comparison.map((media) => ({ ...media, description: showInstructionsBelowImage ? media.description : undefined, actionIndex }))
-    : [{ image: action.image, caption: action.caption, alt: action.alt, label: showInstructionsBelowImage ? action.title : undefined, description: showInstructionsBelowImage ? action.description : undefined, instructionFormat: action.instructionFormat, actionIndex }]), [actions, showInstructionsBelowImage])
+    ? action.comparison.map((media) => ({ ...media, actionIndex }))
+    : [{ image: action.image, crop: action.crop, caption: action.caption, alt: action.alt, label: action.title, description: action.description, instructionFormat: action.instructionFormat, actionIndex }]), [actions])
 
   useEffect(() => {
     const neighbors = [actions[activeIndex - 1], actions[activeIndex + 1]].filter(Boolean)

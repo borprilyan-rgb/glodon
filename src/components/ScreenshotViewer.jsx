@@ -5,8 +5,22 @@ import InstructionCaption from './InstructionCaption'
 function ScreenshotMedia({ media, onEnlarge, showInstruction = false, t, eager = false }) {
   const [failed, setFailed] = useState(false)
   const filename = media.image.split('/').pop()
+  const crop = media.crop
+  const cropStyle = crop ? {
+    aspectRatio: `${crop.imageWidth / crop.imageHeight * crop.width / crop.height}`,
+    maxHeight: '55vh',
+  } : undefined
+  const imageStyle = crop ? {
+    position: 'absolute',
+    left: `${-100 * crop.x / crop.width}%`,
+    top: `${-100 * crop.y / crop.height}%`,
+    width: `${100 / crop.width}%`,
+    height: `${100 / crop.height}%`,
+    maxWidth: 'none',
+    objectFit: 'fill',
+  } : undefined
   return <div className="screenshot-media">
-    {!failed && !media.pending ? <button type="button" className="screenshot-media__image" onClick={onEnlarge} aria-label={`${t.enlargeImage}: ${media.alt}`}><img src={media.image} alt={media.alt} loading={eager ? 'eager' : 'lazy'} onError={() => setFailed(true)} /><span><Maximize2 size={16} /> {t.enlargeImage}</span></button> : <div className="screenshot-media__placeholder" role="status"><span className="screenshot-placeholder__icon"><Image size={27} /></span><div><small>{media.pending ? t.screenshotPending : t.screenshotUnavailable}</small><h3>{media.label || media.alt}</h3><code>{filename}</code><p><strong>{t.requiredFile}:</strong> {media.requiredDescription || media.caption}</p></div></div>}
+    {!failed && !media.pending ? <button type="button" className="screenshot-media__image" style={cropStyle} onClick={onEnlarge} aria-label={`${t.enlargeImage}: ${media.alt}`}><img src={media.image} alt={media.alt} loading={eager ? 'eager' : 'lazy'} style={imageStyle} onError={() => setFailed(true)} /><span><Maximize2 size={16} /> {t.enlargeImage}</span></button> : <div className="screenshot-media__placeholder" role="status"><span className="screenshot-placeholder__icon"><Image size={27} /></span><div><small>{media.pending ? t.screenshotPending : t.screenshotUnavailable}</small><h3>{media.label || media.alt}</h3><code>{filename}</code><p><strong>{t.requiredFile}:</strong> {media.requiredDescription || media.caption}</p></div></div>}
     <div className="screenshot-media__caption">{media.label && <strong>{media.label}</strong>}{media.caption && <p>{media.caption}</p>}{showInstruction && <InstructionCaption description={media.description} format={media.instructionFormat} />}</div>
   </div>
 }

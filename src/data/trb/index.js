@@ -128,6 +128,225 @@ const manualPageByAction = {
   'quantity-reports': [159, 159, 160, 160, 160],
 }
 
+const screenshotCropByPage = {
+  106: { x: 0.02, y: 0.23, width: 0.96, height: 0.74, imageWidth: 2040, imageHeight: 1002 },
+  107: { x: 0.22, y: 0.30, width: 0.56, height: 0.66, imageWidth: 1829, imageHeight: 991 },
+  108: { x: 0.02, y: 0.31, width: 0.96, height: 0.60, imageWidth: 1832, imageHeight: 938 },
+  109: { x: 0.15, y: 0.20, width: 0.71, height: 0.72, imageWidth: 1860, imageHeight: 1002 },
+  110: { x: 0.02, y: 0.55, width: 0.96, height: 0.40, imageWidth: 1923, imageHeight: 764 },
+  114: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1696, imageHeight: 987 },
+  115: { x: 0.02, y: 0.20, width: 0.96, height: 0.77, imageWidth: 1943, imageHeight: 921 },
+  119: { x: 0.02, y: 0.02, width: 0.65, height: 0.96, imageWidth: 1948, imageHeight: 1002 },
+  126: { x: 0.02, y: 0.02, width: 0.96, height: 0.58, imageWidth: 1958, imageHeight: 1002 },
+  124: { x: 0.02, y: 0.28, width: 0.48, height: 0.58, imageWidth: 2004, imageHeight: 966 },
+  125: { x: 0.02, y: 0.02, width: 0.70, height: 0.95, imageWidth: 1958, imageHeight: 1002 },
+  127: { x: 0.02, y: 0.29, width: 0.96, height: 0.68, imageWidth: 1721, imageHeight: 987 },
+  131: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1946, imageHeight: 963 },
+  133: { x: 0.02, y: 0.30, width: 0.96, height: 0.67, imageWidth: 2025, imageHeight: 1002 },
+  135: { x: 0.52, y: 0.02, width: 0.46, height: 0.95, imageWidth: 2048, imageHeight: 1002 },
+  136: { x: 0.02, y: 0.02, width: 0.68, height: 0.95, imageWidth: 1981, imageHeight: 965 },
+  137: { x: 0.02, y: 0.02, width: 0.96, height: 0.76, imageWidth: 2033, imageHeight: 891 },
+  138: { x: 0.02, y: 0.02, width: 0.46, height: 0.95, imageWidth: 1470, imageHeight: 971 },
+  130: { x: 0.02, y: 0.02, width: 0.96, height: 0.52, imageWidth: 1870, imageHeight: 1000 },
+  147: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1849, imageHeight: 987 },
+  150: { x: 0.02, y: 0.02, width: 0.96, height: 0.80, imageWidth: 1409, imageHeight: 894 },
+  155: { x: 0.02, y: 0.02, width: 0.48, height: 0.84, imageWidth: 1514, imageHeight: 981 },
+  157: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1893, imageHeight: 1002 },
+  159: { x: 0.02, y: 0.02, width: 0.96, height: 0.68, imageWidth: 1965, imageHeight: 969 },
+  160: { x: 0.02, y: 0.13, width: 0.96, height: 0.84, imageWidth: 2007, imageHeight: 1000 },
+}
+
+const imageStepTextByPage = {
+  106: {
+    id: ['Step 1: Buat proyek TRB baru.', 'Step 2: Pada tab BIM MODEL, pilih Import Model.', 'Step 3: Pilih file model, lalu klik OK untuk menyelesaikan.'],
+    en: ['Step 1: Create a new TRB project.', 'Step 2: On the BIM MODEL tab, select Import Model.', 'Step 3: Select the model file, then click OK to finish.'],
+  },
+  107: {
+    id: ['Step 1: Gunakan zone dari project yang diimpor, atau pertahankan zone project saat ini dan buat zone baru dari project yang diimpor.', 'Step 2: Centang Use floor height in TAS project.', 'Step 3: Pilih Next Step.'],
+    en: ['Step 1: Use the zone from the imported project, or keep the current project zone and create a new zone from the imported project.', 'Step 2: Tick Use floor height in TAS project.', 'Step 3: Select Next Step.'],
+  },
+  108: {
+    id: ['Step 1: Pilih All Floors untuk diimpor.', 'Step 2: Pilih All Elements untuk diimpor.', 'Step 3: Pilih Next Step.'],
+    en: ['Step 1: Select All Floors to import.', 'Step 2: Select All Elements to import.', 'Step 3: Select Next Step.'],
+  },
+  109: {
+    id: ['Step 1: Tekan F12 atau klik kontrol yang ditandai untuk membuka pengaturan tampilan elemen, lalu centang semua elemen.', 'Step 2: Klik dua kali untuk menampilkan building plan.'],
+    en: ['Step 1: Press F12 or click the marked control to open entity display settings, then tick all elements.', 'Step 2: Double-click to show the building plan.'],
+  },
+  110: {
+    id: ['Step 1: Pada tab IDENTIFY, pilih Add Drawing.', 'Step 2: Pilih Split drawing.', 'Step 3: Pilih Relocate drawing.'],
+    en: ['Step 1: On the IDENTIFY tab, select Add Drawing.', 'Step 2: Select Split drawing.', 'Step 3: Select Relocate drawing.'],
+  },
+  114: {
+    id: ['Step 1: Pada tab {Tool}, klik [Rebar Data Check].', 'Step 2: Pilih Range dan Element.', 'Step 3: Klik dua kali temuan untuk menuju elemen bermasalah.'],
+    en: ['Step 1: On the {Tool} tab, click [Rebar Data Check].', 'Step 2: Select the Range and Element.', 'Step 3: Double-click a finding to navigate to the problematic entity.'],
+  },
+  113: {
+    id: ['Edit data tulangan dengan mengklik teks hijau pada diagram. Untuk spacing, contoh manual dapat ditulis d19-150 tanpa tanda @.', 'Cover bawah/samping/atas ditampilkan sebagai 50/50/20.', 'Pilih No pada Deduct Top Bar Of Slab/Raft jika tulangan pelat atas dan bawah menerus melewati pile cap.'],
+    en: ['Edit reinforcement data by clicking the green text in the diagram. For spacing, the manual example can be entered as d19-150 without the @ sign.', 'Bottom/side/top cover is shown as 50/50/20.', 'Choose No for Deduct Top Bar Of Slab/Raft when the top and bottom slab bars continue through the pile cap.'],
+  },
+  115: {
+    id: ['Step 1: Pada daftar elemen pile cap, klik New lalu pilih parametric pile cap.', 'Step 2: Pilih bentuk yang sesuai dengan pile cap yang akan dimodelkan.', 'Step 3: Masukkan informasi tulangan dan bentuk di attribute editor.'],
+    en: ['Step 1: In the pile-cap element list, click New and choose parametric pile cap.', 'Step 2: Choose the shape that matches the pile cap to model.', 'Step 3: Enter the reinforcement and shape information in the attribute editor.'],
+  },
+  119: {
+    id: ['Step 1: Untuk tulangan utama, klik [Corner Bar] atau [Side Bar], lalu isi Rebar Info.', 'Step 2: Untuk link/sengkang, klik [Draw Link] lalu isi Rebar Info.', 'Catatan: Gunakan tombol (…) pada nilai atribut untuk melihat format input yang tersedia.'],
+    en: ['Step 1: For main bars, click [Corner Bar] or [Side Bar], then fill in Rebar Info.', 'Step 2: For links, click [Draw Link], then fill in Rebar Info.', 'Note: Use the (…) button in the attribute value to review available input formats.'],
+  },
+  124: {
+    id: ['Step 1: Siapkan schedule di Excel.', 'Step 2: Buka Identify Schedule untuk mengimpor Excel.', 'Step 3: Cocokkan heading TRB dengan heading pada Excel.', 'Step 4: Klik kanan teks heading Excel pada baris kedua, lalu pilih Delete > Delete Row.'],
+    en: ['Step 1: Prepare the schedule in Excel.', 'Step 2: Open Identify Schedule to import the Excel file.', 'Step 3: Match the TRB heading to the Excel heading.', 'Step 4: Right-click the Excel heading text in row two, then choose Delete > Delete Row.'],
+  },
+  125: {
+    id: ['Step 5: Pada sel Floor setiap kolom, pilih lantai yang sesuai lalu klik OK.', 'Step 6: Blok semua baris kosong lalu hapus baris tersebut.', 'Step 7: Klik Generate in Column Schedule.'],
+    en: ['Step 5: In the Floor cell for each column, choose the correct floor and click OK.', 'Step 6: Select all empty rows and delete them.', 'Step 7: Click Generate in Column Schedule.'],
+  },
+  126: {
+    id: ['Informasi tambahan: schedule kolom juga dapat dipakai untuk memasukkan tulangan. Buat kolom baru, isi data, lalu gunakan Generate Element untuk menggambar kolom.', 'Untuk elemen yang sudah dimodelkan, gunakan Generate from Element untuk mengambil informasinya ke schedule, lalu [Sync to Entity] untuk menyinkronkan data tulangan.'],
+    en: ['Additional information: the column schedule can also be used to enter reinforcement. Create a new column, enter the data, then use Generate Element to draw the column.', 'For elements already modelled, use Generate from Element to bring their information into the schedule, then [Sync to Entity] to synchronise reinforcement data.'],
+  },
+  127: {
+    id: ['Step 1: Pada tab {Draw}, klik [Column Schedule].', 'Step 2: Klik [Generate from Element] untuk membuat informasi semua kolom yang telah didefinisikan.', 'Step 3: Tinjau atau ubah data bila perlu, lalu klik [Sync to Entity].'],
+    en: ['Step 1: On the {Draw} tab, click [Column Schedule].', 'Step 2: Click [Generate from Element] to generate information for all defined columns.', 'Step 3: Review or edit the data if needed, then click [Sync to Entity].'],
+  },
+  131: {
+    id: ['Step 1: Pada tab {Draw}, klik [Side Label].', 'Step 2: Pilih balok.', 'Step 3: Masukkan Rebar Info.'],
+    en: ['Step 1: On the {Draw} tab, click [Side Label].', 'Step 2: Select the beam.', 'Step 3: Enter Rebar Info.'],
+  },
+  130: {
+    id: ['Tanda + menggabungkan batang pada lapisan yang sama; tanda / memisahkan batang pada lapisan berbeda.', 'Jika informasi side bar hanya menunjukkan satu sisi, masukkan jumlah total batang side bar.'],
+    en: ['The + sign combines bars in the same layer; the / sign separates bars in different layers.', 'If side-bar information shows only one side, enter the total number of side bars.'],
+  },
+  133: {
+    id: ['Step 1: Pada tab {Quantity}, pilih [Calculate] atau [Calculate Selected Entity].', 'Step 2: Klik [Rebar Layout].', 'Step 3: Pilih balok.', 'Step 4: Periksa susunan tulangan. Gunakan Apply to all bila berlaku untuk semua elemen terkait.'],
+    en: ['Step 1: On the {Quantity} tab, select [Calculate] or [Calculate Selected Entity].', 'Step 2: Click [Rebar Layout].', 'Step 3: Select the beam.', 'Step 4: Check the reinforcement arrangement. Use Apply to all when it applies to all related entities.'],
+  },
+  135: {
+    id: ['Step 1: Siapkan tabel beam schedule di Excel.', 'Step 2: Buka Identify Schedule.', 'Step 3: Cocokkan heading schedule dengan kolom Excel, lalu hapus baris heading Excel kedua.', 'Step 4: Klik Generate in Beam Schedule.', 'Step 5: Klik Sync Beam Info dan pilih sinkronisasi ke entity.'],
+    en: ['Step 1: Prepare the beam schedule table in Excel.', 'Step 2: Open Identify Schedule.', 'Step 3: Match schedule headings to the Excel columns, then delete the second Excel heading row.', 'Step 4: Click Generate in Beam Schedule.', 'Step 5: Click Sync Beam Info and choose to synchronise to the entity.'],
+  },
+  136: {
+    id: ['Step 1: Buka Identify Schedule dan siapkan tabel sumber.', 'Step 2: Pilih heading yang sesuai untuk setiap kolom schedule.', 'Step 3: Hapus baris heading Excel kedua.', 'Step 4: Klik Generate in Beam Schedule.', 'Step 5: Untuk balok yang belum dimodelkan, klik Generate Element.', 'Step 6: Untuk balok yang sudah dimodelkan, klik Sync Beam Info.'],
+    en: ['Step 1: Open Identify Schedule and prepare the source table.', 'Step 2: Select the matching heading for each schedule column.', 'Step 3: Delete the second Excel heading row.', 'Step 4: Click Generate in Beam Schedule.', 'Step 5: For beams not yet modelled, click Generate Element.', 'Step 6: For beams already modelled, click Sync Beam Info.'],
+  },
+  137: {
+    id: ['Pilih Generate Element jika balok belum dimodelkan. Jika balok sudah ada, gunakan Sync Beam Info untuk memperbarui informasinya.'],
+    en: ['Choose Generate Element if the beam is not yet modelled. If it already exists, use Sync Beam Info to update its information.'],
+  },
+  138: {
+    id: ['Support balok dapat dikenali dari kolom atau dinding di lantai bawah, balok dengan ukuran lebih besar atau sama, foundation, dan slab.', 'Untuk mengatur support, klik kanan balok lalu pilih Batch Identify Support, Re-pick Span (F), Set Beam Support (Q), atau Delete Beam Support (J) sesuai kebutuhan.'],
+    en: ['Beam supports may be identified from columns or walls on the floor below, larger or same-size beams, foundations, and slabs.', 'To manage supports, right-click a beam and choose Batch Identify Support, Re-pick Span (F), Set Beam Support (Q), or Delete Beam Support (J) as needed.'],
+  },
+  142: {
+    id: ['Step 1: Klik Slab Main Bars.', 'Step 2: Pada fungsi {Draw}, klik [Parametric Arrangement].', 'Step 3: Pilih tipe pelat/raft.', 'Step 4: Pilih tipe susunan tulangan.', 'Step 5: Masukkan data tulangan.', 'Step 6: Klik Generate.'],
+    en: ['Step 1: Click Slab Main Bars.', 'Step 2: In the {Draw} function, click [Parametric Arrangement].', 'Step 3: Select the slab/raft type.', 'Step 4: Select the reinforcement arrangement type.', 'Step 5: Enter the reinforcement data.', 'Step 6: Click Generate.'],
+  },
+  147: {
+    id: ['Step 1: Pada tab {Draw}, klik [Arrange by Beam].', 'Step 2: Klik balok.', 'Step 3 (opsional): Jika panjang kedua sisi berbeda, klik sisi kiri balok.'],
+    en: ['Step 1: On the {Draw} tab, click [Arrange by Beam].', 'Step 2: Click the beam.', 'Step 3 (optional): If the two sides have different lengths, click the left side of the beam.'],
+  },
+  150: {
+    id: ['Pada Project Settings > Calculation Rules, atur kondisi ujung dinding dengan kolom agar sesuai dengan detail proyek.'],
+    en: ['In Project Settings > Calculation Rules, set the wall-end condition with a column to match the project detail.'],
+  },
+  155: {
+    id: ['Step 1: Untuk menghitung berdasarkan lantai, pilih lantai lalu klik [Calculate].', 'Step 2: Untuk menghitung elemen tertentu, klik kanan elemen dan pilih [Calculate Selected Entity].'],
+    en: ['Step 1: To calculate by floor, select the floors and click [Calculate].', 'Step 2: To calculate a specific entity, right-click it and choose [Calculate Selected Entity].'],
+  },
+  157: {
+    id: ['Klik [Rebar Layout], lalu pilih elemen yang sudah dihitung untuk meninjau susunan tulangannya.'],
+    en: ['Click [Rebar Layout], then select an entity that has already been calculated to review its reinforcement layout.'],
+  },
+  159: {
+    id: ['Untuk membuat ulang laporan, klik [Set Classification Condition].', 'Pilih atribut klasifikasi yang diperlukan, lalu gunakan Move Up atau Move Down untuk mengatur urutannya.'],
+    en: ['To regenerate the report, click [Set Classification Condition].', 'Select the required classification attributes, then use Move Up or Move Down to set their order.'],
+  },
+  160: {
+    id: ['Contoh laporan mencakup Rebar Schedule, Element Rebar Schedule by Summary Info, Element Rebar Schedule by Floor, Summary Reports, dan Custom Report.'],
+    en: ['Report examples include Rebar Schedule, Element Rebar Schedule by Summary Info, Element Rebar Schedule by Floor, Summary Reports, and Custom Report.'],
+  },
+}
+
+const groupedActionTitles = {
+  'export-tas-model': {
+    104: { id: 'Pilih metode ekspor model', en: 'Choose an export method' },
+  },
+  'import-tas-model': {
+    106: { id: 'Impor model TAS ke proyek TRB', en: 'Import the TAS model into TRB' },
+  },
+  'match-import-settings': {
+    107: { id: 'Sesuaikan zone dan tinggi lantai', en: 'Match zones and floor heights' },
+    108: { id: 'Pilih lantai dan elemen untuk diimpor', en: 'Select floors and elements to import' },
+  },
+  'prepare-trb-drawings': {
+    109: { id: 'Periksa tampilan model yang diimpor', en: 'Check the display of the imported model' },
+    110: { id: 'Tambahkan, pisahkan, dan pindahkan drawing', en: 'Add, split and relocate the drawing' },
+  },
+  'pile-cap-data-check': {
+    114: { id: 'Temukan dan periksa data tulangan', en: 'Find and review reinforcement data' },
+    115: { id: 'Buat pile cap dengan bentuk khusus', en: 'Create a pile cap with a custom shape' },
+  },
+  'pile-cap-reinforcement': {
+    113: { id: 'Masukkan dan tinjau data tulangan pile cap', en: 'Enter and review pile-cap reinforcement data' },
+  },
+  'column-reinforcement': {
+    119: { id: 'Masukkan tulangan utama dan link kolom', en: 'Enter column main bars and links' },
+  },
+  'beam-side-label': {
+    130: { id: 'Baca notasi dan tips Side Label', en: 'Interpret Side Label notation and tips' },
+  },
+  'beam-schedule': {
+    137: { id: 'Hasilkan atau sinkronkan balok', en: 'Generate or synchronise beams' },
+  },
+  'beam-support-layout': {
+    133: { id: 'Periksa dan susun tulangan balok', en: 'Check and arrange beam reinforcement' },
+  },
+  'slab-support-bars': {
+    146: { id: 'Tentukan garis dan data tulangan tumpuan', en: 'Define the support line and bar data' },
+    147: { id: 'Atur dan tinjau tulangan tumpuan', en: 'Arrange and review support bars' },
+  },
+  'wall-reinforcement': {
+    150: { id: 'Atur dan periksa tulangan dinding', en: 'Set and check wall reinforcement' },
+  },
+  'calculate-quantity': {
+    155: { id: 'Hitung kuantitas berdasarkan lantai atau elemen', en: 'Calculate quantity by floor or entity' },
+  },
+  'verify-rebar': {
+    156: { id: 'Periksa data dan geometri tulangan', en: 'Check reinforcement data and geometry' },
+    157: { id: 'Tinjau susunan tulangan', en: 'Review the reinforcement layout' },
+  },
+  'review-quantity': {
+    158: { id: 'Tinjau hasil kuantitas tulangan', en: 'Review reinforcement quantity results' },
+  },
+  'quantity-reports': {
+    159: { id: 'Atur klasifikasi laporan', en: 'Set report classification' },
+    160: { id: 'Tinjau jenis laporan tulangan', en: 'Review reinforcement report types' },
+  },
+}
+
+const groupActionsByImage = (actions, stepId, language) => {
+  const groups = []
+  for (const action of actions) {
+    const previous = groups.at(-1)
+    if (previous?.image === action.image) previous.actions.push(action)
+    else groups.push({ image: action.image, actions: [action] })
+  }
+  return groups.map(({ image, actions: groupedActions }, index) => {
+    const first = groupedActions[0]
+    const page = Number(image.match(/page-(\d+)\.png$/)?.[1])
+    const extractedText = imageStepTextByPage[page]?.[language] || []
+    return {
+      ...first,
+      id: `${stepId}-image-${index + 1}`,
+      number: index + 1,
+      title: groupedActions.length > 1 ? groupedActionTitles[stepId]?.[page]?.[language] || first.title : first.title,
+      description: [...extractedText, ...groupedActions.map((action) => `${action.title} - ${action.description}`)].join('\n'),
+      instructionFormat: extractedText.length ? 'numbered' : undefined,
+      crop: screenshotCropByPage[page],
+    }
+  })
+}
+
 export function getTrbData(language) {
   const isId = language === 'id'
   const tutorialParts = partDefinitions[language].map(([number, title, summary], partIndex) => ({
@@ -143,6 +362,18 @@ export function getTrbData(language) {
       checks: isId ? ['Tindakan telah dicocokkan dengan dokumen sumber', 'Data dan cakupan elemen telah diperiksa', 'Hasil siap digunakan pada langkah berikutnya'] : ['Actions were checked against the source document', 'Element data and scope were reviewed', 'The result is ready for the next step'],
     })),
   }))
+  tutorialParts[0].steps.forEach((step) => {
+    step.actions = groupActionsByImage(step.actions, step.id, language)
+    step.showInstructionsBelowImage = true
+  })
+  tutorialParts[1].steps.forEach((step) => {
+    step.actions = groupActionsByImage(step.actions, step.id, language)
+    step.showInstructionsBelowImage = true
+  })
+  tutorialParts[2].steps.forEach((step) => {
+    step.actions = groupActionsByImage(step.actions, step.id, language)
+    step.showInstructionsBelowImage = true
+  })
   const allSteps = tutorialParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
   return { id: 'trb', title: isId ? 'Tutorial Teknis Cubicost TRB' : 'Cubicost TRB Technical Tutorial', intro: isId ? 'Pelajari alur kerja pembesian mulai dari persiapan proyek dan pengaturan tulangan hingga perhitungan serta laporan kuantitas.' : 'Learn the rebar workflow from project preparation and reinforcement settings through quantity calculation and reporting.', tutorialParts, allSteps, lessonCount: allSteps.length, status: 'available' }
 }
