@@ -65,6 +65,7 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
           <input type="radio" name={`settings-${openSetting}`} value={option.value} checked={active.selected === option.value} aria-label={option.ariaLabel || option.label} onChange={() => active.choose(option.value)} />
         </label>)}
       </div>
+      {openSetting === 'fullscreen' && <p className="settings-subpage__note">{t.fullscreenCompatibilityNote}</p>}
     </section>}
   </section>
 }

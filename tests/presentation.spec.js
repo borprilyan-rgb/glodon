@@ -6,6 +6,18 @@ import { getTmeData } from '../src/data/tme/index.js'
 
 const origin = 'http://127.0.0.1:5173'
 
+test('presentation home close icon returns to the main home', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.addInitScript(() => localStorage.setItem('cubicost-tas-tutorial-language-v1', 'en'))
+  await page.goto(`${origin}/present`)
+  const close = page.getByRole('link', { name: 'Close', exact: true })
+  await expect(close).toBeVisible()
+  await expect(close.locator('svg')).toBeVisible()
+  await close.click()
+  await expect(page).toHaveURL(`${origin}/`)
+  await expect(page.locator('.presentation')).toHaveCount(0)
+})
+
 for (const [language, width] of [['en', 1440], ['id', 390]]) {
   test(`presenter home lists every part and step and opens selected steps directly (${language}, ${width}px)`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
