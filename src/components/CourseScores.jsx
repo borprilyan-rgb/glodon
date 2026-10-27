@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { downloadScoreCard } from '../data/downloadScoreCard'
-import ParticipantName from './ParticipantName'
+import ParticipantDetails from './ParticipantDetails'
 import { Download } from 'lucide-react'
 import { getSectionExercise } from '../data/sectionExercises'
 import { scoreLabel, scoreStatus } from '../data/testScores'
@@ -39,10 +39,13 @@ export default function CourseScores({ product, scores, language, profile, cours
     } catch { setDownloadFailed(true) }
     finally { setDownloading(false) }
   }
-  return <section className="course-scores" aria-labelledby={`score-heading-${product}`}>
-    <h2 className="course-scores__heading" id={`score-heading-${product}`}>{scoreLabel(language)}</h2>
+  const productLabel = product === 'tme' ? 'TME-C' : product.toUpperCase()
+  return <section className="course-scores" aria-label={`${scoreLabel(language)}: Cubicost ${productLabel}`}>
+    <header className="course-scores__identity">
+      <img className="course-scores__logo" src={`/branding/cubicost-${product}-logo.png`} alt={`Cubicost ${productLabel}`} />
+      <ParticipantDetails profile={profile} language={language} />
+    </header>
     <div className="course-scores__content">
-      <ParticipantName profile={profile} language={language} />
       {sections.length ? <>
       <div className="course-scores__progress" aria-label={`${progressLabel}: ${completionLabel}`}>
         <div><strong>{progressLabel}</strong><span>{completionLabel}</span></div>

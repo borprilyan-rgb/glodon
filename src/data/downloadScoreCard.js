@@ -1,4 +1,4 @@
-import { participantLabels } from './participant'
+import { participantFields, participantLabels } from './participant'
 import { scoreLabel, scoreStatus } from './testScores'
 
 export async function downloadScoreCard({ product, profile, rows, language, progress }) {
@@ -43,9 +43,11 @@ export async function downloadScoreCard({ product, profile, rows, language, prog
     text(`Cubicost ${product.toUpperCase()} · ${scoreLabel(language)}`, { size: 36, bold: true })
     y += 20
     divider()
-    text(participantLabels[language].name, { size: 16, color: '#536a80' })
-    text(profile?.name?.trim() || '—', { bold: true })
-    y += 12
+    for (const field of participantFields) {
+      text(participantLabels[language][field], { size: 16, color: '#536a80' })
+      text(profile?.[field]?.trim() || '—', { bold: true })
+      y += 12
+    }
     divider()
     const totalSteps = progress?.total ?? 0
     const completedSteps = progress?.completed ?? 0

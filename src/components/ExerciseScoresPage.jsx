@@ -8,7 +8,6 @@ export default function ExerciseScoresPage({ language, profile, scores, coursePr
     <header className="course-hub__intro"><h1>{title}</h1></header>
     <section className="exercise-hub__scores" aria-label={title}>
       <div className="hub-course-grid">{['tas', 'trb', 'tme'].map(product => <div key={product}>
-        <h3>Cubicost {product === 'tme' ? 'TME-C' : product.toUpperCase()}</h3>
         <CourseScores product={product} language={language} profile={profile} scores={scores.filter(score => score.exercise.product === product)} courseProgress={courseProgress[product]} />
       </div>)}</div>
     </section>

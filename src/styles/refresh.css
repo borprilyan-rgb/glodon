@@ -161,7 +161,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .exercise-hub__card > .primary-button svg { flex-shrink: 0; }
 .exercise-hub__card > .primary-button svg:last-child { margin-left: auto; }
 .exercise-hub__scores .hub-course-grid > div { min-width: 0; }
-.exercise-hub__scores .course-scores { padding-inline: 22px; }
+.exercise-hub__scores .course-scores { padding: 0; }
 @media (max-width: 900px) {
   .exercise-hub .hub-course-grid { grid-template-columns: 1fr; }
   .exercise-hub .exercise-hub__card { min-height: 0; }
