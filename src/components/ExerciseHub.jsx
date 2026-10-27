@@ -1,4 +1,3 @@
-import { ArrowLeft } from 'lucide-react'
 import ParticipantCard from './ParticipantCard'
 import ExerciseSectionList from './ExerciseSectionList'
 import ParticipantEntry from './ParticipantEntry'
@@ -20,6 +19,5 @@ export default function ExerciseHub({ language, profile, scores, editingParticip
         <ExerciseSectionList product={product} language={language} scores={scores} />
       </article>
     })}</section>
-    <a className="outline-nav-button" href="/"><ArrowLeft size={16} aria-hidden="true" />{en ? 'Back To Learning' : 'Kembali Ke Pembelajaran'}</a>
   </div>
 }
