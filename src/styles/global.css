@@ -117,13 +117,15 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 
   .main-content--focused { width: 100%; padding-inline: 16px; }
   .main-content--focused .tutorial-step { padding: 26px 0 calc(108px + env(safe-area-inset-bottom)); }
-  .step-header { margin-bottom: 20px; }
+  .step-header { margin-bottom: 12px; padding-bottom: 16px; }
   .step-header h1 { margin-block: 10px; font-size: clamp(26px, 7.2vw, 30px); line-height: 1.14; }
   .step-header > p { font-size: 16px; line-height: 1.6; }
   .step-header__meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 6px 12px; font-size: 11px; line-height: 1.4; letter-spacing: .045em; }
   .step-header__meta > span:first-child { min-width: 0; }
   .step-header__meta > span:last-child { flex: 0 0 auto; padding-top: 1px; font-size: 12px; white-space: nowrap; }
-  .action-viewer { margin-inline: -16px; border-inline: 0; }
+  .action-viewer { gap: 12px; margin-inline: -16px; border-inline: 0; }
+  .action-viewer__media { order: 1; }
+  .action-viewer__list { order: 2; }
   .action-viewer__list { padding-top: 14px; }
   .action-viewer__list > .eyebrow { padding-inline: 16px; font-size: 11px; }
   .action-list { gap: 9px; padding: 0 16px 10px; scroll-padding-inline: 16px; }
