@@ -153,7 +153,7 @@ export default function Presentation({ courses, language, onLanguageChange, them
           </button>}
           {!expandedImage && failedImage !== image && <DrawingCanvas drawing={drawing} image={image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}
         </div>
-        <div key={`${product}:${lesson.id}:${action.id}`} className="presentation-instructions" role="region" aria-label={language === 'en' ? 'Slide instructions' : 'Instruksi slide'} tabIndex={0}><p>{action.description || lesson.intro}</p></div>
+        {!action.hideInstructions && <div key={`${product}:${lesson.id}:${action.id}`} className="presentation-instructions" role="region" aria-label={language === 'en' ? 'Slide instructions' : 'Instruksi slide'} tabIndex={0}><p>{action.description || lesson.intro}</p></div>}
       </div> : <PresentationHome courses={courses} initialProduct={product} language={language} t={t} c={c} onStart={startLesson} />}
     </main>
     {walkthrough && <><footer className="presentation-controls">

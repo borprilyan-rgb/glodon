@@ -72,7 +72,8 @@ html:fullscreen :is(body, #root, .app-shell) { min-height: 100dvh; background: v
 :root[data-theme="dark"] .exercise-result.is-passed { border-top-color: #70b88d; }
 :root[data-theme="dark"] .course-lesson.is-current { border-left-color: #86aaff; }
 :root[data-theme="dark"] .course-lesson.is-completed .course-lesson__status { color: white; background: #315bc4; }
-:root[data-theme="dark"] :is(.step-header > p, .landing-hero__copy > p:not(.landing-course-info), .screenshot-media__caption p, .screenshot-media__caption .screenshot-media__instruction) { color: var(--muted); }
+:root[data-theme="dark"] :is(.step-header > p, .landing-hero__copy > p:not(.landing-course-info)) { color: var(--muted); }
+:root[data-theme="dark"] .screenshot-media__caption :is(p, .screenshot-media__instruction, .screenshot-media__instructions) { color: #dce7f3; }
 :root[data-theme="dark"] .screenshot-media__caption > strong { color: var(--night-link); }
 :root[data-theme="dark"] .screenshot-media__caption .screenshot-media__instruction { border-color: var(--line); }
 :root[data-theme="dark"] :is(.callout--warning, .action-inline-warning) { color: #f0cf9a; background: #3b3021; border-color: #e59a28; }

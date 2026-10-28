@@ -3,11 +3,8 @@ import { getScreenshotCopy } from '../screenshotCopy.js'
 const a = (titleId, descriptionId, titleEn, descriptionEn, file) => ({ titleId, descriptionId, titleEn, descriptionEn, file })
 
 const lessons = [
-  ['export-tas-model', 'Memahami dan Mengekspor Model TAS', 'Understand and Export a TAS Model', 'Membuat file transfer TAS yang sesuai dengan cakupan model yang akan dikerjakan di TRB.', 'Create a TAS transfer file that matches the model scope to be developed in TRB.', '103-105', [
-    a('Tentukan cakupan transfer', 'Gunakan alur TAS-ke-TRB setelah model sumber diperiksa dan tentukan apakah seluruh lantai atau hanya elemen tertentu yang perlu diperbarui.', 'Define the transfer scope', 'Use the TAS-to-TRB workflow after checking the source model, then decide whether whole floors or selected entities require an update.', 'export-model-01.webp'),
-    a('Pilih Export Model by Floor', 'Gunakan ekspor per lantai ketika seluruh elemen pada lantai yang dipilih perlu dipindahkan ke proyek TRB.', 'Choose Export Model by Floor', 'Use floor-based export when all elements on the selected floors need to be transferred to the TRB project.', 'export-model-02.webp'),
-    a('Gunakan Export Model by Entity bila diperlukan', 'Ekspor berdasarkan elemen cocok untuk pembaruan parsial agar cakupan transfer tetap terbatas.', 'Use Export Model by Entity when needed', 'Entity-based export is suited to partial updates where the transfer scope must remain limited.', 'export-model-03.webp'),
-    a('Simpan file model', 'Gunakan nama file dan lokasi yang menunjukkan proyek, cakupan, dan revisi agar file dapat dikenali saat diimpor.', 'Save the model file', 'Use a filename and location that identify the project, scope and revision before importing it.', 'export-model-04.webp')]],
+  ['export-tas-model', 'Mengekspor Model TAS', 'Export a TAS Model', 'Ekspor model TAS berdasarkan lantai untuk digunakan dalam proyek TRB.', 'Export the TAS model by floor for use in a TRB project.', '105', [
+    { ...a('Pilih Export Model By Floor', 'Langkah 1: Pada tab BIM MODEL, pilih Export Model By Floor.\nLangkah 2: Centang semua lantai atau lantai tertentu saja, klik OK, lalu simpan file.\nCatatan: Format file hasil ekspor adalah .CUBIC.', 'Select Export Model By Floor', 'Step 1: On the BIM MODEL tab, select Export Model By Floor.\nStep 2: Select all floors or only specific floors, click OK, then save the file.\nNote: The exported file format is .CUBIC.', 'export-model-02.webp'), instructionFormat: 'verbatim' }]],
   ['import-tas-model', 'Mengimpor Model TAS ke TRB', 'Import a TAS Model into TRB', 'Memasukkan file transfer TAS ke proyek TRB tujuan yang benar.', 'Bring the TAS transfer file into the correct destination TRB project.', '106', [
     a('Buka proyek TRB tujuan', 'Buat proyek baru atau buka proyek yang benar sebelum memasukkan data dari TAS.', 'Open the destination TRB project', 'Create a new project or open the correct project before bringing in TAS data.', 'import-model-01.webp'),
     a('Buka BIM MODEL > Import Model', 'Gunakan perintah Import Model dari area BIM MODEL untuk memulai transfer.', 'Open BIM MODEL > Import Model', 'Use Import Model in the BIM MODEL area to begin the transfer.', 'import-model-02.webp'),
@@ -19,10 +16,10 @@ const lessons = [
     a('Pilih lantai dan elemen', 'Batasi pilihan pada lantai serta tipe elemen yang termasuk dalam cakupan transfer.', 'Select floors and elements', 'Limit the selection to the floors and element types included in the transfer scope.', 'match-import-03.webp'),
     a('Lanjutkan dengan Next Step', 'Periksa kembali pemetaan sebelum berpindah ke tahap konfirmasi berikutnya.', 'Continue with Next Step', 'Review the mapping before moving to the next confirmation stage.', 'match-import-04.webp')]],
   ['prepare-trb-drawings', 'Memeriksa Model dan Menyiapkan Gambar', 'Check the Model and Prepare Drawings', 'Memastikan model terlihat dengan benar dan gambar kerja siap digunakan untuk identifikasi.', 'Confirm that the model displays correctly and drawings are ready for identification.', '109-110', [
-    a('Atur tampilan elemen dengan F12', 'Gunakan kontrol tampilan untuk menampilkan hanya elemen yang diperlukan saat pemeriksaan.', 'Control entity display with F12', 'Use the display controls to show the entities required for the current review.', 'prepare-drawing-01.webp'),
-    a('Periksa model yang ditransfer', 'Tampilkan elemen yang dibutuhkan dan pastikan lantai serta geometri utamanya sesuai.', 'Check the transferred model', 'Display the required entities and confirm their floors and main geometry.', 'prepare-drawing-02.webp'),
-    a('Tambahkan building plan', 'Buka rencana bangunan lalu gunakan IDENTIFY > Add Drawing untuk memasukkan gambar referensi.', 'Add the building plan', 'Open the building plan, then use IDENTIFY > Add Drawing to add the reference drawing.', 'prepare-drawing-03.webp'),
-    a('Pisahkan dan pindahkan gambar', 'Atur bagian gambar pada lokasi lantai yang tepat sebelum pemodelan tulangan dimulai.', 'Split and relocate the drawing', 'Arrange drawing portions on the correct floors before reinforcement modelling begins.', 'prepare-drawing-04.webp')]],
+    { ...a('Atur tampilan elemen dengan F12', '', 'Control entity display with F12', '', 'prepare-drawing-01.webp'), hideInstructions: true },
+    { ...a('Periksa model yang ditransfer', '', 'Check the transferred model', '', 'prepare-drawing-02.webp'), hideInstructions: true },
+    { ...a('Tambahkan building plan', '', 'Add the building plan', '', 'prepare-drawing-03.webp'), hideInstructions: true },
+    { ...a('Pisahkan dan pindahkan gambar', '', 'Split and relocate the drawing', '', 'prepare-drawing-04.webp'), hideInstructions: true }]],
   ['pile-cap-reinforcement', 'Mendefinisikan Tulangan Pile Cap', 'Define Pile Cap Reinforcement', 'Menetapkan data tulangan pile cap pada elemen yang sesuai.', 'Assign pile-cap reinforcement data to the correct elements.', '112-113', [
     a('Pilih pile cap', 'Pastikan elemen dan lantai yang aktif sesuai dengan detail tulangan yang akan diterapkan.', 'Select the pile cap', 'Confirm that the active element and floor match the reinforcement detail being applied.', 'pile-cap-01.webp'),
     a('Buka pengaturan tulangan', 'Masuk ke pengaturan reinforcement pile cap dan gunakan data dari detail struktur yang telah disetujui.', 'Open the reinforcement settings', 'Open the pile-cap reinforcement settings and use data from the approved structural detail.', 'pile-cap-02.webp'),
@@ -56,26 +53,18 @@ const lessons = [
     a('Buat balok yang belum dimodelkan', 'Jika elemen belum tersedia, gunakan hasil schedule untuk menghasilkan balok sesuai alur manual.', 'Generate an unmodelled beam', 'If the element does not exist, use the schedule result to generate the beam through the documented workflow.', 'beam-schedule-04.webp'),
     a('Periksa cakupan hasil', 'Pastikan setiap baris schedule menghasilkan pembaruan atau elemen yang dimaksud, bukan keduanya.', 'Check the result scope', 'Ensure each schedule row produces the intended update or element, not both.', 'beam-schedule-05.webp')]],
   ['beam-support-layout', 'Memeriksa Support dan Susunan Tulangan Balok', 'Check Beam Supports and Reinforcement Layout', 'Memastikan support serta susunan reinforcement balok sesuai kondisi model.', 'Confirm that beam supports and reinforcement layout match the model condition.', '133, 138', [
-    a('Periksa support balok', 'Pastikan hubungan ujung balok dikenali sebelum menilai rentang tulangan.', 'Check beam supports', 'Confirm that beam-end relationships are recognised before reviewing reinforcement ranges.', 'beam-support-01.webp'),
+    a('Periksa support balok', '', 'Check beam supports', 'Confirm that beam-end relationships are recognised before reviewing reinforcement ranges. Confirm that supports and reinforcement ranges remain consistent after correction.', 'beam-support-01.webp'),
     a('Tinjau susunan tulangan', 'Periksa posisi tulangan atas, bawah, dan bagian terkait terhadap detail sumber.', 'Review the reinforcement layout', 'Check top, bottom and related bar positions against the source detail.', 'beam-support-02.webp'),
     a('Koreksi ketidaksesuaian data', 'Perbarui hanya data yang dapat ditelusuri ke schedule atau detail struktur.', 'Correct data mismatches', 'Update only data that can be traced to the schedule or structural detail.', 'beam-support-03.webp'),
-    a('Validasi hasil akhir', 'Pastikan support dan rentang tulangan tetap konsisten setelah koreksi.', 'Validate the final result', 'Confirm that supports and reinforcement ranges remain consistent after correction.', 'beam-support-04.webp')]],
+]],
   ['slab-main-bars', 'Mendefinisikan dan Menyusun Tulangan Utama Pelat', 'Define and Arrange Slab Main Bars', 'Menetapkan tulangan utama pelat dan menyesuaikan area penempatannya.', 'Define slab main reinforcement and adjust its placement area.', '140-145', [
     a('Pilih pelat dan arah tulangan', 'Pastikan area pelat serta arah kerja mengacu pada gambar struktur.', 'Select the slab and bar direction', 'Confirm the slab area and spanning direction from the structural drawing.', 'slab-main-01.webp'),
     a('Definisikan tulangan utama', 'Masukkan diameter dan spacing sesuai detail tanpa membuat nilai perkiraan.', 'Define the main bars', 'Enter diameter and spacing from the detail without estimating missing values.', 'slab-main-02.webp'),
     a('Tentukan area penempatan', 'Atur batas susunan agar reinforcement diterapkan pada area pelat yang dimaksud.', 'Set the placement area', 'Adjust the layout boundary so reinforcement applies to the intended slab area.', 'slab-main-03.webp'),
-    a('Sesuaikan susunan batang', 'Gunakan kontrol penyusunan yang didokumentasikan untuk mengikuti kondisi tepi dan bentang.', 'Adjust the bar arrangement', 'Use the documented layout controls to follow edge and span conditions.', 'slab-main-04.webp'),
-    a('Periksa hasil pada pelat', 'Bandingkan arah, spacing, dan cakupan dengan gambar sumber.', 'Check the slab result', 'Compare direction, spacing and coverage with the source drawing.', 'slab-main-05.webp')]],
-  ['slab-support-bars', 'Menyusun Tulangan Tumpuan Pelat', 'Arrange Slab Support Bars', 'Menempatkan tulangan tumpuan pada garis dan rentang yang sesuai.', 'Place slab support bars on the correct lines and ranges.', '146-147', [
-    a('Tentukan garis tumpuan', 'Pilih support yang sesuai dengan detail tulangan negatif atau tumpuan.', 'Define the support line', 'Select the support that matches the negative or support reinforcement detail.', 'slab-support-01.webp'),
-    a('Masukkan data tulangan tumpuan', 'Gunakan diameter, spacing, dan rentang yang tercantum pada dokumen sumber.', 'Enter support-bar data', 'Use the diameter, spacing and range stated in the source documents.', 'slab-support-02.webp'),
-    a('Atur cakupan penempatan', 'Pastikan panjang dan sisi penempatan mengikuti kondisi tumpuan.', 'Set the placement extent', 'Ensure placement length and side follow the support condition.', 'slab-support-03.webp'),
-    a('Periksa hubungan dengan tulangan utama', 'Tinjau apakah susunan tumpuan dan tulangan utama mencakup area yang semestinya.', 'Check the relationship to main bars', 'Review whether support and main-bar layouts cover the intended areas.', 'slab-support-04.webp')]],
+]],
   ['wall-reinforcement', 'Mendefinisikan Tulangan Dinding', 'Define Wall Reinforcement', 'Menerapkan tulangan dinding sesuai arah, lapisan, dan area model.', 'Apply wall reinforcement according to direction, layer and model area.', '149-153', [
     a('Pilih dinding yang benar', 'Periksa tipe, lantai, dan rentang dinding sebelum memasukkan reinforcement.', 'Select the correct wall', 'Check wall type, floor and extent before entering reinforcement.', 'wall-rebar-01.webp'),
     a('Definisikan tulangan vertikal', 'Masukkan data vertikal dari detail dinding yang berlaku.', 'Define vertical reinforcement', 'Enter vertical reinforcement data from the applicable wall detail.', 'wall-rebar-02.webp'),
-    a('Definisikan tulangan horizontal', 'Gunakan data horizontal untuk arah dan lapisan yang ditentukan gambar.', 'Define horizontal reinforcement', 'Use the horizontal data for the direction and layer specified in the drawing.', 'wall-rebar-03.webp'),
-    a('Tinjau area dan lapisan', 'Pastikan reinforcement berada pada sisi dan cakupan dinding yang benar.', 'Review areas and layers', 'Confirm that reinforcement is on the correct wall sides and extents.', 'wall-rebar-04.webp'),
     a('Periksa hasil dinding', 'Bandingkan susunan akhir dengan detail sumber sebelum melanjutkan.', 'Check the wall result', 'Compare the final arrangement with the source detail before continuing.', 'wall-rebar-05.webp')]],
   ['calculate-quantity', 'Menghitung Berdasarkan Lantai atau Elemen', 'Calculate by Floor or Entity', 'Menjalankan perhitungan dengan cakupan lantai atau elemen yang sesuai.', 'Run calculation for the appropriate floor or entity scope.', '155', [
     a('Tentukan cakupan perhitungan', 'Pilih lantai untuk cakupan menyeluruh atau elemen untuk pemeriksaan terfokus.', 'Choose the calculation scope', 'Choose floors for a broad scope or entities for a focused check.', 'calculate-quantity-01.webp'),
@@ -105,10 +94,10 @@ const partDefinitions = {
   en: [['01', 'Model Preparation', 'Transfer the TAS model and prepare the required drawings in TRB.'], ['02', 'Rebar Modelling', 'Define and check reinforcement for the main elements.'], ['03', 'Quantity Verification and Reports', 'Calculate, validate, classify and report reinforcement results.']],
 }
 
-const partRanges = [[0, 4], [4, 14], [14, 18]]
+const partRanges = [[0, 4], [4, 13], [13, 17]]
 
 const manualPageByAction = {
-  'export-tas-model': [103, 104, 104, 105],
+  'export-tas-model': [105],
   'import-tas-model': [106, 106, 106, 106],
   'match-import-settings': [107, 107, 108, 108],
   'prepare-trb-drawings': [109, 109, 110, 110],
@@ -118,10 +107,9 @@ const manualPageByAction = {
   'column-schedule': [123, 124, 125, 126, 127],
   'beam-side-label': [129, 130, 130, 131],
   'beam-schedule': [134, 135, 136, 137, 137],
-  'beam-support-layout': [138, 133, 133, 138],
-  'slab-main-bars': [140, 141, 142, 144, 145],
-  'slab-support-bars': [146, 146, 147, 147],
-  'wall-reinforcement': [149, 150, 150, 151, 152],
+  'beam-support-layout': [138, 133, 133],
+  'slab-main-bars': [140, 141, 142],
+  'wall-reinforcement': [149, 150, 152],
   'calculate-quantity': [155, 155, 155, 155],
   'verify-rebar': [156, 156, 157, 157],
   'review-quantity': [158, 158, 158, 158],
@@ -132,7 +120,6 @@ const screenshotCropByPage = {
   106: { x: 0.02, y: 0.23, width: 0.96, height: 0.74, imageWidth: 2040, imageHeight: 1002 },
   107: { x: 0.22, y: 0.30, width: 0.56, height: 0.66, imageWidth: 1829, imageHeight: 991 },
   108: { x: 0.02, y: 0.31, width: 0.96, height: 0.60, imageWidth: 1832, imageHeight: 938 },
-  109: { x: 0.15, y: 0.20, width: 0.71, height: 0.72, imageWidth: 1860, imageHeight: 1002 },
   110: { x: 0.02, y: 0.55, width: 0.96, height: 0.40, imageWidth: 1923, imageHeight: 764 },
   114: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1696, imageHeight: 987 },
   115: { x: 0.02, y: 0.20, width: 0.96, height: 0.77, imageWidth: 1943, imageHeight: 921 },
@@ -145,8 +132,8 @@ const screenshotCropByPage = {
   133: { x: 0.02, y: 0.30, width: 0.96, height: 0.67, imageWidth: 2025, imageHeight: 1002 },
   135: { x: 0.52, y: 0.02, width: 0.46, height: 0.95, imageWidth: 2048, imageHeight: 1002 },
   136: { x: 0.02, y: 0.02, width: 0.68, height: 0.95, imageWidth: 1981, imageHeight: 965 },
-  137: { x: 0.02, y: 0.02, width: 0.96, height: 0.76, imageWidth: 2033, imageHeight: 891 },
-  138: { x: 0.02, y: 0.02, width: 0.46, height: 0.95, imageWidth: 1470, imageHeight: 971 },
+  137: { x: 0.02, y: 0.02, width: 0.96, height: 0.96, imageWidth: 2033, imageHeight: 891 },
+  138: { x: 0.02, y: 0.02, width: 0.96, height: 0.95, imageWidth: 1543, imageHeight: 1019 },
   130: { x: 0.02, y: 0.02, width: 0.96, height: 0.52, imageWidth: 1870, imageHeight: 1000 },
   147: { x: 0.02, y: 0.28, width: 0.96, height: 0.69, imageWidth: 1849, imageHeight: 987 },
   150: { x: 0.02, y: 0.02, width: 0.96, height: 0.80, imageWidth: 1409, imageHeight: 894 },
@@ -218,7 +205,7 @@ const imageStepTextByPage = {
     en: ['The + sign combines bars in the same layer; the / sign separates bars in different layers.', 'If side-bar information shows only one side, enter the total number of side bars.'],
   },
   133: {
-    id: ['Step 1: Pada tab {Quantity}, pilih [Calculate] atau [Calculate Selected Entity].', 'Step 2: Klik [Rebar Layout].', 'Step 3: Pilih balok.', 'Step 4: Periksa susunan tulangan. Gunakan Apply to all bila berlaku untuk semua elemen terkait.'],
+    id: ['Step 1: Pada tab {Quantity}, pilih [Calculate] atau [Calculate Selected Entity].', 'Step 2: Klik [Rebar Layout].', 'Step 3: Pilih balok yang akan kita lihat detail pembesiannya.'],
     en: ['Step 1: On the {Quantity} tab, select [Calculate] or [Calculate Selected Entity].', 'Step 2: Click [Rebar Layout].', 'Step 3: Select the beam.', 'Step 4: Check the reinforcement arrangement. Use Apply to all when it applies to all related entities.'],
   },
   135: {
@@ -230,11 +217,11 @@ const imageStepTextByPage = {
     en: ['Step 1: Open Identify Schedule and prepare the source table.', 'Step 2: Select the matching heading for each schedule column.', 'Step 3: Delete the second Excel heading row.', 'Step 4: Click Generate in Beam Schedule.', 'Step 5: For beams not yet modelled, click Generate Element.', 'Step 6: For beams already modelled, click Sync Beam Info.'],
   },
   137: {
-    id: ['Pilih Generate Element jika balok belum dimodelkan. Jika balok sudah ada, gunakan Sync Beam Info untuk memperbarui informasinya.'],
+    id: ['Pilih Generate Element jika balok belum dimodelkan. Jika balok sudah ada, gunakan Sync Beam Info untuk memperbarui informasinya. (Perhatian: Generate Element akan membuat data duplikat, pastikan jika revisi data hanya menggunakan sync beam info)'],
     en: ['Choose Generate Element if the beam is not yet modelled. If it already exists, use Sync Beam Info to update its information.'],
   },
   138: {
-    id: ['Support balok dapat dikenali dari kolom atau dinding di lantai bawah, balok dengan ukuran lebih besar atau sama, foundation, dan slab.', 'Untuk mengatur support, klik kanan balok lalu pilih Batch Identify Support, Re-pick Span (F), Set Beam Support (Q), atau Delete Beam Support (J) sesuai kebutuhan.'],
+    id: ['Dalam pemodelan TAS, balok dengan tipe yang sama dimodelkan secara menerus (continuous beam), meskipun melewati elemen struktur lain seperti kolom, dinding, pile cap, atau balok berukuran lebih besar. Fitur Batch Identify Support digunakan untuk mengidentifikasi titik-titik tumpuan tersebut secara otomatis, sehingga balok dapat terbagi menjadi beberapa bentang (span) sesuai posisi elemen struktur yang menopangnya, tanpa perlu memodelkan setiap bentang secara terpisah.'],
     en: ['Beam supports may be identified from columns or walls on the floor below, larger or same-size beams, foundations, and slabs.', 'To manage supports, right-click a beam and choose Batch Identify Support, Re-pick Span (F), Set Beam Support (Q), or Delete Beam Support (J) as needed.'],
   },
   142: {
@@ -333,15 +320,16 @@ const groupActionsByImage = (actions, stepId, language) => {
   }
   return groups.map(({ image, actions: groupedActions }, index) => {
     const first = groupedActions[0]
-    const page = Number(image.match(/page-(\d+)\.png$/)?.[1])
+    const page = Number(image.match(/page-(\d+)(?:-crop)?(?:-id)?\.(?:png|svg)$/)?.[1])
     const extractedText = imageStepTextByPage[page]?.[language] || []
+    const isRevisionSlide = image.startsWith('/tutorial/trb/revision-part3/')
     return {
       ...first,
       id: `${stepId}-image-${index + 1}`,
       number: index + 1,
       title: groupedActions.length > 1 ? groupedActionTitles[stepId]?.[page]?.[language] || first.title : first.title,
-      description: [...extractedText, ...groupedActions.map((action) => `${action.title} - ${action.description}`)].join('\n'),
-      instructionFormat: extractedText.length ? 'numbered' : undefined,
+      description: isRevisionSlide ? groupedActions.map((action) => action.description).join('\n') : page === 138 && language === 'id' ? extractedText.join('\n') : [...extractedText, ...groupedActions.map((action) => `${action.title} - ${action.description}`)].join('\n'),
+      instructionFormat: isRevisionSlide ? first.instructionFormat : page === 138 && language === 'id' ? 'verbatim' : extractedText.length ? 'numbered' : undefined,
       crop: screenshotCropByPage[page],
     }
   })
@@ -357,7 +345,18 @@ export function getTrbData(language) {
       actions: actions.map((item, index) => {
         const manualPage = manualPageByAction[id][index]
         const screenshotCopy = getScreenshotCopy('trb', manualPage, language)
-        return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, image: `/tutorial/trb/processed/page-${manualPage}.png`, imageAlt: screenshotCopy.alt, alt: screenshotCopy.alt, caption: screenshotCopy.caption, requiredDescription: '', pending: false }
+        const isRevisedExportSlide = id === 'export-tas-model'
+        const isFullModelDisplayCrop = id === 'prepare-trb-drawings' && manualPage === 109
+        const imageAlt = isRevisedExportSlide
+          ? (isId ? 'Ekspor model TAS berdasarkan lantai dan alur transfer model ke TRB' : 'Floor-based TAS model export and model transfer flow to TRB')
+          : screenshotCopy.alt
+        const isLocalizedBeamSupportScreenshot = isId && id === 'beam-support-layout' && manualPage === 138
+        const image = isRevisedExportSlide
+          ? '/tutorial/trb/revision-part3/export-floor-complete.svg'
+          : isFullModelDisplayCrop
+            ? '/tutorial/trb/revision-part3/page-109-crop.svg'
+            : `/tutorial/trb/processed/page-${manualPage}${isLocalizedBeamSupportScreenshot ? '-id' : ''}.png`
+        return { id: `${id}-action-${index + 1}`, number: index + 1, title: isId ? item.titleId : item.titleEn, description: isId ? item.descriptionId : item.descriptionEn, hideInstructions: item.hideInstructions, image, imageAlt, alt: imageAlt, caption: isRevisedExportSlide ? '' : screenshotCopy.caption, requiredDescription: '', pending: false, instructionFormat: item.instructionFormat || (isRevisedExportSlide ? 'verbatim' : undefined) }
       }),
       checks: isId ? ['Tindakan telah dicocokkan dengan dokumen sumber', 'Data dan cakupan elemen telah diperiksa', 'Hasil siap digunakan pada langkah berikutnya'] : ['Actions were checked against the source document', 'Element data and scope were reviewed', 'The result is ready for the next step'],
     })),
@@ -373,6 +372,43 @@ export function getTrbData(language) {
   tutorialParts[2].steps.forEach((step) => {
     step.actions = groupActionsByImage(step.actions, step.id, language)
     step.showInstructionsBelowImage = true
+  })
+  const pileCapRuleTitle = isId ? 'Mengubah Aturan Penjangkaran Tulangan Pile Cap' : 'Change Pile-Cap Reinforcement Anchorage Rules'
+  const pileCapRuleAlt = isId ? 'Calculation Rules Foundation untuk penjangkaran tulangan pile cap dan gambar detail pile cap' : 'Foundation Calculation Rules for pile-cap reinforcement anchorage and the pile-cap detail drawing'
+  const pileCapRuleDescription = isId
+    ? [
+        'STEP 1: Pada tab Project Settings, pilih Calculation Rules.',
+        'STEP 2: Pilih Foundation, lalu cari Rules Pile Cap nomor 4.',
+        'STEP 3: Sesuaikan panjang tekukan pile cap dengan gambar. Ubah panjang tekukan atas dari 12*d menjadi 30*d.',
+      ].join('\n')
+    : [
+        'STEP 1: On the Project Settings tab, select Calculation Rules.',
+        'STEP 2: Select Foundation, then find Pile Cap Rule No. 4.',
+        'STEP 3: Adjust the pile-cap anchorage length to match the drawing. Change the top anchorage length from 12*d to 30*d.',
+      ].join('\n')
+  tutorialParts[0].steps.unshift({
+    id: 'pile-cap-anchorage-rules',
+    title: pileCapRuleTitle,
+    intro: isId ? 'Sesuaikan aturan penjangkaran tulangan pile cap berdasarkan gambar detail.' : 'Adjust the pile-cap reinforcement anchorage rule to match the detail drawing.',
+    duration: '2 min',
+    instructions: [pileCapRuleDescription],
+    actions: [{
+      id: 'pile-cap-anchorage-rules-action-1',
+      number: 1,
+      title: pileCapRuleTitle,
+      description: pileCapRuleDescription,
+      image: '/tutorial/trb/revision-part1/pile-cap-rules.png',
+      imageAlt: pileCapRuleAlt,
+      alt: pileCapRuleAlt,
+      caption: '',
+      requiredDescription: pileCapRuleAlt,
+      pending: false,
+      instructionFormat: 'verbatim',
+    }],
+    showInstructionsBelowImage: true,
+    checks: isId
+      ? ['Calculation Rules dan Foundation telah dibuka', 'Rules Pile Cap nomor 4 telah ditemukan', 'Panjang tekukan atas telah disesuaikan dari 12*d menjadi 30*d sesuai gambar']
+      : ['Calculation Rules and Foundation are open', 'Pile Cap Rule No. 4 has been located', 'The top anchorage length matches the drawing at 30*d instead of 12*d'],
   })
   const allSteps = tutorialParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
   return { id: 'trb', title: isId ? 'Tutorial Teknis Cubicost TRB' : 'Cubicost TRB Technical Tutorial', intro: isId ? 'Pelajari alur kerja pembesian mulai dari persiapan proyek dan pengaturan tulangan hingga perhitungan serta laporan kuantitas.' : 'Learn the rebar workflow from project preparation and reinforcement settings through quantity calculation and reporting.', tutorialParts, allSteps, lessonCount: allSteps.length, status: 'available' }

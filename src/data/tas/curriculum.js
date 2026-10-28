@@ -4,6 +4,16 @@ import { applyPartTwoRevision, replacePartTwoLessons } from './partTwoRevision.j
 import { getTasChecklist } from './checklists.js'
 
 const a = (titleId, descriptionId, titleEn, descriptionEn, file) => ({ titleId, descriptionId, titleEn, descriptionEn, file })
+const partTwoTitleCards = {
+  'identify-pile-caps': { title: 'IDENTIFIKASI PILE CAP', actionTitleId: 'Identifikasi Pile Cap', actionTitleEn: 'Pile Cap Identification' },
+  'identify-columns': { title: 'IDENTIFIKASI KOLOM', actionTitleId: 'Identifikasi Kolom', actionTitleEn: 'Column Identification' },
+  'identify-beams': { title: 'IDENTIFIKASI BALOK', actionTitleId: 'Identifikasi Balok', actionTitleEn: 'Beam Identification' },
+  'identify-slabs': { title: 'IDENTIFIKASI SLAB', actionTitleId: 'Identifikasi Slab', actionTitleEn: 'Slab Identification' },
+  'identify-architectural-walls': { title: 'IDENTIFIKASI DINDING', actionTitleId: 'Identifikasi Dinding', actionTitleEn: 'Wall Identification' },
+  'identify-openings': { title: 'IDENTIFIKASI PINTU DAN JENDELA', actionTitleId: 'Identifikasi Pintu dan Jendela', actionTitleEn: 'Door and Window Identification' },
+  'apply-finishes': { title: 'IDENTIFIKASI ROOM FINISH', actionTitleId: 'Identifikasi Room Finish', actionTitleEn: 'Room Finish Identification' },
+  'calculate-verify-quantity': { title: 'LAPORAN HASIL PEMODELAN', actionTitleId: 'Laporan Hasil Pemodelan', actionTitleEn: 'Model Quantity Report' },
+}
 
 const lessons = [
   ['create-project', 'Membuat Proyek TAS', 'Create a TAS Project', 'Membuat proyek dengan aturan pengukuran dan elevasi tanah yang sesuai.', 'Create a project with the applicable measurement rules and ground elevation.', '13-14', [
@@ -289,6 +299,38 @@ export function getTasData(language) {
   const revisedParts = replacePartTwoLessons(tutorialParts)
   revisedParts.forEach((part) => {
     part.steps = part.steps.map((step) => ({ ...applyPartTwoRevision(applySectionOneRevision(step, language), language), checks: getTasChecklist(step.id, language) }))
+    if (part.id === 'part-2') {
+      const isEnglish = language === 'en'
+      part.steps = part.steps.map((step, stepIndex) => {
+        const card = partTwoTitleCards[step.id]
+        if (!card) return step
+        const imageAlt = isEnglish ? `Cubicost TAS title card with Indonesian heading: ${card.title}` : `Kartu judul Cubicost TAS: ${card.title}`
+        const titleCard = {
+          id: `${step.id}-title-card`,
+          number: 1,
+          title: isEnglish ? card.actionTitleEn : card.actionTitleId,
+          description: '',
+          image: `/tutorial/tas/title-cards/part-2-step-${stepIndex + 1}.svg`,
+          imageAlt,
+          alt: imageAlt,
+          caption: '',
+          requiredDescription: imageAlt,
+          pending: false,
+          hideInstructions: true,
+        }
+        const existingActions = step.actions.map((action, index) => ({
+          ...action,
+          id: `${step.id}-action-${index + 2}`,
+          number: index + 2,
+        }))
+        return {
+          ...step,
+          duration: `${(existingActions.length + 1) * 2} min`,
+          instructions: [titleCard.title, ...existingActions.map((action) => `${action.title} ${action.description}`)],
+          actions: [titleCard, ...existingActions],
+        }
+      })
+    }
   })
   const updatedSteps = revisedParts.flatMap((part) => part.steps.map((step, index) => ({ ...step, partId: part.id, partTitle: part.title, partNumber: part.number, stepNumber: index + 1 })))
   return { tutorialParts: revisedParts, allSteps: updatedSteps }

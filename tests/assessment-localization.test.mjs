@@ -45,8 +45,10 @@ test('30 TAS/TRB questions and choices use English copy while immutable definiti
     }
     assert.equal(translated, 30)
     const tas = getSectionExercise('tas', 1)
-    assert.equal(tas.copy.en.questions[1].options[1][1], 'Use Zone in Floor Settings')
-    assert.equal(tas.copy.id.questions[1].options[1][1], 'Gunakan Zona di Floor Settings')
+    assert.equal(tas.copy.en.questions[1].title, 'What should you do when the drawing scale is incorrect?')
+    assert.equal(tas.copy.en.questions[1].options[0][1], 'Set the drawing scale in the Identify menu')
+    assert.equal(tas.copy.id.questions[1].title, 'Saat skala gambar belum sesuai, apa yang perlu dilakukan?')
+    assert.deepEqual(tas.copy.id.questions[1].options, [['A', 'Atur skala gambar pada menu identify'], ['B', 'Ubah warna gambar'], ['C', 'Ganti nama file']])
   } finally { globalThis.localStorage = oldStorage; await server.close() }
 })
 

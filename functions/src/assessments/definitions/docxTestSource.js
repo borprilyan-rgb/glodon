@@ -8,7 +8,7 @@ export const tasDocxSource = {
       title: 'Drawing dan Persiapan Measurement',
       questions: [
         ['Apa fungsi utama Floor Settings pada TAS?', 'Mengatur warna garis gambar CAD', 'Mengatur jenis laporan proyek', 'Mengatur elevasi lantai dan mutu material proyek', 'C'],
-        ['Jika dalam suatu proyek terdapat beberapa bangunan, bagaimana cara memisahkan area bangunan tersebut?', 'Tidak perlu melakukan setting, nanti outuputnya akan otomatis terdeteksi', 'Gunakan Zona di Floor Settings', 'Gunakan Separator Line untuk memisahkan bangunannya', 'B'],
+        ['Saat skala gambar belum sesuai, apa yang perlu dilakukan?', 'Atur skala gambar pada menu identify', 'Ubah warna gambar', 'Ganti nama file', 'A'],
         ['Jenis gambar manakah yang paling direkomendasikan untuk digunakan dalam pemodelan TAS?', 'PDF Scan', 'DWG', 'JPEG', 'B'],
         ['Apa fungsi Measurement Rules pada TAS?', 'Mengatur prinsip perhitungan sesuai dengan SMM dan spesifikasi yang digunakan', 'Mengubah gambar DWG menjadi PDF', 'Mengatur diameter tulangan', 'A'],
         ['Apa yang harus dilakukan ketika sudah melakukan Add Drawing?', 'Calculate dan View Expression', 'Split Drawing dan Relocate', 'Rebar Data Check', 'B'],

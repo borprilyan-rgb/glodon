@@ -75,6 +75,14 @@ const groups = [
   ['openings-report', 'Door – Window', ['door', 'window']],
   ['finishes-report', 'Room', ['room', 'floor-finish', 'waterproof', 'skirting', 'wall-finish', 'suspended-ceiling']],
 ]
+const reportTitleCards = [
+  ['LAPORAN PILE CAP', 'Laporan Pile Cap', 'Pile Cap Report'],
+  ['LAPORAN IN-SITU SLAB', 'Laporan In-Situ Slab', 'In-Situ Slab Report'],
+  ['LAPORAN BALOK DAN KOLOM', 'Laporan Balok dan Kolom', 'Beam and Column Report'],
+  ['LAPORAN DINDING', 'Laporan Dinding', 'Wall Report'],
+  ['LAPORAN PINTU DAN JENDELA', 'Laporan Pintu dan Jendela', 'Door and Window Report'],
+  ['LAPORAN ROOM FINISH', 'Laporan Room Finish', 'Room Finish Report'],
+]
 
 const usesEn = {
   'Volume(m3)': 'Used for element volume.',
@@ -145,28 +153,36 @@ const usesEn = {
 export function getReportLessons(language = 'id') {
   const isEn = language === 'en'
   const descriptions = isEn ? usesEn : uses
-  return groups.map(([id, title, elements], stepIndex) => ({
-  id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: groups.length,
-  hideIntro: true, showInstructionsBelowImage: true, duration: `${elements.length * 5} ${isEn ? 'min' : 'menit'}`,
-  checks: getTasChecklist(id, language),
-  actions: elements.flatMap(slug => {
-    const report = source.reports[slug]
-    return (report.segments || [report.display || report]).map(segment => {
-    const actionTitle = segment.id ? `${report.title} – ${isEn ? segment.titleEn : segment.titleId}` : report.title
-    const description = segment.quantityColumns.map(({ header }, columnIndex) => {
-      let usage = descriptions[header]
-      if (!usage) throw new Error(`Missing Quantity explanation: ${report.sheet} / ${header}`)
-      if (header === 'Volume(m3)' && ['pile-cap', 'pile', 'in-situ-slab', 'beam', 'column'].includes(slug)) usage = isEn ? 'Used for concrete volume.' : 'Digunakan untuk volume beton.'
-      if (header === 'Number(pc)') usage = isEn ? `Used for the number of ${report.title} elements.` : `Digunakan untuk jumlah ${report.title}.`
-      return `${columnIndex + 1}. ${header}: ${usage}`
-    }).join('\n')
-    return { id: `${id}-${slug}${segment.id ? `-${segment.id}` : ''}`, title: actionTitle, description, image: segment.image,
-      alt: isEn ? `${actionTitle} report with numbered callouts on the Quantity columns` : `Report ${actionTitle} dengan callout bernomor pada kolom Quantity`, caption: '', pending: false, instructionFormat: 'verbatim', sourceSheet: report.sheet }
-    })
-  }).map((action, index) => ({ ...action, number: index + 1 })),
-}))
+  return groups.map(([id, title, elements], stepIndex) => {
+    const [imageTitle, actionTitleId, actionTitleEn] = reportTitleCards[stepIndex]
+    const actions = elements.flatMap(slug => {
+      const report = source.reports[slug]
+      return (report.segments || [report.display || report]).map(segment => {
+        const actionTitle = segment.id ? [report.title, isEn ? segment.titleEn : segment.titleId].join(' - ') : report.title
+        const description = segment.quantityColumns.map(({ header }, columnIndex) => {
+          let usage = descriptions[header]
+          if (!usage) throw new Error('Missing Quantity explanation: ' + report.sheet + ' / ' + header)
+          if (header === 'Volume(m3)' && ['pile-cap', 'pile', 'in-situ-slab', 'beam', 'column'].includes(slug)) usage = isEn ? 'Used for concrete volume.' : 'Digunakan untuk volume beton.'
+          if (header === 'Number(pc)') usage = isEn ? 'Used for the number of ' + report.title + ' elements.' : 'Digunakan untuk jumlah ' + report.title + '.'
+          return (columnIndex + 1) + '. ' + header + ': ' + usage
+        }).join('\n')
+        return { id: id + '-' + slug + (segment.id ? '-' + segment.id : ''), title: actionTitle, description, image: segment.image,
+          alt: isEn ? actionTitle + ' report with numbered callouts on the Quantity columns' : 'Report ' + actionTitle + ' dengan callout bernomor pada kolom Quantity', caption: '', pending: false, instructionFormat: 'verbatim', sourceSheet: report.sheet }
+      })
+    }).map((action, index) => ({ ...action, number: index + 2 }))
+    const image = '/tutorial/tas/title-cards/part-3-step-' + (stepIndex + 1) + '.svg'
+    const imageAlt = isEn ? 'Cubicost TAS title card with Indonesian heading: ' + imageTitle : 'Kartu judul Cubicost TAS: ' + imageTitle
+    const titleCard = {
+      id: id + '-title-card', number: 1, title: isEn ? actionTitleEn : actionTitleId, description: '', image, imageAlt, alt: imageAlt,
+      caption: '', requiredDescription: imageAlt, pending: false, hideInstructions: true,
+    }
+    return {
+      id, title, partId: 'part-3', partTitle: 'Report', partNumber: '03', stepNumber: stepIndex + 1, partStepCount: groups.length,
+      hideIntro: true, showInstructionsBelowImage: true, duration: elements.length * 5 + (isEn ? ' min' : ' menit'),
+      checks: getTasChecklist(id, language), actions: [titleCard, ...actions],
+    }
+  })
 }
-
 export const reportLessons = getReportLessons('id')
 
 export const reportProgressKey = 'cubicost:tas:reports:progress:v3'

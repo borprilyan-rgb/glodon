@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="777" height="416" viewBox="0 0 777 416" role="img" aria-labelledby="title description">
+  <title id="title">04 Identifikasi — Identifikasi Slab — Cubicost TAS</title>
+  <desc id="description">Kartu judul Cubicost TAS untuk identifikasi slab.</desc>
+  <rect width="777" height="416" fill="#f4f6fb"/><rect x="15" y="18" width="747" height="380" rx="14" fill="#fff" stroke="#245bd7" stroke-width="4"/>
+  <text x="51" y="105" fill="#245bd7" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" letter-spacing="4">04 Identifikasi</text>
+  <text x="51" y="171" fill="#142f58" font-family="Arial, Helvetica, sans-serif" font-size="45" font-weight="700" letter-spacing="0.4">IDENTIFIKASI SLAB</text>
+  <path d="M51 313.5H730" fill="none" stroke="#b6c9f2" stroke-width="1.5"/><text x="51" y="354" fill="#245bd7" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="0.5">CUBICOST TAS</text>
+</svg>

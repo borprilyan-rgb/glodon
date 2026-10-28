@@ -1,7 +1,7 @@
 {
   "tas-1-v3": {
     "q1": { "title": "What is the main purpose of Floor Settings in TAS?", "options": [["A", "Set the colours of CAD drawing lines"], ["B", "Set the project report type"], ["C", "Set floor elevations and project material grades"]] },
-    "q2": { "title": "If a project contains several buildings, how should the building areas be separated?", "options": [["A", "No settings are needed; the output will be detected automatically"], ["B", "Use Zone in Floor Settings"], ["C", "Use Separator Line to separate the buildings"]] },
+    "q2": { "title": "What should you do when the drawing scale is incorrect?", "options": [["A", "Set the drawing scale in the Identify menu"], ["B", "Change the drawing color"], ["C", "Rename the file"]] },
     "q3": { "title": "Which drawing format is most recommended for modelling in TAS?", "options": [["A", "Scanned PDF"], ["B", "DWG"], ["C", "JPEG"]] },
     "q4": { "title": "What is the purpose of Measurement Rules in TAS?", "options": [["A", "Set calculation principles according to the SMM and specifications used"], ["B", "Convert DWG drawings to PDF"], ["C", "Set reinforcement diameters"]] },
     "q5": { "title": "What should you do after using Add Drawing?", "options": [["A", "Calculate and View Expression"], ["B", "Split Drawing and Relocate"], ["C", "Rebar Data Check"]] }

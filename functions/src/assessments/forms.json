@@ -80,19 +80,19 @@
             "id": "q2",
             "type": "choice",
             "topic": "Drawing dan Persiapan Measurement · 2",
-            "title": "Jika dalam suatu proyek terdapat beberapa bangunan, bagaimana cara memisahkan area bangunan tersebut?",
+            "title": "Saat skala gambar belum sesuai, apa yang perlu dilakukan?",
             "options": [
               [
                 "A",
-                "Tidak perlu melakukan setting, nanti outuputnya akan otomatis terdeteksi"
+                "Atur skala gambar pada menu identify"
               ],
               [
                 "B",
-                "Gunakan Zona di Floor Settings"
+                "Ubah warna gambar"
               ],
               [
                 "C",
-                "Gunakan Separator Line untuk memisahkan bangunannya"
+                "Ganti nama file"
               ]
             ]
           },
@@ -228,19 +228,19 @@
             "id": "q2",
             "type": "choice",
             "topic": "Drawing dan Persiapan Measurement · 2",
-            "title": "Jika dalam suatu proyek terdapat beberapa bangunan, bagaimana cara memisahkan area bangunan tersebut?",
+            "title": "Saat skala gambar belum sesuai, apa yang perlu dilakukan?",
             "options": [
               [
                 "A",
-                "Tidak perlu melakukan setting, nanti outuputnya akan otomatis terdeteksi"
+                "Atur skala gambar pada menu identify"
               ],
               [
                 "B",
-                "Gunakan Zona di Floor Settings"
+                "Ubah warna gambar"
               ],
               [
                 "C",
-                "Gunakan Separator Line untuk memisahkan bangunannya"
+                "Ganti nama file"
               ]
             ]
           },
