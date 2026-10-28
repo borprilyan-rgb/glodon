@@ -1,5 +1,6 @@
 ﻿export const uiText = {
   id: {
+    mobileSearch: 'Cari', searchAllCourses: 'Cari materi TAS, TRB, TME-C', clearSearch: 'Hapus pencarian', popularTopics: 'Topik populer', searchResults: 'Hasil pencarian', searchResultCount: (count) => `${count} materi ditemukan`,
     lessonNotFound: 'Materi tidak ditemukan', lessonNotFoundDescription: 'Tautan materi ini tidak tersedia. Kembali ke peta belajar untuk memilih materi.',
     imageZoomControls: 'Kontrol perbesaran gambar', zoomIn: 'Perbesar', zoomOut: 'Perkecil',
     language: 'Bahasa', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'Pembelajaran TAS, TRB & TME-C',
@@ -36,6 +37,7 @@
     productPreviewAlt: (product) => `Pratinjau antarmuka ${product} yang digunakan dalam tutorial`, productPreviewCaption: (product) => `Selamat datang di tutorial ${product}.`, enlargeProductPreview: (product) => `Perbesar pratinjau ${product}`,
   },
   en: {
+    mobileSearch: 'Search', searchAllCourses: 'Search TAS, TRB, TME-C lessons', clearSearch: 'Clear search', popularTopics: 'Popular topics', searchResults: 'Search results', searchResultCount: (count) => `${count} ${count === 1 ? 'lesson' : 'lessons'} found`,
     lessonNotFound: 'Lesson not found', lessonNotFoundDescription: 'This lesson link is unavailable. Return to the learning map to choose a lesson.',
     imageZoomControls: 'Image zoom controls', zoomIn: 'Zoom in', zoomOut: 'Zoom out',
     language: 'Language', indonesian: 'ID', english: 'EN', tutorialSubtitle: 'TAS, TRB & TME-C Learning Resource',

@@ -18,6 +18,7 @@ import ContactPage from './components/ContactPage'
 import ExerciseHub from './components/ExerciseHub'
 import ExerciseScoresPage from './components/ExerciseScoresPage'
 import SettingsPage from './components/SettingsPage'
+import MobileSearchPage from './components/MobileSearchPage'
 import SectionExercise from './components/SectionExercise'
 import { PARTICIPANT_EDIT_LOCK_KEY, PARTICIPANT_EDIT_LOCK_MS, PARTICIPANT_KEY, loadParticipant, loadParticipantEditLockUntil, hasParticipant, canEditParticipant } from './data/participant'
 import { readTestScores } from './data/testScores'
@@ -62,6 +63,7 @@ function routeFromLocation() {
   if (path === '/exercises/score') return { page: 'scores' }
   if (path === '/exercises') return { page: 'exercises' }
   if (path === '/settings') return { page: 'settings' }
+  if (path === '/search') return { page: window.matchMedia('(max-width: 767px)').matches ? 'search' : 'hub' }
   if (path === '/present') return { page: 'presentation', search: window.location.search }
   if (path === '/contact') return { page: 'contact' }
   if (path === '/admin/results') return { page: 'admin' }
@@ -239,7 +241,7 @@ export default function App() {
       if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return
       const destination = new URL(link.href, window.location.href)
       if (destination.origin !== window.location.origin) return
-      const isAppRoute = /^\/(?:settings|contact|present|exercises(?:\/score)?|(?:tas|trb|tme)(?:\/(?:course|reference|tests|lesson\/[^/]+|(?:exercise|tests)\/section-[1-3]))?)?\/?$/.test(destination.pathname)
+      const isAppRoute = /^\/(?:search|settings|contact|present|exercises(?:\/score)?|(?:tas|trb|tme)(?:\/(?:course|reference|tests|lesson\/[^/]+|(?:exercise|tests)\/section-[1-3]))?)?\/?$/.test(destination.pathname)
       if (!isAppRoute || (destination.pathname === window.location.pathname && destination.search === window.location.search && destination.hash)) return
       event.preventDefault()
       window.history.pushState({}, '', destination.pathname + destination.search + destination.hash)
@@ -250,7 +252,10 @@ export default function App() {
     window.addEventListener('popstate', onLocationChange)
     window.addEventListener('hashchange', onLocationChange)
     document.addEventListener('click', onFullscreenNavigation)
-    return () => { window.removeEventListener('popstate', onLocationChange); window.removeEventListener('hashchange', onLocationChange); document.removeEventListener('click', onFullscreenNavigation) }
+    const mobileViewport = window.matchMedia('(max-width: 767px)')
+    const onSearchViewportChange = () => { if (window.location.pathname.replace(/\/+$/, '') === '/search') onLocationChange() }
+    mobileViewport.addEventListener('change', onSearchViewportChange)
+    return () => { window.removeEventListener('popstate', onLocationChange); window.removeEventListener('hashchange', onLocationChange); document.removeEventListener('click', onFullscreenNavigation); mobileViewport.removeEventListener('change', onSearchViewportChange) }
   }, [])
   useEffect(() => {
     try {
@@ -358,7 +363,7 @@ export default function App() {
     return <Presentation key={route.search || ''} theme={theme} onThemeToggle={toggleTheme} courses={{ tas: { tutorialParts: tasCourseParts, allSteps: tasCourseSteps, lessonAliases: { ...partTwoLessonAliases, ...reportLessonAliases } }, trb, tme }} language={language} onLanguageChange={setLanguage} />
   }
   return <TutorialLayout key={`${route.page}:${product || ''}:${route.stepId || ''}:${route.section || ''}`} theme={theme} onThemeToggle={toggleTheme} page={route.page} product={product} activeStep={activeStep} completed={visibleProgress.completed} total={visibleTotal} showProgress={Boolean(product) && !['welcome', 'tests', 'exercise'].includes(route.page)} language={language} onLanguageChange={setLanguage} t={t}>
-    {!['exercise', 'tests', 'exercises', 'scores'].includes(route.page) && <PresentationEntry language={language} />}
+    {!['exercise', 'tests', 'exercises', 'scores', 'search'].includes(route.page) && <PresentationEntry language={language} />}
     {progressCannotSave && <p role="status">{language === 'en' ? 'Your learning progress could not be saved in this browser. Changes may be lost after refreshing.' : 'Kemajuan belajar tidak dapat disimpan di browser ini. Perubahan dapat hilang setelah memuat ulang.'}</p>}
     {route.page === 'lesson' && !activeStep && <section className="tutorial-step"><header className="step-header"><h1>{t.lessonNotFound}</h1><p>{t.lessonNotFoundDescription}</p></header><a className="primary-button" href={`/${product}/`}>{t.backToCourseMap}</a></section>}
 
@@ -370,6 +375,7 @@ export default function App() {
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} courseProgress={courseLearningProgress} />}
     {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} t={t} />}
+    {route.page === 'search' && <MobileSearchPage courses={{ tas: { tutorialParts: tasCourseParts }, trb, tme }} t={t} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}

@@ -388,6 +388,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .settings-fullscreen-error { margin: 12px 0 0; color: #a52d24; font-size: 14px; line-height: 1.5; }
 .settings-page__card--mobile-only { display: none; }
 .mobile-bottom-nav { display: none; }
+.mobile-search-page { display: none; }
 
 @media (max-width: 767px) {
   :root { --mobile-bottom-nav-height: calc(64px + env(safe-area-inset-bottom)); }
@@ -403,10 +404,30 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .main-content--focused.has-mobile-bottom-nav .tutorial-step { padding-bottom: 24px; }
   .main-content--focused.has-mobile-bottom-nav:has(.tutorial-step) footer { padding-bottom: 24px; }
   .has-mobile-bottom-nav .mobile-action-navigation { bottom: var(--mobile-bottom-nav-height); padding-bottom: 8px; }
-  .mobile-bottom-nav { position: fixed; right: 0; bottom: 0; left: 0; z-index: 44; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); min-height: calc(64px + env(safe-area-inset-bottom)); padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right)); background: white; border-top: 1px solid var(--line); box-shadow: 0 -5px 18px rgba(16, 43, 78, .09); }
+  .mobile-bottom-nav { position: fixed; right: 0; bottom: 0; left: 0; z-index: 44; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); min-height: calc(64px + env(safe-area-inset-bottom)); padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right)); background: white; border-top: 1px solid var(--line); box-shadow: 0 -5px 18px rgba(16, 43, 78, .09); }
   .mobile-bottom-nav a { display: flex; min-width: 0; min-height: 50px; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px 2px; color: var(--muted); border-radius: 8px; font-size: 10px; font-weight: 650; line-height: 1.1; text-align: center; }
-  .mobile-bottom-nav a.is-current { color: var(--blue-dark); font-weight: 850; }
+  .mobile-bottom-nav a.is-current { color: var(--blue-dark); background: #eaf1ff; box-shadow: inset 0 -3px currentColor; }
+  :root[data-theme="dark"] .mobile-bottom-nav a.is-current { background: #20314b; }
   .mobile-bottom-nav a:focus-visible { outline-offset: -2px; }
+  .mobile-search-page { display: block; padding-top: 24px; color: var(--navy); }
+  .mobile-search-page h1 { margin-bottom: 20px; font-size: 26px; }
+  .mobile-search-page h2 { margin: 26px 0 10px; font-size: 17px; }
+  .mobile-search-field { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 10px 0 14px; background: var(--page-background, #f5f7fb); border: 1px solid var(--line); border-radius: 14px; }
+  .mobile-search-field:focus-within { outline: 2px solid var(--turquoise); outline-offset: 2px; }
+  .mobile-search-field > svg { flex-shrink: 0; color: var(--muted); }
+  .mobile-search-field input { width: 100%; min-width: 0; padding-block: 14px; color: var(--navy); background: transparent; border: 0; outline: 0; font-size: 16px; }
+  :root .mobile-search-field input:focus-visible { outline: 0; }
+  .mobile-search-field input::placeholder { color: var(--muted); opacity: 1; }
+  .mobile-search-field input::-webkit-search-cancel-button { display: none; }
+  .mobile-search-field button { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; padding: 0; color: var(--navy); background: transparent; border: 0; border-radius: 8px; cursor: pointer; }
+  .mobile-search-status { color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+  .mobile-search-status:empty { margin: 0; }
+  .mobile-search-results { margin: 0; padding: 0; list-style: none; }
+  .mobile-search-results a { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 76px; padding: 16px 2px; border-bottom: 1px solid var(--line); }
+  .mobile-search-results a > span { min-width: 0; }
+  .mobile-search-results small { display: block; margin-bottom: 7px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+  .mobile-search-results strong { display: block; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+  .mobile-search-results svg { flex-shrink: 0; color: var(--muted); }
   .settings-page { margin: 18px auto; }
   .settings-page__card { padding: 0 16px; }
   .settings-page__card--mobile-only { display: flex; }
