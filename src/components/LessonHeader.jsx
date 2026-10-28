@@ -7,7 +7,7 @@ import ProgressBar from './ProgressBar'
 import { getProductLabel } from '../data/productConfig'
 import { getHeaderNavigation } from '../data/headerNavigation'
 
-export default function LessonHeader({ page, product, activeStep, completed, total, showProgress, language, onLanguageChange, t, headerActions, theme, onThemeToggle }) {
+export default function LessonHeader({ page, product, activeStep, completed, total, showProgress, language, onLanguageChange, t, headerActions, theme, onThemeToggle, searchReturnHref }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButtonRef = useRef(null)
   const closeButtonRef = useRef(null)
@@ -48,7 +48,7 @@ export default function LessonHeader({ page, product, activeStep, completed, tot
         const Icon = navigationIcons[link.id]
         return <a key={link.id} className={navigationClasses[link.id]} href={link.href} aria-label={link.id === 'learningMap' ? t.backToCourseMap : navigationLabels[link.id]}><Icon size={16} /><span>{navigationLabels[link.id]}</span></a>
       })}</div>
-      <div className="mobile-header-row">{product && <a className="mobile-header__back" href={activeStep ? `/${product}/course` : '/'} aria-label={activeStep ? t.backToCourseMap : t.home}><ArrowLeft size={20} /></a>}<a className="mobile-header__logo" href="/" aria-label={t.home}><img src={brandImage} alt="" /></a><strong>{title}</strong><button ref={menuButtonRef} type="button" onClick={() => setMenuOpen(true)} aria-label={t.lessons} aria-expanded={menuOpen}><Menu size={21} /></button></div>
+      <div className="mobile-header-row">{product && <a className="mobile-header__back" href={searchReturnHref || (activeStep ? `/${product}/course` : '/')} aria-label={searchReturnHref ? t.backToSearch : activeStep ? t.backToCourseMap : t.home}><ArrowLeft size={20} /></a>}<a className="mobile-header__logo" href="/" aria-label={t.home}><img src={brandImage} alt="" /></a><strong>{title}</strong><button ref={menuButtonRef} type="button" onClick={() => setMenuOpen(true)} aria-label={t.lessons} aria-expanded={menuOpen}><Menu size={21} /></button></div>
       {headerActions && <div className="lesson-topbar__actions">{headerActions}</div>}
     </header>
     {menuOpen && <div className="mobile-menu-layer"><button className="mobile-menu-backdrop" type="button" onClick={() => setMenuOpen(false)} aria-label={t.closeMenu} /><aside ref={drawerRef} className="mobile-menu-drawer" role="dialog" aria-modal="true" aria-label={t.lessons}><header><strong>{t.hubBrand}</strong><button ref={closeButtonRef} type="button" onClick={() => setMenuOpen(false)} aria-label={t.closeMenu}><X size={22} /></button></header><nav><a href="/" onClick={() => setMenuOpen(false)}><Home size={18} />{t.home}</a>{product && <a href={`/${product}/course`} onClick={() => setMenuOpen(false)}><ArrowLeft size={18} />{t.courseMapLabel}</a>}{['exercises', 'tests', 'exercise'].includes(page) && <a href="/exercises/score" onClick={() => setMenuOpen(false)}><ClipboardCheck size={18} />{language === 'en' ? 'Scores' : 'Nilai'}</a>}{page !== 'admin' && <a href="/present" onClick={() => setMenuOpen(false)}><Play size={18} />{presentationCopy[language].present}</a>}{!['exercises', 'tests', 'exercise', 'admin'].includes(page) && <a href="/exercises" onClick={() => setMenuOpen(false)}><ClipboardCheck size={18} />{language === 'en' ? 'Exercises' : 'Latihan'}</a>}</nav>{showProgress && <ProgressBar completed={completed.size} total={total} t={t} compact />}</aside></div>}

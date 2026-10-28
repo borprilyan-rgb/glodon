@@ -65,6 +65,7 @@
 .participant-profile-card .participant-details { display: flex; flex-wrap: wrap; gap: 12px 40px; margin: 0; }
 .participant-profile-card__heading .secondary-button { min-height: 42px; padding: 10px 16px; gap: 8px; }
 .participant-profile-card__timer { margin: 0; color: var(--muted); font-size: 12px; }
+@media (max-width: 767px) { .participant-profile-card__heading .secondary-button { min-height: 36px; padding: 7px 10px; gap: 6px; font-size: 13px; } }
 .participant-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0 0 18px; color: var(--muted); font-size: 13px; }
 .participant-name strong { color: var(--navy); font-size: 14px; }
 .participant-field-hint { color: var(--muted); font-size: 12px; font-weight: 400; }

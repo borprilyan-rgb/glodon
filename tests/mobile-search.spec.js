@@ -64,13 +64,18 @@ for (const language of ['en', 'id']) {
     await expect(page.locator('.mobile-search-topics a[href^="/tas/lesson/"]').first()).toBeVisible()
     await expect(page.locator('.mobile-search-topics a[href^="/trb/lesson/"]').first()).toBeVisible()
     await expect(page.locator('.mobile-search-topics a[href^="/tme/lesson/"]').first()).toBeVisible()
+    await expect(popular.first()).toHaveAttribute('href', /fromSearch=1/)
     await expect(popular.first().locator('small')).toContainText('·')
     await expect(popular.first().locator('small')).not.toContainText('Â·')
+    const topicMetadataBox = await popular.first().locator('small').boundingBox()
+    const topicTitleBox = await popular.first().locator('strong').boundingBox()
+    expect(topicTitleBox.y).toBeGreaterThanOrEqual(topicMetadataBox.y + topicMetadataBox.height)
+    await expect(popular.first().locator('svg')).toHaveCount(0)
     await page.screenshot({ path: testInfo.outputPath('mobile-search.png'), fullPage: true })
 
     await input.fill(language === 'en' ? 'MVAC Work' : 'Pekerjaan MVAC')
     for (const lessonId of ['mvac-equipment-plenum-grille', 'mvac-duct', 'mvac-pipa-ac']) {
-      await expect(page.locator(`.mobile-search-results a[href="/tme/lesson/${lessonId}"]`)).toBeVisible()
+      await expect(page.locator(`.mobile-search-results a[href^="/tme/lesson/${lessonId}"]`)).toBeVisible()
     }
 
     // These queries cover titles, introductions, action titles, and action descriptions.
@@ -88,7 +93,7 @@ for (const language of ['en', 'id']) {
         ]
     for (const [query, href] of cases) {
       await input.fill(query)
-      await expect(page.locator(`.mobile-search-results a[href="${href}"]`)).toBeVisible()
+      await expect(page.locator(`.mobile-search-results a[href^="${href}"]`)).toBeVisible()
     }
     await input.fill(language === 'en' ? 'ground elevation' : 'Actual length')
     await expect(page.locator('.mobile-search-result__excerpt mark').first()).toBeVisible()
@@ -96,11 +101,25 @@ for (const language of ['en', 'id']) {
     await input.fill('zzzz-no-matching-lesson')
     await expect(page.getByRole('status')).toContainText(language === 'en' ? 'No results' : 'Materi tidak ditemukan')
     await expect(page.getByRole('button', { name: language === 'en' ? 'Clear search and try again' : 'Hapus pencarian dan coba lagi' })).toBeVisible()
-    await expect(page.locator('.mobile-search-topics--recovery a')).toHaveCount(3)
+    await expect(page.locator('.mobile-search-results--recovery a')).toHaveCount(3)
     await page.getByRole('button', { name: language === 'en' ? 'Clear search' : 'Hapus pencarian', exact: true }).click()
     await expect(input).toHaveValue('')
     await expect(input).toBeFocused()
     await expect(popular).toHaveCount(6)
+    const query = language === 'en' ? 'MVAC Work' : 'Pekerjaan MVAC'
+    await input.fill(query)
+    const searchResult = page.locator('.mobile-search-results a[href^="/tme/lesson/mvac-equipment-plenum-grille"]')
+    await expect(searchResult).toBeVisible()
+    await searchResult.click()
+    await expect(page).toHaveURL(/fromSearch=1/)
+    const backToSearch = page.locator('.mobile-header__back')
+    await expect(backToSearch).toHaveAttribute('href', /\/search\?q=/)
+    await backToSearch.click()
+    await expect(page).toHaveURL(/\/search\?q=/)
+    await expect(page.getByRole('searchbox')).toHaveValue(query)
+    await expect(page.locator('.mobile-search-results a[href^="/tme/lesson/mvac-equipment-plenum-grille"]')).toBeVisible()
+    await page.getByRole('button', { name: language === 'en' ? 'Clear search' : 'Hapus pencarian', exact: true }).click()
+    await expect(page.locator('.mobile-search-topics a')).toHaveCount(6)
     const target = await popular.first().getAttribute('href')
     const title = await popular.first().locator('strong').innerText()
     await popular.first().click()
@@ -108,6 +127,7 @@ for (const language of ['en', 'id']) {
     await expect(page.locator('.step-header h1')).toHaveText(title)
     await expect(nav.getByRole('link', { name: labels[0], exact: true })).toHaveAttribute('aria-current', 'page')
     await expect(nav).toBeVisible()
+    await expect(page.locator('.mobile-header__back')).toHaveAttribute('href', /\/search$/)
   })
 }
 

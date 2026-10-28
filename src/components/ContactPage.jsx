@@ -18,19 +18,21 @@ export default function ContactPage({ t }) {
       <h1>{t.contactTitle}</h1>
     </header>
     <section className="contact-grid" aria-label={t.contactMethods}>
-      <article className="contact-card">
-        <h2>{t.hotlineService}</h2>
-        <ContactMethod kind="phone" value="08158800091" href="tel:+628158800091" t={t} />
-      </article>
-      <article className="contact-card">
-        <h2>{t.quantitySurveyorCsa}</h2>
-        <ContactMethod name="Muhammad Faiq Sani Nugraha" kind="phone" value="08979990622" href="tel:+628979990622" t={t} />
-        <ContactMethod name="Boris Prilyan Sidabutar" kind="email" value="boris.sidabutar@agungsedayu.com" href="mailto:boris.sidabutar@agungsedayu.com" t={t} />
-      </article>
-      <article className="contact-card">
-        <h2>{t.quantitySurveyorMep}</h2>
-        <ContactMethod name="Moch Abdul Karim" kind="phone" value="081328202668" href="tel:+6281328202668" t={t} />
-        <ContactMethod name="Erwan Wijaya" kind="email" value="erwan.wijaya@agungsedayu.com" href="mailto:erwan.wijaya@agungsedayu.com" t={t} />
+      <article className="contact-card contact-card--directory">
+        <section className="contact-directory__group">
+          <h2>{t.hotlineService}</h2>
+          <ContactMethod kind="phone" value="08158800091" href="https://wa.me/628158800091" t={t} />
+        </section>
+        <section className="contact-directory__group">
+          <h3>{t.quantitySurveyorCsa}</h3>
+          <ContactMethod name="Boris Prilyan Sidabutar" kind="email" value="boris.sidabutar@agungsedayu.com" href="mailto:boris.sidabutar@agungsedayu.com" t={t} />
+          <ContactMethod name="Muhammad Faiq Sani Nugraha" kind="phone" value="08979990622" href="https://wa.me/628979990622" t={t} />
+        </section>
+        <section className="contact-directory__group">
+          <h3>{t.quantitySurveyorMep}</h3>
+          <ContactMethod name="Erwan Wijaya" kind="email" value="erwan.wijaya@agungsedayu.com" href="mailto:erwan.wijaya@agungsedayu.com" t={t} />
+          <ContactMethod name="Moch Abdul Karim" kind="phone" value="081328202668" href="https://wa.me/6281328202668" t={t} />
+        </section>
       </article>
     </section>
   </div>

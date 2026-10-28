@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Accessibility, ArrowLeft, CircleHelp, ChevronRight, Languages, Maximize, SunMoon } from 'lucide-react'
+import { ArrowLeft, CircleHelp, ChevronRight, Languages, Maximize, Moon, PersonStanding } from 'lucide-react'
 
 const settingDefinitions = ['language', 'appearance', 'accessibility', 'help', 'fullscreen']
 
@@ -39,7 +39,7 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
     },
     appearance: {
       title: t.settingsAppearance,
-      icon: SunMoon,
+      icon: Moon,
       value: theme === 'dark' ? t.settingsOn : t.settingsOff,
       options: [
         { value: 'light', label: t.settingsOff },
@@ -50,7 +50,7 @@ export default function SettingsPage({ language, onLanguageChange, theme, onThem
     },
     accessibility: {
       title: t.accessibility,
-      icon: Accessibility,
+      icon: PersonStanding,
     },
     help: {
       title: t.help,
