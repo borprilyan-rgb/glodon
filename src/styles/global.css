@@ -435,6 +435,19 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .mobile-search-results small { display: block; margin-bottom: 7px; color: var(--muted); font-size: 11px; line-height: 1.5; }
   .mobile-search-results strong { display: block; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
   .mobile-search-results svg { flex-shrink: 0; color: var(--muted); }
+  .mobile-search-result__copy { display: block; min-width: 0; }
+  .mobile-search-result__excerpt { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+  .mobile-search-result__excerpt mark { padding: 0 1px; color: var(--navy); background: #ffdf84; border-radius: 2px; }
+  :root[data-theme="dark"] .mobile-search-result__excerpt mark { color: #17243a; background: #ffd76b; }
+  .mobile-search-topics { display: flex; flex-wrap: wrap; gap: 9px; margin: 0; padding: 0; list-style: none; }
+  .mobile-search-topics li { min-width: 0; max-width: 100%; }
+  .mobile-search-topics a { display: block; max-width: 100%; padding: 10px 12px; background: var(--page-background, #f5f7fb); border: 1px solid var(--line); border-radius: 14px; }
+  .mobile-search-topics a small { margin-bottom: 3px; font-size: 10px; }
+  .mobile-search-topics a strong { font-size: 13px; }
+  .mobile-search-recovery { margin-top: 4px; }
+  .mobile-search-clear { padding: 8px 0; color: var(--blue); background: none; border: 0; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .mobile-search-recovery h3 { margin: 16px 0 10px; font-size: 15px; }
+  .mobile-search-topics--recovery { gap: 8px; }
   .settings-page { margin: 18px auto; }
   .settings-page__card { padding: 0 16px; }
   .settings-page__card--mobile-only { display: flex; }

@@ -8,12 +8,23 @@ import { getProductLabel } from '../src/data/productConfig.js'
 
 const origin = 'http://127.0.0.1:5173'
 
+function makeSearchCourses(language) {
+  const tas = getTasData(language)
+  const reports = getReportLessons(language)
+  tas.tutorialParts = tas.tutorialParts.map(part => part.id === 'part-3' ? {
+    ...part,
+    title: 'Report',
+    shortTitle: 'Report',
+    steps: reports,
+  } : part)
+  return { tas, trb: getTrbData(language), tme: getTmeData(language) }
+}
+
 test('all course and part titles find their lessons in both languages', () => {
   for (const language of ['en', 'id']) {
-    const tas = getTasData(language)
-    tas.tutorialParts = tas.tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', steps: getReportLessons(language) } : part)
-    const courses = { tas, trb: getTrbData(language), tme: getTmeData(language) }
-    const catalog = buildSearchCatalog(courses)
+    const coursesByLanguage = { en: makeSearchCourses('en'), id: makeSearchCourses('id') }
+    const courses = coursesByLanguage[language]
+    const catalog = buildSearchCatalog(coursesByLanguage, language)
     for (const [product, course] of Object.entries(courses)) {
       const courseResults = new Set(searchLessons(catalog, `Cubicost ${getProductLabel(product)}`).map(lesson => lesson.key))
       for (const part of course.tutorialParts) {
@@ -47,12 +58,14 @@ for (const language of ['en', 'id']) {
     const input = page.getByRole('searchbox')
     await expect(input).toBeFocused()
     await expect(nav.getByRole('link', { name: labels[3], exact: true })).toHaveAttribute('aria-current', 'page')
-    const popular = page.locator('.mobile-search-results a')
+    const popular = page.locator('.mobile-search-topics a')
     await expect(page.getByRole('heading', { name: language === 'en' ? 'Popular topics' : 'Topik populer' })).toBeVisible()
     await expect(popular).toHaveCount(6)
-    await expect(page.locator('.mobile-search-results a[href^="/tas/lesson/"]').first()).toBeVisible()
-    await expect(page.locator('.mobile-search-results a[href^="/trb/lesson/"]').first()).toBeVisible()
-    await expect(page.locator('.mobile-search-results a[href^="/tme/lesson/"]').first()).toBeVisible()
+    await expect(page.locator('.mobile-search-topics a[href^="/tas/lesson/"]').first()).toBeVisible()
+    await expect(page.locator('.mobile-search-topics a[href^="/trb/lesson/"]').first()).toBeVisible()
+    await expect(page.locator('.mobile-search-topics a[href^="/tme/lesson/"]').first()).toBeVisible()
+    await expect(popular.first().locator('small')).toContainText('·')
+    await expect(popular.first().locator('small')).not.toContainText('Â·')
     await page.screenshot({ path: testInfo.outputPath('mobile-search.png'), fullPage: true })
 
     await input.fill(language === 'en' ? 'MVAC Work' : 'Pekerjaan MVAC')
@@ -77,9 +90,14 @@ for (const language of ['en', 'id']) {
       await input.fill(query)
       await expect(page.locator(`.mobile-search-results a[href="${href}"]`)).toBeVisible()
     }
+    await input.fill(language === 'en' ? 'ground elevation' : 'Actual length')
+    await expect(page.locator('.mobile-search-result__excerpt mark').first()).toBeVisible()
+    await expect(page.locator('.mobile-search-result__excerpt').first()).toContainText(language === 'en' ? 'ground elevation' : 'actual length')
     await input.fill('zzzz-no-matching-lesson')
     await expect(page.getByRole('status')).toContainText(language === 'en' ? 'No results' : 'Materi tidak ditemukan')
-    await page.getByRole('button', { name: language === 'en' ? 'Clear search' : 'Hapus pencarian' }).click()
+    await expect(page.getByRole('button', { name: language === 'en' ? 'Clear search and try again' : 'Hapus pencarian dan coba lagi' })).toBeVisible()
+    await expect(page.locator('.mobile-search-topics--recovery a')).toHaveCount(3)
+    await page.getByRole('button', { name: language === 'en' ? 'Clear search' : 'Hapus pencarian', exact: true }).click()
     await expect(input).toHaveValue('')
     await expect(input).toBeFocused()
     await expect(popular).toHaveCount(6)

@@ -43,6 +43,17 @@ const TME_PROGRESS_KEY = 'cubicost:tutorial:tme:progress'
 const TME_LAST_LESSON_KEY = 'cubicost:tutorial:tme:lastLesson'
 
 const LANGUAGE_KEY = 'cubicost-tas-tutorial-language-v1'
+function withSearchReportLessons(tutorialParts, reportLessons, language) {
+  return tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', shortTitle: 'Report', summary: language === 'en' ? 'Read Quantity columns for each report type.' : 'Mengenal kolom Quantity untuk setiap jenis report.', steps: reportLessons } : part)
+}
+
+function getSearchCourses(language) {
+  const tas = getTasData(language)
+  const reportLessons = getReportLessons(language)
+  const localizedTas = { ...tas, tutorialParts: withSearchReportLessons(tas.tutorialParts, reportLessons, language) }
+  return { tas: localizedTas, trb: getTrbData(language), tme: getTmeData(language) }
+}
+const SEARCH_COURSES = { en: getSearchCourses('en'), id: getSearchCourses('id') }
 const TAS_LESSON_IDS = new Set([...getTasData('en').allSteps, ...getReportLessons('en')].map((step) => step.id))
 const TRB_LESSON_IDS = new Set(getTrbData('en').allSteps.map((step) => step.id))
 const TME_LESSON_IDS = new Set(getTmeData('en').allSteps.map((step) => step.id))
@@ -295,7 +306,7 @@ export default function App() {
   }, [reportProgress])
   const term = query.trim().toLocaleLowerCase(language)
   const tasCourseSteps = [...allSteps.filter(step => step.partId !== 'part-3'), ...reportLessons]
-  const tasCourseParts = tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', shortTitle: 'Report', summary: language === 'en' ? 'Read Quantity columns for each report type.' : 'Mengenal kolom Quantity untuk setiap jenis report.', steps: reportLessons } : part)
+  const tasCourseParts = withSearchReportLessons(tutorialParts, reportLessons, language)
   const tasCourseCompleted = new Set([...tasProgress.completed, ...reportLessons.filter(step => reportProgress[step.id].completed).map(step => step.id)].filter(id => tasCourseSteps.some(step => step.id === id)))
   const tasCourseStarted = new Set([...tasProgress.started, ...reportLessons.filter(step => reportProgress[step.id].completed || reportProgress[step.id].checks.length).map(step => step.id)].filter(id => tasCourseSteps.some(step => step.id === id)))
   const courseLearningProgress = {
@@ -379,7 +390,7 @@ export default function App() {
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} courseProgress={courseLearningProgress} />}
     {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} accessibility={accessibility} onAccessibilityChange={updateAccessibility} t={t} />}
-    {route.page === 'search' && <MobileSearchPage courses={{ tas: { tutorialParts: tasCourseParts }, trb, tme }} t={t} />}
+    {route.page === 'search' && <MobileSearchPage coursesByLanguage={SEARCH_COURSES} language={language} t={t} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}
     {courseHome && ['welcome', 'course'].includes(route.page) && <div className="course-home" data-product={product}><h1 className="sr-only">{product === 'tme' ? 'Cubicost TME-C' : 'Cubicost ' + product.toUpperCase()}</h1><LandingPage compact {...courseHome} completed={visibleProgress.completed} product={product} language={language} t={t} /><CourseMapPage embedded {...courseHome} completed={visibleProgress.completed} query={query} setQuery={setQuery} product={product} language={language} t={t} /></div>}
