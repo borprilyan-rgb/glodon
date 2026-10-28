@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { applyTheme, loadTheme, saveTheme } from './data/theme'
+import { applyAccessibilityPreferences, loadAccessibilityPreferences, saveAccessibilityPreferences } from './data/accessibility'
 import { getTasData } from './data/tas/index.js'
 import { partTwoLessonAliases } from './data/tas/partTwoRevision.js'
 import { getTrbData } from './data/trb/index.js'
@@ -169,6 +170,9 @@ export default function App() {
   const [theme, setTheme] = useState(loadTheme)
   const toggleTheme = () => setTheme(current => current === 'dark' ? 'light' : 'dark')
   useEffect(() => { applyTheme(theme); saveTheme(theme) }, [theme])
+  const [accessibility, setAccessibility] = useState(loadAccessibilityPreferences)
+  useEffect(() => { applyAccessibilityPreferences(accessibility); saveAccessibilityPreferences(accessibility) }, [accessibility])
+  const updateAccessibility = (key, value) => setAccessibility(current => ({ ...current, [key]: value }))
   const initialRoute = routeFromLocation()
   const [route, setRoute] = useState(initialRoute)
   const [language, setLanguage] = useState(() => {
@@ -374,7 +378,7 @@ export default function App() {
     {route.page === 'exercise' && (!hasParticipant(participant) || editingParticipant ? <section className="exercise-card participant-required"><h1>{language === 'en' ? 'Personal details required' : 'Data diri diperlukan'}</h1><p>{language === 'en' ? 'Add or update your details on the main Exercises page before opening a section.' : 'Tambahkan atau ubah data diri di halaman utama Latihan sebelum membuka bagian.'}</p><a className="primary-button" href="/exercises">{language === 'en' ? 'Go to Exercises' : 'Buka Latihan'}</a></section> : <SectionExercise key={product + '-' + route.section} profile={participant} onScoreSaved={() => setTestScores(readTestScores())} language={language} exercise={getSectionExercise(product, route.section)} />)}
     {route.page === 'exercises' && <ExerciseHub language={language} profile={participant} scores={testScores} editingParticipant={editingParticipant} participantEditUntil={participantEditUntil} onEditParticipant={beginParticipantEdit} onSaveParticipant={saveParticipant} />}
     {route.page === 'scores' && <ExerciseScoresPage language={language} profile={participant} scores={testScores} courseProgress={courseLearningProgress} />}
-    {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} t={t} />}
+    {route.page === 'settings' && <SettingsPage language={language} onLanguageChange={setLanguage} theme={theme} onThemeToggle={toggleTheme} accessibility={accessibility} onAccessibilityChange={updateAccessibility} t={t} />}
     {route.page === 'search' && <MobileSearchPage courses={{ tas: { tutorialParts: tasCourseParts }, trb, tme }} t={t} />}
     {route.page === 'admin' && <section className="exercise-card"><h1>{language === 'en' ? 'Central results temporarily disconnected' : 'Hasil pusat sementara tidak terhubung'}</h1><p>{language === 'en' ? 'Firebase connections are disabled. You can review results saved in this browser on the scores page.' : 'Koneksi Firebase dinonaktifkan. Hasil yang tersimpan di browser ini dapat dilihat di halaman nilai.'}</p><a className="primary-button" href="/exercises/score">{language === 'en' ? 'View local results' : 'Lihat hasil lokal'}</a></section>}
     {route.page === 'contact' && <ContactPage t={t} />}

@@ -14,7 +14,7 @@ export default function MobileSearchPage({ courses, t }) {
   useEffect(() => { input.current?.focus() }, [])
 
   return <section className="mobile-search-page" aria-labelledby="mobile-search-title">
-    <h1 id="mobile-search-title">{t.mobileSearch}</h1>
+    <h1 id="mobile-search-title" className="sr-only">{t.mobileSearch}</h1>
     <div className="mobile-search-field" role="search">
       <Search size={20} aria-hidden="true" />
       <label className="sr-only" htmlFor="mobile-course-search">{t.searchAria}</label>

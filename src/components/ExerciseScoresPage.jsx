@@ -3,7 +3,7 @@ import CourseScores from './CourseScores'
 
 export default function ExerciseScoresPage({ language, profile, scores, courseProgress }) {
   const en = language === 'en'
-  const title = en ? 'Exercise score overview' : 'Ringkasan nilai latihan'
+  const title = en ? 'Exercise score overview' : 'Nilai latihan'
   return <div className="course-hub exercise-hub exercise-score-page">
     <header className="course-hub__intro"><h1>{title}</h1></header>
     <section className="exercise-hub__scores" aria-label={title}>

@@ -168,6 +168,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 }
 @media (max-width: 767px) {
   .exercise-hub { padding-top: 28px; }
+  .exercise-hub > .course-hub__intro { display: none; }
   .exercise-hub .course-hub__intro h1 { font-size: 36px; }
   .exercise-hub .course-hub__intro p { font-size: 15px; }
   .exercise-hub .hub-course-grid { gap: 16px; }

@@ -1,6 +1,31 @@
 import { test, expect } from '@playwright/test'
+import { buildSearchCatalog, searchLessons } from '../src/data/courseSearch.js'
+import { getTasData } from '../src/data/tas/index.js'
+import { getTrbData } from '../src/data/trb/index.js'
+import { getTmeData } from '../src/data/tme/index.js'
+import { getReportLessons } from '../src/data/tas/tasReports.js'
+import { getProductLabel } from '../src/data/productConfig.js'
 
 const origin = 'http://127.0.0.1:5173'
+
+test('all course and part titles find their lessons in both languages', () => {
+  for (const language of ['en', 'id']) {
+    const tas = getTasData(language)
+    tas.tutorialParts = tas.tutorialParts.map(part => part.id === 'part-3' ? { ...part, title: 'Report', steps: getReportLessons(language) } : part)
+    const courses = { tas, trb: getTrbData(language), tme: getTmeData(language) }
+    const catalog = buildSearchCatalog(courses)
+    for (const [product, course] of Object.entries(courses)) {
+      const courseResults = new Set(searchLessons(catalog, `Cubicost ${getProductLabel(product)}`).map(lesson => lesson.key))
+      for (const part of course.tutorialParts) {
+        const partResults = new Set(searchLessons(catalog, part.title).map(lesson => lesson.key))
+        for (const lesson of part.steps) {
+          expect(courseResults.has(`${product}:${lesson.id}`)).toBe(true)
+          expect(partResults.has(`${product}:${lesson.id}`)).toBe(true)
+        }
+      }
+    }
+  }
+})
 
 for (const language of ['en', 'id']) {
   test(`${language}: mobile icon navigation and cross-course search`, async ({ page }, testInfo) => {
@@ -29,6 +54,11 @@ for (const language of ['en', 'id']) {
     await expect(page.locator('.mobile-search-results a[href^="/trb/lesson/"]').first()).toBeVisible()
     await expect(page.locator('.mobile-search-results a[href^="/tme/lesson/"]').first()).toBeVisible()
     await page.screenshot({ path: testInfo.outputPath('mobile-search.png'), fullPage: true })
+
+    await input.fill(language === 'en' ? 'MVAC Work' : 'Pekerjaan MVAC')
+    for (const lessonId of ['mvac-equipment-plenum-grille', 'mvac-duct', 'mvac-pipa-ac']) {
+      await expect(page.locator(`.mobile-search-results a[href="/tme/lesson/${lessonId}"]`)).toBeVisible()
+    }
 
     // These queries cover titles, introductions, action titles, and action descriptions.
     const cases = language === 'en'

@@ -1,8 +1,14 @@
-import { BookOpen, ClipboardCheck, Search, Settings, Trophy } from 'lucide-react'
+import { Clipboard, Search, Settings, Trophy } from 'lucide-react'
+
+function HomeIcon({ size = 24, strokeWidth = 2, ...props }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M3 10 12 2l9 8v11h-6v-6a3 3 0 0 0-6 0v6H3Z" />
+  </svg>
+}
 
 const destinations = [
-  { id: 'course', href: (product) => product ? `/${product}/` : '/', icon: BookOpen },
-  { id: 'assessment', href: () => '/exercises', icon: ClipboardCheck },
+  { id: 'course', href: (product) => product ? `/${product}/` : '/', icon: HomeIcon },
+  { id: 'assessment', href: () => '/exercises', icon: Clipboard },
   { id: 'scores', href: () => '/exercises/score', icon: Trophy },
   { id: 'search', href: () => '/search', icon: Search },
   { id: 'settings', href: () => '/settings', icon: Settings },
@@ -15,8 +21,8 @@ export default function MobileBottomNavigation({ page, product, t }) {
       ? 'assessment'
       : page === 'scores'
         ? 'scores'
-        : ['search', 'settings'].includes(page)
-          ? page
+        : ['search', 'settings', 'contact'].includes(page)
+          ? page === 'contact' ? 'settings' : page
           : null
 
   return <nav className="mobile-bottom-nav" aria-label={t.mobilePrimaryNavigation}>

@@ -35,7 +35,7 @@ export default function LessonHeader({ page, product, activeStep, completed, tot
   const brandImage = product ? `/branding/cubicost-${product}-logo.png` : '/branding/company-logo.png'
   const brandAlt = product ? `Cubicost ${productLabel}` : 'Glodon company logo'
   const isCourseHome = Boolean(product) && ['welcome', 'course'].includes(page) && !activeStep
-  const title = page === 'scores' ? (language === 'en' ? 'Exercise scores' : 'Nilai latihan') : page === 'exercises' ? (language === 'en' ? 'Exercise' : 'Latihan') : page === 'settings' ? t.settings : page === 'contact' ? t.contact : activeStep?.title || (product ? `Cubicost ${productLabel}` : t.hubBrand)
+  const title = page === 'scores' ? (language === 'en' ? 'Exercise scores' : 'Nilai latihan') : page === 'exercises' ? (language === 'en' ? 'Exercise' : 'Latihan') : page === 'search' ? t.mobileSearch : page === 'settings' ? t.settings : page === 'contact' ? t.contact : activeStep?.title || (product ? `Cubicost ${productLabel}` : t.hubBrand)
   const navigation = getHeaderNavigation({ page, product, activeStep })
   const navigationLabels = { scores: language === 'en' ? 'Scores' : 'Nilai', home: t.home, exercises: language === 'en' ? 'Exercises' : 'Latihan', learningMap: t.courseMapLabel }
   const navigationIcons = { scores: ClipboardCheck, home: Home, exercises: ClipboardCheck, learningMap: ArrowLeft }
