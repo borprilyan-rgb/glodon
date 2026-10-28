@@ -27,7 +27,7 @@ export default function MobileBottomNavigation({ page, product, t }) {
 
   return <nav className="mobile-bottom-nav" aria-label={t.mobilePrimaryNavigation}>
     {destinations.map(({ id, href, icon: Icon }) => <a key={id} href={href(product)} aria-label={t[`mobile${id[0].toUpperCase()}${id.slice(1)}`] || t[id]} aria-current={current === id ? 'page' : undefined} className={current === id ? 'is-current' : undefined}>
-      <Icon size={24} strokeWidth={current === id ? 2.6 : 1.8} aria-hidden="true" />
+      <Icon size={24} strokeWidth={current === id ? 2.2 : 1.8} aria-hidden="true" />
     </a>)}
   </nav>
 }

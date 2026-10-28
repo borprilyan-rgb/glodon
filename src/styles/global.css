@@ -252,6 +252,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .contact-person__name { display: block; margin-bottom: 7px; color: var(--navy); font-size: 14px; line-height: 1.45; }
 .contact-person__link { display: inline-flex; min-height: 32px; align-items: center; gap: 8px; color: var(--blue-dark); font-size: 14px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
 .contact-person__link svg { flex: 0 0 auto; }
+.contact-directory__group--paired { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; row-gap: 0; }
+.contact-directory__group--paired h3 { grid-column: 1 / -1; }
+.contact-directory__group--paired .contact-person { min-width: 0; margin: 0; padding: 0; border: 0; }
 .contact-copy { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 14px; color: var(--navy); background: white; border: 1px solid #b8c9d8; border-radius: 6px; font-weight: 700; cursor: pointer; }
 .contact-card button:disabled { cursor: not-allowed; opacity: .48; }
 .contact-privacy { display: flex; align-items: flex-start; gap: 10px; margin-top: 22px; padding: 14px 16px; color: #617488; background: #f7fafc; border: 1px solid var(--line); border-radius: 6px; }
@@ -267,6 +270,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .contact-grid { gap: 14px; }
   .contact-card { padding: 21px 16px; }
   .contact-person { margin-inline-start: 12px; }
+  .contact-directory__group--paired { display: block; }
+  .contact-directory__group--paired h3 { grid-column: auto; }
+  .contact-directory__group--paired .contact-person { margin-inline-start: 12px; }
+  .contact-directory__group--paired .contact-person + .contact-person { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
   .contact-card__actions { display: grid; }
   .contact-card__actions .primary-button, .contact-copy { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: center; text-align: center; }
   .contact-card__actions .primary-button svg, .contact-copy svg { flex: 0 0 auto; }
@@ -418,7 +425,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .has-mobile-bottom-nav .mobile-action-navigation { bottom: var(--mobile-bottom-nav-height); padding-bottom: 8px; }
   .mobile-bottom-nav { position: fixed; right: 0; bottom: 0; left: 0; z-index: 44; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); min-height: calc(64px + env(safe-area-inset-bottom)); padding: 6px max(8px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right)); background: white; border-top: 1px solid var(--line); box-shadow: 0 -5px 18px rgba(16, 43, 78, .09); }
   .mobile-bottom-nav a { display: flex; min-width: 0; min-height: 50px; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px 2px; color: var(--muted); border-radius: 8px; font-size: 10px; font-weight: 650; line-height: 1.1; text-align: center; }
-  .mobile-bottom-nav a.is-current { color: var(--blue-dark); background: #eaf1ff; }
+  .mobile-bottom-nav a.is-current { color: var(--blue-dark); background: #eaf1ff; border-radius: 125px; }
   :root[data-theme="dark"] .mobile-bottom-nav a.is-current { background: #20314b; }
   .mobile-bottom-nav a:focus-visible { outline-offset: -2px; }
   .mobile-search-page { display: block; padding-top: 24px; color: var(--navy); }

@@ -159,7 +159,7 @@ const withScreenshotCopy = (action, manualPage, language) => {
 
 const screenshotCropByPage = {
   14: { x: 0.19, y: 0.30, width: 0.76, height: 0.65, imageWidth: 1676, imageHeight: 1002 },
-  16: { x: 0.20, y: 0.25, width: 0.68, height: 0.67, imageWidth: 1943, imageHeight: 991 },
+  16: { x: 0.0028, y: 0.2031, width: 0.68, height: 0.67, imageWidth: 1943, imageHeight: 991 },
   19: { x: 0.19, y: 0.41, width: 0.73, height: 0.50, imageWidth: 1705, imageHeight: 968 },
   20: { x: 0.14, y: 0.27, width: 0.82, height: 0.67, imageWidth: 1713, imageHeight: 950 },
   23: { x: 0.03, y: 0.29, width: 0.94, height: 0.66, imageWidth: 1961, imageHeight: 978 },
