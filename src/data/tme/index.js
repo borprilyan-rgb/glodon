@@ -54,7 +54,7 @@ const definitions = [
   ]},
   { number: '04', title: 'Pekerjaan Elektrikal', summary: 'Identifikasi diagram panel, panel, rak kabel, kabel, lampu, saklar, dan stop kontak.', lessons: [
     lesson('electrical-diagram-panel', 'Identifikasi Diagram Panel', 'Mengidentifikasi skematik diagram panel mulai dari sumber daya sampai outlet.', 'Memudahkan saat identifikasi panel, kabel feeder dan kabel power.', [
-      action('Setting, Equipment, Head, Pipa, & Valve', '', 'module-09.svg'),
+      action('SETTING - IDENTIFIKASI PANEL - SINGLE LINE DIAGRAM', '', 'module-09-panel-identification.svg'),
       action('Membuat daftar panel dan identifikasi terminal panel & kabel', 'Klik 2x untuk buka gambar → Cable Conduit → System Diagram → Add Distribution Box → klik 2x kolom Name → blok nama panel pada gambar → klik kanan. Klik kolom Terminal Load → klik tanda (…) → pilih satu/lebih panel tujuan → klik kolom Cable Specification → klik tanda (…) → klik satu/lebih nama kabel → klik kolom Circuit Number → klik tanda (…) → pilih satu/lebih nama panel → OK.', 'electrical-panel-names.png'),
     ]),
     lesson('electrical-panel', 'Identifikasi Panel', 'Mengidentifikasi gambar panel sesuai dengan nama panelnya.', 'Agar dapat terdeteksi jumlah panel dan sebagai dasar untuk identifikasi kabel feeder dan power.', [
@@ -93,6 +93,7 @@ const definitions = [
     ]),
     lesson('penyesuaian-atribut', 'Penyesuaian Atribut', 'Menyesuaikan atribut aksesori MVAC, pemadam dan plumbing sesuai dengan fungsi dan nama equipmentnya.', 'Agar quantity hasil kalkulasi dapat dikelompokkan sesuai fungsi dan nama equipmentnya.', [
       action('Penyesuaian grille & damper dengan equipment', 'Batch → Air Grille & Air Damper → OK → Adapt Linear Entity Attribute → pilih Element → klik atribut yang akan disesuaikan → OK.', 'mvac-damper-attributes.png'),
+      action('Kalkulasi quantity dan tinjau hasil', 'Pilih Quantity > Calculation, tentukan satu atau lebih lantai, lalu klik Calculation. Untuk meninjau hasil, buka View Quantity by Category, pilih Element Type, lalu pilih elemen.', 'calculation-result.png'),
     ]),
   ]},
 ]
@@ -142,7 +143,7 @@ const englishLessons = {
     ['Create and identify valves', 'Create the Element List: Valve & Flange → New Valve → Edit Attributes. Identify valves: select Element → Device → select the valve drawing → right-click → Select Floor → select one or more floors → OK → Identify → +Create.'],
   ]],
   'electrical-diagram-panel': ['Identify the Panel Diagram', 'Identify the panel schematic diagram from the power source to the outlet.', 'To make panel, feeder-cable, and power-cable identification easier.', [
-    ['Setup, equipment, heads, pipes, and valves', ''],
+    ['SETTING - PANEL IDENTIFICATION - SINGLE LINE DIAGRAM', ''],
     ['Create the panel list and identify panel terminals and cables', 'Double-click to open the drawing → Cable Conduit → System Diagram → Add Distribution Box → double-click the Name column → select the panel name in the drawing → right-click. Click the Terminal Load column → click the (…) button → select one or more destination panels → click the Cable Specification column → click the (…) button → select one or more cable names → click the Circuit Number column → click the (…) button → select one or more panel names → OK.'],
   ]],
   'electrical-panel': ['Identify Panels', 'Identify panel drawings by panel name.', 'So the panel count can be detected and used as the basis for feeder- and power-cable identification.', [
@@ -177,6 +178,7 @@ const englishLessons = {
   ]],
   'penyesuaian-atribut': ['Attribute Adjustments', 'Adjust MVAC, fire-fighting, and plumbing accessory attributes by function and equipment name.', 'So calculated quantities can be grouped by function and equipment name.', [
     ['Adjust grilles and dampers to equipment', 'Batch → Air Grille & Air Damper → OK → Adapt Linear Entity Attribute → select Element → click the attribute to adjust → OK.'],
+    ['Calculate and review quantities', 'Select Quantity > Calculation, choose one or more floors, then click Calculation. To review the result, open View Quantity by Category, choose Element Type, then select the element.'],
   ]],
 }
 
