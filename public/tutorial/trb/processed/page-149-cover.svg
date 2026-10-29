@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="767" height="416" viewBox="0 0 767 416" role="img" aria-labelledby="title desc">
+  <title id="title">06 Schedule — Pemodelan Tulangan Dinding — Cubicost TRB</title>
+  <desc id="desc">Kartu pembuka dengan bingkai biru, judul Pemodelan Tulangan Dinding, dan label Cubicost TRB.</desc>
+  <rect width="767" height="416" fill="#fff"/>
+  <rect x="11" y="19" width="744" height="378" rx="14" fill="none" stroke="#2857e8" stroke-width="4"/>
+  <text x="48" y="106" fill="#2857e8" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" letter-spacing="5">06 Schedule</text>
+  <text x="48" y="172" fill="#17325d" font-family="Arial, Helvetica, sans-serif" font-size="37" font-weight="700" letter-spacing="0.4">PEMODELAN TULANGAN DINDING</text>
+  <line x1="48" y1="313" x2="722" y2="313" stroke="#b6c8f5" stroke-width="1.5"/>
+  <text x="48" y="353" fill="#2857e8" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="0.3">CUBICOST TRB</text>
+</svg>

@@ -346,12 +346,30 @@ export function getTrbData(language) {
         const manualPage = manualPageByAction[id][index]
         const screenshotCopy = getScreenshotCopy('trb', manualPage, language)
         const isRevisedExportSlide = id === 'export-tas-model'
+        const isPileCapTitlePage = id === 'pile-cap-reinforcement' && manualPage === 112
+        const isColumnTitlePage = id === 'column-reinforcement' && manualPage === 117
+        const isBeamTitlePage = id === 'beam-side-label' && manualPage === 129
+        const isBeamScheduleTitlePage = id === 'beam-schedule' && manualPage === 134
+        const isSlabTitlePage = id === 'slab-main-bars' && manualPage === 140
+        const isWallTitlePage = id === 'wall-reinforcement' && manualPage === 149
         const isFullModelDisplayCrop = id === 'prepare-trb-drawings' && manualPage === 109
         const imageAlt = isRevisedExportSlide
           ? (isId ? 'Ekspor model TAS berdasarkan lantai dan alur transfer model ke TRB' : 'Floor-based TAS model export and model transfer flow to TRB')
           : screenshotCopy.alt
         const isLocalizedBeamSupportScreenshot = isId && id === 'beam-support-layout' && manualPage === 138
-        const image = isRevisedExportSlide
+        const image = isPileCapTitlePage
+          ? '/tutorial/trb/processed/page-112-cover.svg'
+          : isColumnTitlePage
+            ? '/tutorial/trb/processed/page-117-cover.svg'
+            : isBeamTitlePage
+              ? '/tutorial/trb/processed/page-129-cover.svg'
+              : isBeamScheduleTitlePage
+                ? '/tutorial/trb/processed/page-134-cover.svg'
+                : isSlabTitlePage
+                  ? '/tutorial/trb/processed/page-140-cover.svg'
+                  : isWallTitlePage
+                    ? '/tutorial/trb/processed/page-149-cover.svg'
+          : isRevisedExportSlide
           ? '/tutorial/trb/revision-part3/export-floor-complete.svg'
           : isFullModelDisplayCrop
             ? '/tutorial/trb/revision-part3/page-109-crop.svg'
@@ -395,7 +413,7 @@ export function getTrbData(language) {
     actions: [{
       id: 'pile-cap-anchorage-rules-action-1',
       number: 1,
-      title: pileCapRuleTitle,
+      title: isId ? 'Mengatur Standar Detail pada TRB' : pileCapRuleTitle,
       description: pileCapRuleDescription,
       image: '/tutorial/trb/revision-part1/pile-cap-rules.png',
       imageAlt: pileCapRuleAlt,
