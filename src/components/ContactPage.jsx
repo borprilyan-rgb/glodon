@@ -31,7 +31,7 @@ export default function ContactPage({ t }) {
         </section>
         <section className="contact-directory__group contact-directory__group--paired">
           <h3>{t.quantitySurveyorCsa}</h3>
-          <ContactMethod name="Boris Prilyan Sidabutar" kind="phone" value="Whatsapp" href="https://wa.me/628969801069" t={t} />
+          <ContactMethod name="Boris Prilyan Sidabutar" kind="phone" value="Whatsapp" href="https://wa.me/6289669801069" t={t} />
           <ContactMethod name="Muhammad Faiq Sani Nugraha" kind="phone" value="Whatsapp" href="https://wa.me/628979990622" t={t} />
         </section>
         <section className="contact-directory__group contact-directory__group--paired">

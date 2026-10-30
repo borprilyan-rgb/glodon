@@ -85,6 +85,10 @@
 .presentation .lightbox { padding: 0; }
 .presentation .lightbox__panel { width: 100vw; height: 100dvh; max-width: none; border: 0; }
 .presentation .lightbox__image-wrap { padding: 64px 12px 12px; }
+.presentation .lightbox__caption--instructions { max-height: min(26vh, 220px); overflow-y: auto; }
+.presentation .lightbox__caption-toggle { position: relative; flex: 0 0 40px; align-self: stretch; justify-content: center; padding: 6px 14px; color: #dce7f1; background: #102b4e; border: 0; border-top: 1px solid #496078; border-radius: 0; }
+.presentation .lightbox__caption-toggle:hover { background: #18395c; }
+.presentation .lightbox__caption-toggle span { position: absolute; right: 18px; font-size: 11px; font-weight: 800; }
 .presentation .lightbox__close { color: white; background: #1d3c5d; }
 .presentation .lightbox__zoom button { padding: 0; color: white; background: transparent; border: 0; }
 

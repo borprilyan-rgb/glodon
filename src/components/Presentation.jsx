@@ -48,6 +48,20 @@ export default function Presentation({ courses, language, onLanguageChange, them
   const lesson = courses[product].allSteps.find((step) => step.id === lessonId) || courses[product].allSteps[0]
   const lessons = courses[product].allSteps
   const lessonIndex = lessons.findIndex((step) => step.id === lesson.id)
+  const slidesBeforeLesson = lessons.slice(0, lessonIndex).reduce((total, step) => total + step.actions.length, 0)
+  const expandedSlides = lessons.flatMap((step) => step.actions.map((slide, actionIndex) => {
+    const media = slide.mediaLayout === 'comparison' ? slide.comparison[0] : slide
+    return {
+      image: media.presenterImage || media.image,
+      alt: media.imageAlt || media.alt || media.title,
+      caption: media.title || slide.title,
+      description: media.description || slide.description,
+      instructionFormat: media.instructionFormat || slide.instructionFormat,
+      crop: media.crop || slide.crop,
+      lessonId: step.id,
+      actionIndex,
+    }
+  }))
   const previousLesson = walkthrough ? lessons[lessonIndex - 1] : null
   const nextLesson = walkthrough ? lessons[lessonIndex + 1] : null
   const count = walkthrough ? lesson.actions.length : 1
@@ -144,11 +158,11 @@ export default function Presentation({ courses, language, onLanguageChange, them
     <main tabIndex={-1} className={`presentation-stage ${walkthrough ? 'presentation-stage--lesson' : 'presentation-stage--home'}`} aria-label={walkthrough ? c.actions : c.home.label}>
       {walkthrough ? <div className="presentation-heading"><span className="presentation-eyebrow">{`${getProductLabel(product)} · ${revisedLayout ? action.title : lesson.title}`}</span><h1>{revisedLayout ? lesson.title : action.title}</h1></div> : <h1 className="sr-only">{c.home.label}</h1>}
       {walkthrough && action.mediaLayout === 'comparison' ? <div className="presentation-comparison">{action.comparison.map((media) => <section key={media.image}>
-        <button type="button" className="presentation-image-button" aria-label={`${t.enlargeImage}: ${media.alt}`} onClick={(event) => setExpandedImage({ image: media.image, alt: media.alt, caption: media.label, description: media.description, instructionFormat: media.instructionFormat, opener: event.currentTarget })}><img src={media.image} alt={media.alt} /></button>
+        <button type="button" className="presentation-image-button" aria-label={`${t.enlargeImage}: ${media.alt}`} onClick={(event) => setExpandedImage({ image: media.image, alt: media.alt, caption: media.label, description: media.description, instructionFormat: media.instructionFormat, slideIndex: slidesBeforeLesson + index, opener: event.currentTarget })}><img src={media.image} alt={media.alt} /></button>
         <h2>{media.label}</h2><div className="presentation-instructions"><p>{media.description}</p></div>
       </section>)}</div> : walkthrough ? <div className={`presentation-action${revisedLayout ? ' presentation-action--revised' : ''}`}>
         <div className="presentation-image">
-          {failedImage === image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" style={cropButtonStyle} aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image, alt: action.imageAlt || action.alt || action.title, caption: action.title, description: action.description, instructionFormat: action.instructionFormat, crop, opener: event.currentTarget })}>
+          {failedImage === image ? <p>{c.missing}</p> : <button type="button" className="presentation-image-button" style={cropButtonStyle} aria-label={t.enlargeImage} onClick={(event) => setExpandedImage({ image, alt: action.imageAlt || action.alt || action.title, caption: action.title, description: action.description, instructionFormat: action.instructionFormat, crop, slideIndex: slidesBeforeLesson + index, opener: event.currentTarget })}>
             <img key={image} src={image} alt={action.imageAlt || action.alt || action.title} style={cropImageStyle} onError={() => setFailedImage(image)} />
           </button>}
           {!expandedImage && failedImage !== image && <DrawingCanvas drawing={drawing} image={image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} />}
@@ -166,6 +180,11 @@ export default function Presentation({ courses, language, onLanguageChange, them
     {notice && <p role="status" className="presentation-notice">{notice}</p>}
     <MobileBottomNavigation page="presentation" product={walkthrough ? product : null} t={t} />
     </div>
-    {expandedImage && <ImageLightbox items={[expandedImage]} index={0} onIndexChange={() => {}} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} drawing={drawing} language={language} />}
+    {expandedImage && <ImageLightbox items={expandedSlides.map((slide, slideIndex) => slideIndex === expandedImage.slideIndex ? expandedImage : slide)} index={expandedImage.slideIndex} onIndexChange={(slideIndex) => {
+      const slide = expandedSlides[slideIndex]
+      setLessonId(slide.lessonId)
+      setIndex(slide.actionIndex)
+      setExpandedImage((current) => ({ ...slide, slideIndex, opener: current.opener }))
+    }} onClose={() => setExpandedImage(null)} t={t} opener={expandedImage.opener} drawing={drawing} language={language} hideDrawingToggle collapsibleCaption />}
   </div>
 }

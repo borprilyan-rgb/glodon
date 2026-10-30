@@ -2,17 +2,21 @@ import { useEffect, useRef, useState } from 'react'
 import DrawingCanvas from './DrawingCanvas'
 import DrawingToolbar from './DrawingToolbar'
 import InstructionCaption from './InstructionCaption'
-import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, X, ZoomIn, ZoomOut } from 'lucide-react'
 
-export default function ImageLightbox({ items, index, onIndexChange, onClose, t, opener, drawing, language }) {
+export default function ImageLightbox({ items, index, onIndexChange, onClose, t, opener, drawing, language, hideDrawingToggle = false, collapsibleCaption = false }) {
   const closeRef = useRef(null)
   const panelRef = useRef(null)
   const imageWrapRef = useRef(null)
   const dragRef = useRef(null)
   const [zoomState, setZoomState] = useState({ index, value: 1 })
+  const [captionExpanded, setCaptionExpanded] = useState(false)
   const item = items[index]
   const zoom = zoomState.index === index ? zoomState.value : 1
   const crop = item.crop
+  const repeatedText = item.description?.trim() && [item.label, item.caption].some((text) => text?.trim() === item.description.trim())
+  const instructionDescription = repeatedText ? '' : item.description
+  const hasCaption = Boolean(item.label || item.caption || instructionDescription)
   const cropAspect = crop ? crop.imageWidth / crop.imageHeight * crop.width / crop.height : null
   const cropFrameStyle = crop ? { width: `${zoom * 100}%`, aspectRatio: `${cropAspect}` } : undefined
   const cropImageStyle = crop ? {
@@ -33,8 +37,8 @@ export default function ImageLightbox({ items, index, onIndexChange, onClose, t,
   useEffect(() => {
     const onKeyDown = (event) => {
       if (event.key === 'Escape') { if (drawing?.enabled) drawing.toggle(); else onClose() }
-      if (event.key === 'ArrowLeft' && index > 0) onIndexChange(index - 1)
-      if (event.key === 'ArrowRight' && index < items.length - 1) onIndexChange(index + 1)
+      if (event.key === 'ArrowLeft' && index > 0) { event.preventDefault(); onIndexChange(index - 1) }
+      if (event.key === 'ArrowRight' && index < items.length - 1) { event.preventDefault(); onIndexChange(index + 1) }
       if (event.key === 'Tab') {
         const controls = [...panelRef.current.querySelectorAll('button:not(:disabled), select:not(:disabled)')]
         const first = controls[0]
@@ -84,8 +88,9 @@ export default function ImageLightbox({ items, index, onIndexChange, onClose, t,
       <button ref={closeRef} type="button" className="lightbox__close" onClick={onClose} aria-label={t.closeImage}><X /><span>{t.closeImage}</span></button>
       <div className="lightbox__zoom" aria-label={t.imageZoomControls}><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.max(1, (current.index === index ? current.value : 1) - 0.5) }))} disabled={zoom === 1} aria-label={t.zoomOut}><ZoomOut size={17} /></button><span>{Math.round(zoom * 100)}%</span><button type="button" onClick={() => setZoomState((current) => ({ index, value: Math.min(4, (current.index === index ? current.value : 1) + 0.5) }))} disabled={zoom === 4} aria-label={t.zoomIn}><ZoomIn size={17} /></button></div>
       <div className="lightbox__image-wrap" ref={imageWrapRef} onPointerDown={startPan} onPointerMove={pan} onPointerUp={stopPan} onPointerCancel={stopPan}>{crop ? <div className="lightbox__crop" style={cropFrameStyle}>{drawing ? <div className="lightbox__annotated-image" style={cropImageStyle}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={cropImageStyle} />}</div> : drawing ? <div className="lightbox__annotated-image" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}><img src={item.image} alt={item.alt} draggable="false" /><DrawingCanvas drawing={drawing} image={item.image} label={language === 'en' ? 'Image annotations' : 'Coretan gambar'} /></div> : <img src={item.image} alt={item.alt} draggable="false" style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }} />}</div>
-      {drawing && <div className="lightbox__drawing-tools"><DrawingToolbar drawing={drawing} language={language} /></div>}
-      <div className={`lightbox__caption${item.description ? ' lightbox__caption--instructions' : ''}`}><div>{item.label && <strong>{item.label}</strong>}{item.caption && <p>{item.caption}</p>}<InstructionCaption description={item.description} format={item.instructionFormat} plainText /></div><span>{t.imageCount(index + 1, items.length)}</span></div>
+      {drawing && <div className="lightbox__drawing-tools"><DrawingToolbar drawing={drawing} language={language} mode={hideDrawingToggle ? 'tools' : 'all'} /></div>}
+      {collapsibleCaption && hasCaption && <button type="button" className="lightbox__caption-toggle" aria-expanded={captionExpanded} aria-label={language === 'en' ? (captionExpanded ? 'Hide slide text' : 'Show slide text') : (captionExpanded ? 'Sembunyikan teks slide' : 'Tampilkan teks slide')} onClick={() => setCaptionExpanded((expanded) => !expanded)}>{captionExpanded ? <ChevronDown size={20} /> : <ChevronUp size={20} />}<span>{t.imageCount(index + 1, items.length)}</span></button>}
+      {(!collapsibleCaption || captionExpanded) && <div className={`lightbox__caption${instructionDescription ? ' lightbox__caption--instructions' : ''}`}><div>{item.label && <strong>{item.label}</strong>}{item.caption && <p>{item.caption}</p>}<InstructionCaption description={instructionDescription} format={item.instructionFormat} plainText /></div>{!collapsibleCaption && <span>{t.imageCount(index + 1, items.length)}</span>}</div>}
       <button type="button" className="lightbox__arrow lightbox__arrow--previous" onClick={() => onIndexChange(index - 1)} disabled={index === 0} aria-label={t.previousImage}><ChevronLeft /></button>
       <button type="button" className="lightbox__arrow lightbox__arrow--next" onClick={() => onIndexChange(index + 1)} disabled={index === items.length - 1} aria-label={t.nextImage}><ChevronRight /></button>
     </div>

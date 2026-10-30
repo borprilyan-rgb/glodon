@@ -65,7 +65,7 @@ const lessons = [
   ['wall-reinforcement', 'Mendefinisikan Tulangan Dinding', 'Define Wall Reinforcement', 'Menerapkan tulangan dinding sesuai arah, lapisan, dan area model.', 'Apply wall reinforcement according to direction, layer and model area.', '149-153', [
     a('Pilih dinding yang benar', 'Periksa tipe, lantai, dan rentang dinding sebelum memasukkan reinforcement.', 'Select the correct wall', 'Check wall type, floor and extent before entering reinforcement.', 'wall-rebar-01.webp'),
     a('Definisikan tulangan vertikal', 'Masukkan data vertikal dari detail dinding yang berlaku.', 'Define vertical reinforcement', 'Enter vertical reinforcement data from the applicable wall detail.', 'wall-rebar-02.webp'),
-    a('Periksa hasil dinding', 'Bandingkan susunan akhir dengan detail sumber sebelum melanjutkan.', 'Check the wall result', 'Compare the final arrangement with the source detail before continuing.', 'wall-rebar-05.webp')]],
+]],
   ['calculate-quantity', 'Menghitung Berdasarkan Lantai atau Elemen', 'Calculate by Floor or Entity', 'Menjalankan perhitungan dengan cakupan lantai atau elemen yang sesuai.', 'Run calculation for the appropriate floor or entity scope.', '155', [
     a('Tentukan cakupan perhitungan', 'Pilih lantai untuk cakupan menyeluruh atau elemen untuk pemeriksaan terfokus.', 'Choose the calculation scope', 'Choose floors for a broad scope or entities for a focused check.', 'calculate-quantity-01.webp'),
     a('Pilih lantai atau elemen', 'Pastikan pilihan mencakup semua model reinforcement yang perlu diperbarui.', 'Select floors or entities', 'Ensure the selection includes every reinforcement model that requires updating.', 'calculate-quantity-02.webp'),
@@ -109,7 +109,7 @@ const manualPageByAction = {
   'beam-schedule': [134, 135, 136, 137, 137],
   'beam-support-layout': [138, 133, 133],
   'slab-main-bars': [140, 141, 142],
-  'wall-reinforcement': [149, 150, 152],
+  'wall-reinforcement': [149, 150],
   'calculate-quantity': [155, 155, 155, 155],
   'verify-rebar': [156, 156, 157, 157],
   'review-quantity': [158, 158, 158, 158],
